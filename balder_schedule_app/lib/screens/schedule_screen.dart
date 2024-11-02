@@ -81,10 +81,10 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                       ),
                       FilledButton(
                         style: ButtonStyle(
-                          backgroundColor: MaterialStateProperty.all(
+                          backgroundColor: WidgetStateProperty.all(
                             Theme.of(context).colorScheme.secondaryContainer,
                           ),
-                          foregroundColor: MaterialStateProperty.all(
+                          foregroundColor: WidgetStateProperty.all(
                             Theme.of(context).colorScheme.onSecondaryContainer,
                           ),
                         ),
@@ -112,7 +112,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                           children: [
                             Icon(
                               size: 18.0,
-                              Icons.event_available_outlined,
+                              Icons.today_outlined,
                               color: Theme.of(context)
                                   .colorScheme
                                   .onSecondaryContainer,
@@ -120,7 +120,8 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                             SizedBox(width: 8.0),
                             Column(
                               mainAxisSize: MainAxisSize.min,
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment
+                                  .center, // Центрируем по горизонтали
                               children: [
                                 Text(
                                   '${scheduleState.getWeekNumber()} неделя',
@@ -131,7 +132,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                                   style: Theme.of(context).textTheme.labelSmall,
                                 ),
                               ],
-                            ),
+                            )
                           ],
                         ),
                       ),
