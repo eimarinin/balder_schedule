@@ -1,4 +1,7 @@
 {
-    "appTitle": "Schedule App",
-    "welcomeMessage": "Welcome, {name}"
+    "scheduleTitle": "Schedule",
+    "editTitle": "Edit",
+    "settingsTitle": "Settings",
+    "scheduleScreen": "Schedule Screen",
+    "currentWeekSchedule": "Current week schedule"
 }

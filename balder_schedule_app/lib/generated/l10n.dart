@@ -50,23 +50,53 @@ class S {
     return Localizations.of<S>(context, S);
   }
 
-  /// `Schedule App`
-  String get appTitle {
+  /// `Schedule`
+  String get scheduleTitle {
     return Intl.message(
-      'Schedule App',
-      name: 'appTitle',
+      'Schedule',
+      name: 'scheduleTitle',
       desc: '',
       args: [],
     );
   }
 
-  /// `Welcome, {name}`
-  String welcomeMessage(Object name) {
+  /// `Edit`
+  String get editTitle {
     return Intl.message(
-      'Welcome, $name',
-      name: 'welcomeMessage',
+      'Edit',
+      name: 'editTitle',
       desc: '',
-      args: [name],
+      args: [],
+    );
+  }
+
+  /// `Settings`
+  String get settingsTitle {
+    return Intl.message(
+      'Settings',
+      name: 'settingsTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Schedule Screen`
+  String get scheduleScreen {
+    return Intl.message(
+      'Schedule Screen',
+      name: 'scheduleScreen',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Current week schedule`
+  String get currentWeekSchedule {
+    return Intl.message(
+      'Current week schedule',
+      name: 'currentWeekSchedule',
+      desc: '',
+      args: [],
     );
   }
 }
