@@ -31,11 +31,48 @@ class MyApp extends StatelessWidget {
             titleTextStyle: TextStyle(
               fontSize: 20, // Задаем размер текста
               color: Colors.black, // Цвет текста
+              height: 1.2,
             ),
           ),
           buttonTheme: const ButtonThemeData(
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.all(Radius.circular(4)),
+            ),
+          ),
+          elevatedButtonTheme: ElevatedButtonThemeData(
+            style: ButtonStyle(
+              shape: WidgetStateProperty.all(
+                RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(4),
+                ),
+              ),
+            ),
+          ),
+          outlinedButtonTheme: OutlinedButtonThemeData(
+            style: ButtonStyle(
+              shape: WidgetStateProperty.all(
+                RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(4),
+                ),
+              ),
+            ),
+          ),
+          textButtonTheme: TextButtonThemeData(
+            style: ButtonStyle(
+              shape: WidgetStateProperty.all(
+                RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(4),
+                ),
+              ),
+            ),
+          ),
+          filledButtonTheme: FilledButtonThemeData(
+            style: ButtonStyle(
+              shape: WidgetStateProperty.all(
+                RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(4),
+                ),
+              ),
             ),
           ),
         ),
