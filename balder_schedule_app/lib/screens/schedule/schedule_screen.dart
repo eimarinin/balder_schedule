@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:gap/gap.dart';
 
 import '../../state/schedule_state.dart';
 import '../../utils/padded_screen.dart';
 import '../../generated/l10n.dart';
 import '../../widgets/page_header.dart';
+import '../../widgets/schedule/calendar.dart';
+import '../../widgets/schedule/day_schedule.dart';
+import '../../widgets/schedule/lesson_item.dart';
 
 class ScheduleScreen extends StatelessWidget {
   const ScheduleScreen({super.key});
@@ -29,75 +33,50 @@ class ScheduleContent extends StatelessWidget {
     var scheduleState = context.watch<ScheduleState>();
     return Column(
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            IconButton(
-              icon: Icon(Icons.arrow_back_outlined),
-              onPressed: scheduleState.previousWeek,
+        Calendar(scheduleState: scheduleState),
+        Gap(12),
+        DaySchedule(
+          date: "Понедельник - 28.10",
+          lessons: [
+            LessonItem(
+              startTime: '8:00',
+              endTime: '9:35',
+              subject: 'Алгебра',
+              lectureType: 'Лекция',
+              room: '6512',
+              teacher: 'Багаев Андрей Владимирович',
             ),
-            FilledButton(
-              style: ButtonStyle(
-                backgroundColor: WidgetStateProperty.all(
-                  Theme.of(context).colorScheme.secondaryContainer,
-                ),
-                foregroundColor: WidgetStateProperty.all(
-                  Theme.of(context).colorScheme.onSecondaryContainer,
-                ),
-              ),
-              onPressed: () async {
-                final DateTime? pickedDate = await showDatePicker(
-                  context: context,
-                  initialDate: scheduleState.currentWeek,
-                  firstDate: DateTime(2020),
-                  lastDate: DateTime(2101),
-                  builder: (BuildContext context, Widget? child) {
-                    return Theme(
-                      data: ThemeData.light(),
-                      child: child!,
-                    );
-                  },
-                );
-
-                if (pickedDate != null &&
-                    pickedDate != scheduleState.currentWeek) {
-                  scheduleState.setCurrentWeek(pickedDate);
-                }
-              },
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(
-                    size: 18.0,
-                    Icons.today_outlined,
-                    color: Theme.of(context).colorScheme.onSecondaryContainer,
-                  ),
-                  SizedBox(width: 8.0),
-                  Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Text(
-                        '${scheduleState.getWeekNumber()} неделя',
-                        style: Theme.of(context).textTheme.labelLarge,
-                      ),
-                      Text(
-                        scheduleState.getFormattedWeek(),
-                        style: Theme.of(context).textTheme.labelSmall,
-                      ),
-                    ],
-                  )
-                ],
-              ),
-            ),
-            IconButton(
-              icon: Icon(Icons.arrow_forward_outlined),
-              onPressed: scheduleState.nextWeek,
+            LessonItem(
+              startTime: '9:45',
+              endTime: '11:20',
+              subject: 'Ведение проектов',
+              lectureType: 'Практика',
+              room: '6210',
+              teacher: 'Захаров',
             ),
           ],
         ),
-        Expanded(
-          child: Center(child: Text('Экран расписания')),
+        Gap(12),
+        DaySchedule(
+          date: "Вторник - 29.10",
+          lessons: [
+            LessonItem(
+              startTime: '11:35',
+              endTime: '13:10',
+              subject: 'Базы данных',
+              lectureType: 'Лекция',
+              room: '1221',
+              teacher: 'Моисеев',
+            ),
+            LessonItem(
+              startTime: '13:40',
+              endTime: '15:15',
+              subject: 'Распределенные системы',
+              lectureType: 'Практика',
+              room: '1222',
+              teacher: 'Рыбин',
+            ),
+          ],
         ),
       ],
     );
