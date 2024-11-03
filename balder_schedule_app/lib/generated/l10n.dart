@@ -79,6 +79,26 @@ class S {
       args: [],
     );
   }
+
+  /// `Appearance`
+  String get appearanceTitle {
+    return Intl.message(
+      'Appearance',
+      name: 'appearanceTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Notifications`
+  String get notificationsTitle {
+    return Intl.message(
+      'Notifications',
+      name: 'notificationsTitle',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

@@ -2,5 +2,7 @@
     "@@locale": "en",
     "scheduleTitle": "Schedule",
     "editTitle": "Edit",
-    "settingsTitle": "Settings"
+    "settingsTitle": "Settings",
+    "appearanceTitle": "Appearance",
+    "notificationsTitle": "Notifications"
 }

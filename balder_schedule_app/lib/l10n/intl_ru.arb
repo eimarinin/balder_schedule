@@ -2,5 +2,7 @@
     "@@locale": "ru",
     "scheduleTitle": "Расписание",
     "editTitle": "Редактирование",
-    "settingsTitle": "Настройки"
+    "settingsTitle": "Настройки",
+    "appearanceTitle": "Внешний вид",
+    "notificationsTitle": "Уведомления"
 }
