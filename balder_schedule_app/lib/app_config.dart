@@ -67,5 +67,11 @@ class AppConfig {
     GlobalCupertinoLocalizations.delegate,
   ];
 
-  static const List<Locale> supportedLocales = [Locale('ru')];
+  static List<Locale> getSupportedLocales() {
+    return S.delegate.supportedLocales;
+  }
+
+  static Locale getDefaultLocale() {
+    return const Locale('ru');
+  }
 }

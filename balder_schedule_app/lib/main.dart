@@ -21,8 +21,8 @@ class MyApp extends StatelessWidget {
       title: 'Schedule App',
       theme: AppConfig.themeData(),
       localizationsDelegates: AppConfig.localizationsDelegates,
-      supportedLocales: AppConfig.supportedLocales,
-      locale: const Locale('ru'),
+      supportedLocales: AppConfig.getSupportedLocales(),
+      locale: AppConfig.getDefaultLocale(),
       home: const MainScreen(),
     );
   }
