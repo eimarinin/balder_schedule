@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'appearance.dart'; // Импортируем экран внешнего вида
-import 'notifications.dart'; // Импортируем экран уведомлений
-import 'qr.dart'; // Импортируем экран QR кода
+import 'settings/appearance_screen.dart'; // Импортируем экран внешнего вида
+import 'settings/notification_screen.dart'; // Импортируем экран уведомлений
+import 'settings/qr_screen.dart'; // Импортируем экран QR кода
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
@@ -10,17 +10,7 @@ class SettingsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: Stack(
-        children: [
-          Positioned(
-            top: 0,
-            left: 0,
-            right: 0,
-            child: Container(
-              height: MediaQuery.of(context).padding.top + 1.0,
-              color: Colors.grey,
-            ),
-          ),
+      body: 
           Column(
             children: [
               SizedBox(height: MediaQuery.of(context).padding.top + 40.0),
@@ -93,8 +83,7 @@ class SettingsScreen extends StatelessWidget {
               ),
             ],
           ),
-        ],
-      ),
+      
     );
   }
 }
