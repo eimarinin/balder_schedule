@@ -79,26 +79,6 @@ class S {
       args: [],
     );
   }
-
-  /// `Schedule Screen`
-  String get scheduleScreen {
-    return Intl.message(
-      'Schedule Screen',
-      name: 'scheduleScreen',
-      desc: '',
-      args: [],
-    );
-  }
-
-  /// `Current week schedule`
-  String get currentWeekSchedule {
-    return Intl.message(
-      'Current week schedule',
-      name: 'currentWeekSchedule',
-      desc: '',
-      args: [],
-    );
-  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

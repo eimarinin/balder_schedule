@@ -1,7 +1,6 @@
 {
+    "@@locale": "ru",
     "scheduleTitle": "Расписание",
     "editTitle": "Редактирование",
-    "settingsTitle": "Настройки",
-    "scheduleScreen": "Экран расписания",
-    "currentWeekSchedule": "Расписание на текущую неделю"
+    "settingsTitle": "Настройки"
 }
