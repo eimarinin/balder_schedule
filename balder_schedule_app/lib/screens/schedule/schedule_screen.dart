@@ -53,7 +53,7 @@ class ScheduleContent extends StatelessWidget {
                   lastDate: DateTime(2101),
                   builder: (BuildContext context, Widget? child) {
                     return Theme(
-                      data: ThemeData.light(),
+                      data: Theme.of(context),
                       child: child!,
                     );
                   },

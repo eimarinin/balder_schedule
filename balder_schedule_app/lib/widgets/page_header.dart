@@ -17,7 +17,13 @@ class PageHeader extends StatelessWidget implements PreferredSizeWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(title),
+            Text(
+              title,
+              style: const TextStyle(
+                fontSize: 20,
+                height: 1.2,
+              ),
+            ),
             const SizedBox(height: 12),
             const Divider(height: 1),
           ],

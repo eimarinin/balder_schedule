@@ -9,13 +9,6 @@ class AppConfig {
     return ThemeData(
       useMaterial3: true,
       brightness: Brightness.light,
-      appBarTheme: const AppBarTheme(
-        titleTextStyle: TextStyle(
-          fontSize: 20,
-          color: Colors.black,
-          height: 1.2,
-        ),
-      ),
       buttonTheme: const ButtonThemeData(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(4)),
