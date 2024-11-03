@@ -9,8 +9,6 @@ import '../../widgets/page_header.dart';
 import '../../widgets/schedule/calendar.dart';
 import '../../widgets/schedule/day_schedule.dart';
 import '../../widgets/schedule/lesson_item.dart';
-import '../../widgets/schedule/lesson_tag.dart';
-import '../../widgets/schedule/lesson_time.dart';
 
 class ScheduleScreen extends StatelessWidget {
   const ScheduleScreen({super.key});
