@@ -1,3 +1,5 @@
+import 'package:balder_schedule_app/screens/settings/appearance_screen.dart';
+import 'package:balder_schedule_app/screens/settings/qr_screen.dart';
 import 'package:flutter/material.dart';
 
 import '../../utils/unanimated_page_route.dart';
@@ -15,6 +17,14 @@ class SettingsNavigator extends StatelessWidget {
           case '/notifications':
             return UnanimatedPageRoute(
               builder: (context) => const NotificationsScreen(),
+            );
+          case '/appearance':
+            return UnanimatedPageRoute(
+              builder: (context) => const AppearanceScreen(),
+            );
+          case '/qr':
+            return UnanimatedPageRoute(
+              builder: (context) => const qrScreen(),
             );
           default:
             return MaterialPageRoute(

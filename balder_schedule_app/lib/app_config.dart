@@ -8,7 +8,7 @@ class AppConfig {
   static ThemeData themeData() {
     return ThemeData(
       useMaterial3: true,
-      brightness: Brightness.light,
+      brightness: Brightness.dark,
       buttonTheme: const ButtonThemeData(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(4)),

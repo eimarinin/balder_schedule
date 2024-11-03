@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 
 import '../../widgets/page_header.dart';
 import '../../generated/l10n.dart';
@@ -12,15 +13,14 @@ class SettingsScreen extends StatelessWidget {
       appBar: PageHeader(title: S.of(context).settingsTitle),
       body: Column(
         children: [
-          SizedBox(height: MediaQuery.of(context).padding.top + 40.0),
           Align(
             alignment: Alignment.topCenter,
             child: Container(
               margin: EdgeInsets.symmetric(horizontal: 16.0),
               padding: EdgeInsets.all(16.0),
               decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.secondaryContainer,
-                borderRadius: BorderRadius.circular(8.0),
+                color: Theme.of(context).colorScheme.surfaceContainer,
+                borderRadius: BorderRadius.circular(6.0),
               ),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
@@ -28,41 +28,47 @@ class SettingsScreen extends StatelessWidget {
                   ListTile(
                     leading: Icon(
                       Icons.auto_awesome_outlined,
-                      color: Colors.black,
-                      size: 36,
+                      size: 24,
                     ),
-                    title: Text(S.of(context).appearanceTitle),
+                    title: Text(
+                      S.of(context).appearanceTitle,
+                      style: const TextStyle(
+                        fontSize: 20,
+                        height: 1.2,
+                      ),
+                    ),
                     onTap: () {
                       Navigator.of(context).pushNamed(
-                          '/notifications'); // Переход на экран AppearanceScreen
+                          '/appearance'); // Переход на экран AppearanceScreen
                     },
                   ),
-                  Divider(color: Colors.grey, thickness: 1.5),
+                  Divider(thickness: 2),
                   ListTile(
                     leading: Icon(
                       Icons.notifications_outlined,
-                      color: Colors.black,
-                      size: 36,
+                      size: 24,
                     ),
-                    title: Text(S.of(context).notificationsTitle),
+                    title: Text(S.of(context).notificationsTitle,
+                        style: const TextStyle(
+                          fontSize: 20,
+                          height: 1.2,
+                        )),
                     onTap: () {
                       Navigator.of(context).pushNamed(
-                          '/notifications'); // Переход на экран AppearanceScreen
+                          '/notifications'); // Переход на экран notifications
                     },
                   ),
-                  Divider(color: Colors.grey, thickness: 1.5),
+                  Divider(thickness: 2),
                   ListTile(
                     leading: Icon(
                       Icons.qr_code_outlined,
-                      color: Colors.black,
-                      size: 36,
+                      size: 24,
                     ),
-                    title: Text(
-                      'QR',
-                      style: TextStyle(color: Colors.black, fontSize: 18),
-                    ),
+                    title: Text(S.of(context).qrTitle,
+                        style: const TextStyle(fontSize: 20, height: 1.2)),
                     onTap: () {
-                      // Переход на экран QRScreen
+                      Navigator.of(context)
+                          .pushNamed('/qr'); // Переход на экран QRScreen
                     },
                   ),
                 ],

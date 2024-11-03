@@ -4,5 +4,6 @@
     "editTitle": "Edit",
     "settingsTitle": "Settings",
     "appearanceTitle": "Appearance",
-    "notificationsTitle": "Notifications"
+    "notificationsTitle": "Notifications",
+    "qrTitle": "QR"
 }

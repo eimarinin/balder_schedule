@@ -26,6 +26,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "editTitle": MessageLookupByLibrary.simpleMessage("Edit"),
         "notificationsTitle":
             MessageLookupByLibrary.simpleMessage("Notifications"),
+        "qrTitle": MessageLookupByLibrary.simpleMessage("QR"),
         "scheduleTitle": MessageLookupByLibrary.simpleMessage("Schedule"),
         "settingsTitle": MessageLookupByLibrary.simpleMessage("Settings")
       };

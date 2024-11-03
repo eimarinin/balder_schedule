@@ -99,6 +99,16 @@ class S {
       args: [],
     );
   }
+
+  /// `QR`
+  String get qrTitle {
+    return Intl.message(
+      'QR',
+      name: 'qrTitle',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

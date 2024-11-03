@@ -4,5 +4,6 @@
     "editTitle": "Редактирование",
     "settingsTitle": "Настройки",
     "appearanceTitle": "Внешний вид",
-    "notificationsTitle": "Уведомления"
+    "notificationsTitle": "Уведомления",
+    "qrTitle": "QR"
 }
