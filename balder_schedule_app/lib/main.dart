@@ -1,11 +1,11 @@
 // lib/main.dart
 import 'package:flutter/material.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:provider/provider.dart';
-import 'generated/l10n.dart';
-import 'screens/schedule_screen.dart';
-import 'state/schedule_state.dart';
-import 'state/settings_state.dart';
+
+import 'app_config.dart';
+import 'screens/edit/edit_navigator.dart';
+import 'screens/schedule/schedule_navigator.dart';
+import 'screens/settings/settings_navigator.dart';
+import 'widgets/bottom_navigation.dart';
 
 void main() {
   runApp(const MyApp());
@@ -17,74 +17,50 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (context) => ScheduleState()),
-        ChangeNotifierProvider(create: (context) => SettingsState()),
-      ],
-      child: MaterialApp(
-        title: 'Schedule App',
-        theme: ThemeData(
-          useMaterial3: true,
-          brightness: Brightness.light,
-          appBarTheme: const AppBarTheme(
-            titleTextStyle: TextStyle(
-              fontSize: 20, // Задаем размер текста
-              color: Colors.black, // Цвет текста
-              height: 1.2,
-            ),
-          ),
-          buttonTheme: const ButtonThemeData(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(4)),
-            ),
-          ),
-          elevatedButtonTheme: ElevatedButtonThemeData(
-            style: ButtonStyle(
-              shape: WidgetStateProperty.all(
-                RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(4),
-                ),
-              ),
-            ),
-          ),
-          outlinedButtonTheme: OutlinedButtonThemeData(
-            style: ButtonStyle(
-              shape: WidgetStateProperty.all(
-                RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(4),
-                ),
-              ),
-            ),
-          ),
-          textButtonTheme: TextButtonThemeData(
-            style: ButtonStyle(
-              shape: WidgetStateProperty.all(
-                RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(4),
-                ),
-              ),
-            ),
-          ),
-          filledButtonTheme: FilledButtonThemeData(
-            style: ButtonStyle(
-              shape: WidgetStateProperty.all(
-                RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(4),
-                ),
-              ),
-            ),
-          ),
-        ),
-        localizationsDelegates: const [
-          S.delegate,
-          GlobalMaterialLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-          GlobalCupertinoLocalizations.delegate,
-        ],
-        supportedLocales: S.delegate.supportedLocales,
-        locale: const Locale('ru'),
-        home: ScheduleScreen(),
+    return MaterialApp(
+      title: 'Schedule App',
+      theme: AppConfig.themeData(),
+      localizationsDelegates: AppConfig.localizationsDelegates,
+      supportedLocales: AppConfig.supportedLocales,
+      locale: const Locale('ru'),
+      home: const MainScreen(),
+    );
+  }
+}
+
+class MainScreen extends StatefulWidget {
+  const MainScreen({super.key});
+
+  @override
+  State<MainScreen> createState() => _MainScreenState();
+}
+
+class _MainScreenState extends State<MainScreen> {
+  int _selectedIndex = 0;
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
+
+  // Список страниц с вложенными навигаторами
+  final List<Widget> _pages = [
+    const ScheduleNavigator(),
+    const EditNavigator(),
+    const SettingsNavigator(),
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: IndexedStack(
+        index: _selectedIndex,
+        children: _pages,
+      ),
+      bottomNavigationBar: BottomNavigation(
+        selectedIndex: _selectedIndex,
+        onItemTapped: _onItemTapped,
       ),
     );
   }

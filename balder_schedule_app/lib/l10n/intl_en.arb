@@ -1,7 +1,6 @@
 {
+    "@@locale": "en",
     "scheduleTitle": "Schedule",
     "editTitle": "Edit",
-    "settingsTitle": "Settings",
-    "scheduleScreen": "Schedule Screen",
-    "currentWeekSchedule": "Current week schedule"
+    "settingsTitle": "Settings"
 }

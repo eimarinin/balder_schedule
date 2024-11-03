@@ -22,11 +22,7 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
-        "currentWeekSchedule":
-            MessageLookupByLibrary.simpleMessage("Current week schedule"),
         "editTitle": MessageLookupByLibrary.simpleMessage("Edit"),
-        "scheduleScreen":
-            MessageLookupByLibrary.simpleMessage("Schedule Screen"),
         "scheduleTitle": MessageLookupByLibrary.simpleMessage("Schedule"),
         "settingsTitle": MessageLookupByLibrary.simpleMessage("Settings")
       };
