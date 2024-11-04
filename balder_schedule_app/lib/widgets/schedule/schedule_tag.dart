@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-class LessonTag extends StatelessWidget {
+class ScheduleTag extends StatelessWidget {
   final String text;
 
-  const LessonTag({super.key, required this.text});
+  const ScheduleTag({super.key, required this.text});
 
   @override
   Widget build(BuildContext context) {

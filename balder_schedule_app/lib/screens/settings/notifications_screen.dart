@@ -35,26 +35,28 @@ class _NotificationsContentState extends State<NotificationsContent> {
       children: [
         const Gap(12),
         Padding(
-          padding: const EdgeInsets.only(top: 23.0), // Отступ сверху
+          padding: const EdgeInsets.only(top: 0.0), // Отступ сверху
           child: Container(
             padding: const EdgeInsets.all(
                 24.0), // Увеличенный отступ внутри контейнера
-            margin: const EdgeInsets.symmetric(horizontal: 16.0),
+            margin: const EdgeInsets.symmetric(horizontal: 0.0),
             decoration: BoxDecoration(
               color: Theme.of(context)
                   .colorScheme
-                  .onInverseSurface, // Фон карточки
-              borderRadius: BorderRadius.circular(10.0), // Закругленные углы
+                  .surfaceContainer, // Фон карточки
+              borderRadius: BorderRadius.circular(6.0), // Закругленные углы
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Expanded(
+                Expanded(
                   child: Text(
-                    'Расписание на завтра',
-                    style: TextStyle(
-                        fontSize: 22,
-                        color: Colors.black), // Увеличенный размер текста
+                    S.of(context).applanguageTitle,
+                    style: const TextStyle(
+                      fontSize: 20,
+                      height: 1.2,
+                      color: Colors.black, // Цвет текста
+                    ),
                   ),
                 ),
                 Switch.adaptive(

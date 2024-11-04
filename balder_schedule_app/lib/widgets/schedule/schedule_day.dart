@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
-import 'lesson_item.dart';
+import 'schedule_item.dart';
 
-class DaySchedule extends StatelessWidget {
+class ScheduleDay extends StatelessWidget {
   final String date;
-  final List<LessonItem> lessons;
+  final List<ScheduleItem> lessons;
 
-  const DaySchedule({
+  const ScheduleDay({
     super.key,
     required this.date,
     required this.lessons,
