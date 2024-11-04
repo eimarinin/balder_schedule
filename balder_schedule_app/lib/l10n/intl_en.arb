@@ -8,5 +8,8 @@
     "qrTitle": "QR",
     "lightthemeTitle": "Light theme",
     "applanguageTitle": "app language",
-    "ru_enTitle": "en"
+    "ru_enTitle": "En",
+    "shedule_tomorrowTitle": "Shedule for tomorrow",
+    "scanNewScheduleTitle": "scan new schedule",
+    "shareScheduleTitle": "Share schedule"
 }

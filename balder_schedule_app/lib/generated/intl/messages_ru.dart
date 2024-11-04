@@ -30,8 +30,14 @@ class MessageLookup extends MessageLookupByLibrary {
         "notificationsTitle":
             MessageLookupByLibrary.simpleMessage("Уведомления"),
         "qrTitle": MessageLookupByLibrary.simpleMessage("QR"),
-        "ru_enTitle": MessageLookupByLibrary.simpleMessage("ru"),
+        "ru_enTitle": MessageLookupByLibrary.simpleMessage("Ru"),
+        "scanNewScheduleTitle": MessageLookupByLibrary.simpleMessage(
+            "Сканировать новое расписание"),
         "scheduleTitle": MessageLookupByLibrary.simpleMessage("Расписание"),
-        "settingsTitle": MessageLookupByLibrary.simpleMessage("Настройки")
+        "settingsTitle": MessageLookupByLibrary.simpleMessage("Настройки"),
+        "shareScheduleTitle":
+            MessageLookupByLibrary.simpleMessage("Поделиться расписанием"),
+        "shedule_tomorrowTitle":
+            MessageLookupByLibrary.simpleMessage("Расписание на завтра")
       };
 }

@@ -8,5 +8,10 @@
     "qrTitle": "QR",
     "lightthemeTitle": "Светлая тема",
     "applanguageTitle": "Язык приложения",
-    "ru_enTitle": "ru"
+    "ru_enTitle": "ru",
+    "applanguageTitle": "Язык приложения",
+    "ru_enTitle": "Ru",
+    "shedule_tomorrowTitle": "Расписание на завтра",
+    "scanNewScheduleTitle": "Сканировать новое расписание",
+    "shareScheduleTitle": "Поделиться расписанием"
 }
