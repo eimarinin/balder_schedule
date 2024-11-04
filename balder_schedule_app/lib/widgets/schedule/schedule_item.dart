@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
-import 'lesson_tag.dart';
-import 'lesson_time.dart';
+import 'schedule_tag.dart';
+import 'schedule_time.dart';
 
-class LessonItem extends StatelessWidget {
+class ScheduleItem extends StatelessWidget {
   final String startTime;
   final String endTime;
   final String subject;
@@ -12,7 +12,7 @@ class LessonItem extends StatelessWidget {
   final String room;
   final String teacher;
 
-  const LessonItem({
+  const ScheduleItem({
     super.key,
     required this.startTime,
     required this.endTime,
@@ -39,7 +39,7 @@ class LessonItem extends StatelessWidget {
                 color: Theme.of(context).colorScheme.secondaryContainer,
                 borderRadius: BorderRadius.circular(6),
               ),
-              child: TimeRange(startTime: startTime, endTime: endTime),
+              child: ScheduleTime(startTime: startTime, endTime: endTime),
             ),
             const Gap(12),
             Column(
@@ -55,13 +55,13 @@ class LessonItem extends StatelessWidget {
                   children: [
                     Row(
                       children: [
-                        LessonTag(text: lectureType),
+                        ScheduleTag(text: lectureType),
                         const Gap(2),
-                        LessonTag(text: room),
+                        ScheduleTag(text: room),
                       ],
                     ),
                     const Gap(2),
-                    LessonTag(text: teacher),
+                    ScheduleTag(text: teacher),
                   ],
                 ),
               ],

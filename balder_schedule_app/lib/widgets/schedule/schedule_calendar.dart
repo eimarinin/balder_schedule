@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 
 import '../../state/schedule_state.dart';
 
-class Calendar extends StatelessWidget {
+class ScheduleCalendar extends StatelessWidget {
   final ScheduleState scheduleState;
 
-  const Calendar({
+  const ScheduleCalendar({
     super.key,
     required this.scheduleState,
   });
