@@ -5,5 +5,7 @@
     "settingsTitle": "Настройки",
     "appearanceTitle": "Внешний вид",
     "notificationsTitle": "Уведомления",
-    "qrTitle": "QR"
+    "qrTitle": "QR",
+    "lightthemeTitle": "Светлая тема",
+    "applanguageTitle": "Язык приложения"
 }

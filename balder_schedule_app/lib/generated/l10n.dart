@@ -109,6 +109,26 @@ class S {
       args: [],
     );
   }
+
+  /// `Light theme`
+  String get lightthemeTitle {
+    return Intl.message(
+      'Light theme',
+      name: 'lightthemeTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `app language`
+  String get applanguageTitle {
+    return Intl.message(
+      'app language',
+      name: 'applanguageTitle',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {
