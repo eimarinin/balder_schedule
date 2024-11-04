@@ -129,6 +129,46 @@ class S {
       args: [],
     );
   }
+
+  /// `En`
+  String get ru_enTitle {
+    return Intl.message(
+      'En',
+      name: 'ru_enTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Shedule for tomorrow`
+  String get shedule_tomorrowTitle {
+    return Intl.message(
+      'Shedule for tomorrow',
+      name: 'shedule_tomorrowTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `scan new schedule`
+  String get scanNewScheduleTitle {
+    return Intl.message(
+      'scan new schedule',
+      name: 'scanNewScheduleTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Share schedule`
+  String get shareScheduleTitle {
+    return Intl.message(
+      'Share schedule',
+      name: 'shareScheduleTitle',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

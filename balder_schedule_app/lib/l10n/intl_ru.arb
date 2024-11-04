@@ -7,5 +7,9 @@
     "notificationsTitle": "Уведомления",
     "qrTitle": "QR",
     "lightthemeTitle": "Светлая тема",
-    "applanguageTitle": "Язык приложения"
+    "applanguageTitle": "Язык приложения",
+    "ru_enTitle": "Ru",
+    "shedule_tomorrowTitle": "Расписание на завтра",
+    "scanNewScheduleTitle": "Сканировать новое расписание",
+    "shareScheduleTitle": "Поделиться расписанием"
 }

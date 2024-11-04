@@ -87,10 +87,14 @@ class AppearanceContent extends StatelessWidget {
                         .primary, // Прозрачный фиолетовый цвет
                     borderRadius: BorderRadius.circular(6.0),
                   ),
-                  child: const Icon(
-                    Icons.language, // Иконка языка
-                    color: Colors.white, // Цвет иконки белый
-                    size: 24, // Увеличенный размер иконки
+                  alignment: Alignment.center, // Выравнивание текста по центру
+                  child: Text(
+                    S.of(context).ru_enTitle, // Текст вместо иконки
+                    style: const TextStyle(
+                      color: Colors.white, // Цвет текста белый
+                      fontSize: 20, // Размер текста
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
                 onTap: () {
