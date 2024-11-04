@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-class TimeRange extends StatelessWidget {
+class ScheduleTime extends StatelessWidget {
   final String startTime;
   final String endTime;
 
-  const TimeRange({
+  const ScheduleTime({
     super.key,
     required this.startTime,
     required this.endTime,

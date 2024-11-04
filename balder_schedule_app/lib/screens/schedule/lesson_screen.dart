@@ -1,6 +1,8 @@
 import 'package:balder_schedule_app/utils/padded_screen.dart';
 import 'package:balder_schedule_app/widgets/page_header_child.dart';
+import 'package:balder_schedule_app/widgets/schedule/lesson/lesson_time.dart';
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 
 class LessonScreen extends StatelessWidget {
   const LessonScreen({super.key});
@@ -19,6 +21,21 @@ class LessonContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView();
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          Gap(12),
+          Row(
+            children: [
+              LessonTime(text: '8:00'),
+              Gap(12),
+              Text('-', style: TextStyle(fontSize: 24)),
+              Gap(12),
+              LessonTime(text: '9:35'),
+            ],
+          )
+        ],
+      ),
+    );
   }
 }

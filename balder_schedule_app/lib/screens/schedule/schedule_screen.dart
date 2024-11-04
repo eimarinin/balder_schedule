@@ -6,9 +6,9 @@ import '../../state/schedule_state.dart';
 import '../../utils/padded_screen.dart';
 import '../../generated/l10n.dart';
 import '../../widgets/page_header.dart';
-import '../../widgets/schedule/calendar.dart';
-import '../../widgets/schedule/day_schedule.dart';
-import '../../widgets/schedule/lesson_item.dart';
+import '../../widgets/schedule/schedule_calendar.dart';
+import '../../widgets/schedule/schedule_day.dart';
+import '../../widgets/schedule/schedule_item.dart';
 
 class ScheduleScreen extends StatelessWidget {
   const ScheduleScreen({super.key});
@@ -35,12 +35,12 @@ class ScheduleContent extends StatelessWidget {
       child: Column(
         children: [
           Gap(12),
-          Calendar(scheduleState: scheduleState),
+          ScheduleCalendar(scheduleState: scheduleState),
           Gap(12),
-          DaySchedule(
+          ScheduleDay(
             date: "Понедельник - 28.10",
             lessons: [
-              LessonItem(
+              ScheduleItem(
                 startTime: '8:00',
                 endTime: '9:35',
                 subject: 'Алгебра',
@@ -48,7 +48,7 @@ class ScheduleContent extends StatelessWidget {
                 room: '6512',
                 teacher: 'Багаев Андрей Владимирович',
               ),
-              LessonItem(
+              ScheduleItem(
                 startTime: '9:45',
                 endTime: '11:20',
                 subject: 'Ведение проектов',
@@ -59,10 +59,10 @@ class ScheduleContent extends StatelessWidget {
             ],
           ),
           Gap(12),
-          DaySchedule(
+          ScheduleDay(
             date: "Вторник - 29.10",
             lessons: [
-              LessonItem(
+              ScheduleItem(
                 startTime: '11:35',
                 endTime: '13:10',
                 subject: 'Базы данных',
@@ -70,7 +70,7 @@ class ScheduleContent extends StatelessWidget {
                 room: '1221',
                 teacher: 'Моисеев',
               ),
-              LessonItem(
+              ScheduleItem(
                 startTime: '13:40',
                 endTime: '15:15',
                 subject: 'Распределенные системы',
@@ -81,10 +81,10 @@ class ScheduleContent extends StatelessWidget {
             ],
           ),
           Gap(12),
-          DaySchedule(
+          ScheduleDay(
             date: "Среда - 30.10",
             lessons: [
-              LessonItem(
+              ScheduleItem(
                 startTime: '11:35',
                 endTime: '13:10',
                 subject: 'Базы данных',
@@ -92,7 +92,7 @@ class ScheduleContent extends StatelessWidget {
                 room: '1221',
                 teacher: 'Моисеев',
               ),
-              LessonItem(
+              ScheduleItem(
                 startTime: '13:40',
                 endTime: '15:15',
                 subject: 'Распределенные системы',
