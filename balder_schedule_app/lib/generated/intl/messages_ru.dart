@@ -30,6 +30,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "notificationsTitle":
             MessageLookupByLibrary.simpleMessage("Уведомления"),
         "qrTitle": MessageLookupByLibrary.simpleMessage("QR"),
+        "ru_enTitle": MessageLookupByLibrary.simpleMessage("ru"),
         "scheduleTitle": MessageLookupByLibrary.simpleMessage("Расписание"),
         "settingsTitle": MessageLookupByLibrary.simpleMessage("Настройки")
       };

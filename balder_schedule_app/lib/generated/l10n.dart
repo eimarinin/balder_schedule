@@ -129,6 +129,16 @@ class S {
       args: [],
     );
   }
+
+  /// `en`
+  String get ru_enTitle {
+    return Intl.message(
+      'en',
+      name: 'ru_enTitle',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

@@ -7,20 +7,15 @@ import 'package:gap/gap.dart';
 import '../../utils/padded_screen.dart';
 import '../../widgets/page_header_child.dart';
 
-class NotificationsScreen extends StatelessWidget {
+class NotificationsScreen extends StatefulWidget {
   const NotificationsScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: PageHeaderChild(title: S.of(context).notificationsTitle),
-      body: const PaddedScreen(child: NotificationsContent()),
-    );
-  }
+  _NotificationsScreenState createState() => _NotificationsScreenState();
 }
 
-class NotificationsContent extends StatelessWidget {
-  const NotificationsContent({super.key});
+class _NotificationsScreenState extends State<NotificationsScreen> {
+  bool isChecked = false; // Изначально выключено
 
   @override
   Widget build(BuildContext context) {
