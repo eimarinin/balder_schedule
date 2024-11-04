@@ -33,7 +33,7 @@ class LessonItem extends StatelessWidget {
             height: 66,
             decoration: BoxDecoration(
               color: Theme.of(context).colorScheme.secondaryContainer,
-              borderRadius: BorderRadius.circular(4),
+              borderRadius: BorderRadius.circular(6),
             ),
             child: TimeRange(startTime: startTime, endTime: endTime),
           ),
