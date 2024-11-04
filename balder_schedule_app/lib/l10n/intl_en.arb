@@ -5,5 +5,7 @@
     "settingsTitle": "Settings",
     "appearanceTitle": "Appearance",
     "notificationsTitle": "Notifications",
-    "qrTitle": "QR"
+    "qrTitle": "QR",
+    "lightthemeTitle": "Light theme",
+    "applanguageTitle": "app language"
 }
