@@ -24,7 +24,7 @@ class SettingsNavigator extends StatelessWidget {
             );
           case '/qr':
             return UnanimatedPageRoute(
-              builder: (context) => const qrScreen(),
+              builder: (context) => const QrScreen(),
             );
           default:
             return MaterialPageRoute(

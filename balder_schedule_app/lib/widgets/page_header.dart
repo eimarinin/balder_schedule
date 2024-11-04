@@ -1,7 +1,4 @@
-// lib/widgets/page_header.dart
-
 import 'package:flutter/material.dart';
-import '../utils/padded_screen.dart';
 
 class PageHeader extends StatelessWidget implements PreferredSizeWidget {
   final String title;
@@ -12,20 +9,16 @@ class PageHeader extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return AppBar(
       titleSpacing: 0,
-      toolbarHeight: 61,
-      title: PaddedScreen(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+      title: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 12.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
-              title,
-              style: const TextStyle(
-                fontSize: 20,
-                height: 1.2,
-              ),
+            Text(title),
+            IconButton(
+              icon: const Icon(Icons.search_outlined),
+              onPressed: () {},
             ),
-            const SizedBox(height: 12),
-            const Divider(height: 1),
           ],
         ),
       ),
@@ -33,5 +26,5 @@ class PageHeader extends StatelessWidget implements PreferredSizeWidget {
   }
 
   @override
-  Size get preferredSize => const Size.fromHeight(61.0);
+  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 }

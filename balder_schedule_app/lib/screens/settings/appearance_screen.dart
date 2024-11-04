@@ -1,8 +1,11 @@
 // lib/screens/notifications_screen.dart
 
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 
 import '../../generated/l10n.dart';
+import '../../utils/padded_screen.dart';
+import '../../widgets/page_header_child.dart';
 
 class AppearanceScreen extends StatelessWidget {
   const AppearanceScreen({super.key});
@@ -48,8 +51,8 @@ class AppearanceScreen extends StatelessWidget {
                       ),
                     ),
                     trailing: Container(
-                      width: 50,
-                      height: 50,
+                      width: 50, // Установите одинаковую ширину
+                      height: 50, // Установите одинаковую высоту
                       decoration: BoxDecoration(
                         color: Theme.of(context)
                             .colorScheme
@@ -79,23 +82,18 @@ class AppearanceScreen extends StatelessWidget {
                       ),
                     ),
                     trailing: Container(
-                      width: 50,
-                      height: 50,
+                      width: 50, // Установите одинаковую ширину
+                      height: 50, // Установите одинаковую высоту
                       decoration: BoxDecoration(
                         color: Theme.of(context)
                             .colorScheme
                             .primary, // Прозрачный фиолетовый цвет
                         borderRadius: BorderRadius.circular(6.0),
                       ),
-                      alignment:
-                          Alignment.center, // Выравнивание текста по центру
-                      child: Text(
-                        S.of(context).ru_enTitle, // Текст вместо иконки
-                        style: const TextStyle(
-                          color: Colors.white, // Цвет текста белый
-                          fontSize: 20, // Размер текста
-                          fontWeight: FontWeight.bold,
-                        ),
+                      child: const Icon(
+                        Icons.language, // Иконка языка
+                        color: Colors.white, // Цвет иконки белый
+                        size: 24, // Увеличенный размер иконки
                       ),
                     ),
                     onTap: () {
