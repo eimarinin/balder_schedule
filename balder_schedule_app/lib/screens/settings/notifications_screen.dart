@@ -27,6 +27,7 @@ class NotificationsContent extends StatelessWidget {
     return Column(
       children: [
         Gap(12),
+        Gap(12),
       ],
     );
   }
