@@ -2,6 +2,10 @@
 
 import 'package:balder_schedule_app/generated/l10n.dart';
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
+
+import '../../utils/padded_screen.dart';
+import '../../widgets/page_header_child.dart';
 
 class NotificationsScreen extends StatelessWidget {
   const NotificationsScreen({super.key});
@@ -9,18 +13,21 @@ class NotificationsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(S.of(context).notificationsTitle),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-      ),
-      body: const Center(
-        child: Text(''),
-      ),
+      appBar: PageHeaderChild(title: S.of(context).notificationsTitle),
+      body: const PaddedScreen(child: NotificationsContent()),
+    );
+  }
+}
+
+class NotificationsContent extends StatelessWidget {
+  const NotificationsContent({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Gap(12),
+      ],
     );
   }
 }

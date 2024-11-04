@@ -1,3 +1,4 @@
+import 'package:balder_schedule_app/screens/schedule/lesson_screen.dart';
 import 'package:flutter/material.dart';
 
 import '../../utils/unanimated_page_route.dart';
@@ -10,9 +11,16 @@ class ScheduleNavigator extends StatelessWidget {
   Widget build(BuildContext context) {
     return Navigator(
       onGenerateRoute: (settings) {
-        return UnanimatedPageRoute(
-          builder: (context) => const ScheduleScreen(),
-        );
+        switch (settings.name) {
+          case '/lesson':
+            return UnanimatedPageRoute(
+              builder: (context) => const LessonScreen(),
+            );
+          default:
+            return MaterialPageRoute(
+              builder: (context) => const ScheduleScreen(),
+            );
+        }
       },
     );
   }

@@ -34,6 +34,7 @@ class ScheduleContent extends StatelessWidget {
     return SingleChildScrollView(
       child: Column(
         children: [
+          Gap(12),
           Calendar(scheduleState: scheduleState),
           Gap(12),
           DaySchedule(

@@ -24,45 +24,50 @@ class LessonItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return IntrinsicHeight(
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            width: 72,
-            height: 66,
-            decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.secondaryContainer,
-              borderRadius: BorderRadius.circular(6),
+    return InkWell(
+      onTap: () {
+        Navigator.of(context).pushNamed('/lesson');
+      },
+      child: IntrinsicHeight(
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              width: 72,
+              height: 66,
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.secondaryContainer,
+                borderRadius: BorderRadius.circular(6),
+              ),
+              child: TimeRange(startTime: startTime, endTime: endTime),
             ),
-            child: TimeRange(startTime: startTime, endTime: endTime),
-          ),
-          const Gap(12),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                subject,
-                style: Theme.of(context).textTheme.labelLarge,
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      LessonTag(text: lectureType),
-                      const Gap(2),
-                      LessonTag(text: room),
-                    ],
-                  ),
-                  const Gap(2),
-                  LessonTag(text: teacher),
-                ],
-              ),
-            ],
-          ),
-        ],
+            const Gap(12),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  subject,
+                  style: Theme.of(context).textTheme.labelLarge,
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        LessonTag(text: lectureType),
+                        const Gap(2),
+                        LessonTag(text: room),
+                      ],
+                    ),
+                    const Gap(2),
+                    LessonTag(text: teacher),
+                  ],
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
