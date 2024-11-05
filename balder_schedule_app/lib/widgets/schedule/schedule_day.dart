@@ -32,7 +32,12 @@ class ScheduleDay extends StatelessWidget {
             ),
           ),
           const Gap(12),
-          ..._buildLessonItems(),
+          Wrap(
+            runSpacing: 12,
+            children: [
+              ..._buildLessonItems(),
+            ],
+          ),
         ],
       ),
     );
@@ -43,7 +48,10 @@ class ScheduleDay extends StatelessWidget {
     for (var i = 0; i < lessons.length; i++) {
       lessonWidgets.add(lessons[i]);
       if (i < lessons.length - 1) {
-        lessonWidgets.add(const Divider(thickness: 2));
+        lessonWidgets.add(const Divider(
+          thickness: 2,
+          height: 0,
+        ));
       }
     }
     return lessonWidgets;
