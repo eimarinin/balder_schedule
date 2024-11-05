@@ -23,62 +23,60 @@ class NotificationsContent extends StatefulWidget {
   const NotificationsContent({super.key});
 
   @override
-  _NotificationsContentState createState() => _NotificationsContentState();
+  State<NotificationsContent> createState() => _NotificationsContentState();
 }
 
 class _NotificationsContentState extends State<NotificationsContent> {
-  bool isChecked = false; // Изначально выключено
+  bool isChecked = false;
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        const Gap(12),
-        Padding(
-          padding: const EdgeInsets.only(top: 0.0), // Отступ сверху
-          child: Container(
-            padding: const EdgeInsets.all(
-                24.0), // Увеличенный отступ внутри контейнера
-            margin: const EdgeInsets.symmetric(horizontal: 0.0),
-            decoration: BoxDecoration(
-              color: Theme.of(context)
-                  .colorScheme
-                  .surfaceContainer, // Фон карточки
-              borderRadius: BorderRadius.circular(6.0), // Закругленные углы
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Expanded(
-                  child: Text(
-                    S.of(context).shedule_tomorrowTitle,
-                    style: const TextStyle(
-                      fontSize: 20,
-                      height: 1.2,
-                      // Цвет текста
+        Gap(12),
+        Container(
+          padding: const EdgeInsets.all(12.0),
+          decoration: BoxDecoration(
+            color: Theme.of(context).colorScheme.surfaceContainer,
+            borderRadius: BorderRadius.circular(6.0),
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Container(
+                padding: EdgeInsets.symmetric(vertical: 24.0, horizontal: 12.0),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        S.of(context).shedule_tomorrowTitle,
+                        style: const TextStyle(
+                          fontSize: 20,
+                          height: 1.2,
+                        ),
+                      ),
                     ),
-                  ),
+                    Switch.adaptive(
+                      thumbIcon: WidgetStateProperty.resolveWith<Icon?>(
+                        (states) {
+                          if (states.contains(WidgetState.selected)) {
+                            return Icon(Icons.check_outlined);
+                          } else {
+                            return Icon(Icons.remove_outlined);
+                          }
+                        },
+                      ),
+                      value: isChecked,
+                      onChanged: (value) {
+                        setState(() {
+                          isChecked = value;
+                        });
+                      },
+                    ),
+                  ],
                 ),
-                Switch.adaptive(
-                  value: isChecked,
-                  onChanged: (value) {
-                    setState(() {
-                      isChecked = value;
-                    });
-                  },
-                  activeColor: Theme.of(context)
-                      .colorScheme
-                      .onPrimary, // Цвет фона в включенном состоянии
-                  activeTrackColor: Theme.of(context)
-                      .colorScheme
-                      .primary, // Цвет дорожки в включенном состоянии
-                  inactiveThumbColor: const Color.fromARGB(
-                      255, 133, 133, 133), // Цвет фона в выключенном состоянии
-                  inactiveTrackColor: Colors
-                      .grey.shade300, // Цвет дорожки в выключенном состоянии
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ],

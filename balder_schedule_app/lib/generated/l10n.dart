@@ -130,10 +130,10 @@ class S {
     );
   }
 
-  /// `En`
+  /// `en`
   String get ru_enTitle {
     return Intl.message(
-      'En',
+      'en',
       name: 'ru_enTitle',
       desc: '',
       args: [],
@@ -150,10 +150,10 @@ class S {
     );
   }
 
-  /// `scan new schedule`
+  /// `Scan new schedule`
   String get scanNewScheduleTitle {
     return Intl.message(
-      'scan new schedule',
+      'Scan new schedule',
       name: 'scanNewScheduleTitle',
       desc: '',
       args: [],

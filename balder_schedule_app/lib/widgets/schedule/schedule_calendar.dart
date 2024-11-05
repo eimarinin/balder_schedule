@@ -20,13 +20,10 @@ class ScheduleCalendar extends StatelessWidget {
           onPressed: scheduleState.previousWeek,
         ),
         FilledButton(
-          style: ButtonStyle(
-            backgroundColor: WidgetStateProperty.all(
-              Theme.of(context).colorScheme.secondaryContainer,
-            ),
-            foregroundColor: WidgetStateProperty.all(
-              Theme.of(context).colorScheme.onSecondaryContainer,
-            ),
+          style: FilledButton.styleFrom(
+            padding: EdgeInsets.only(top: 12, bottom: 12, left: 16, right: 24),
+            backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
+            foregroundColor: Theme.of(context).colorScheme.onSecondaryContainer,
           ),
           onPressed: () async {
             final DateTime? pickedDate = await showDatePicker(

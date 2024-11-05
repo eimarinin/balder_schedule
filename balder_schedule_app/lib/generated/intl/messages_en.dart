@@ -30,9 +30,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "notificationsTitle":
             MessageLookupByLibrary.simpleMessage("Notifications"),
         "qrTitle": MessageLookupByLibrary.simpleMessage("QR"),
-        "ru_enTitle": MessageLookupByLibrary.simpleMessage("En"),
+        "ru_enTitle": MessageLookupByLibrary.simpleMessage("en"),
         "scanNewScheduleTitle":
-            MessageLookupByLibrary.simpleMessage("scan new schedule"),
+            MessageLookupByLibrary.simpleMessage("Scan new schedule"),
         "scheduleTitle": MessageLookupByLibrary.simpleMessage("Schedule"),
         "settingsTitle": MessageLookupByLibrary.simpleMessage("Settings"),
         "shareScheduleTitle":
