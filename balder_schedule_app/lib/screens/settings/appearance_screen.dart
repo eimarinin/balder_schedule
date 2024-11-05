@@ -23,13 +23,14 @@ class AppearanceScreen extends StatelessWidget {
         ),
       ),
       body: Padding(
-        padding: const EdgeInsets.only(top: 16.0), // Отступ сверху
+        padding: const EdgeInsets.only(top: 0.0), // Отступ сверху
         child: Column(
           children: [
+            const Gap(12),
             Container(
               padding: const EdgeInsets.all(
-                  24.0), // Увеличенный отступ внутри контейнера
-              margin: const EdgeInsets.symmetric(horizontal: 16.0),
+                  16.5), // Увеличенный отступ внутри контейнера
+              margin: const EdgeInsets.symmetric(horizontal: 11.5),
               decoration: BoxDecoration(
                 color: Theme.of(context)
                     .colorScheme
@@ -51,18 +52,16 @@ class AppearanceScreen extends StatelessWidget {
                       ),
                     ),
                     trailing: Container(
-                      width: 50, // Установите одинаковую ширину
-                      height: 50, // Установите одинаковую высоту
+                      width: 40,
+                      height: 40,
                       decoration: BoxDecoration(
-                        color: Theme.of(context)
-                            .colorScheme
-                            .primary, // Прозрачный фиолетовый цвет
+                        color: Theme.of(context).colorScheme.primary,
                         borderRadius: BorderRadius.circular(6.0),
                       ),
                       child: const Icon(
-                        Icons.wb_sunny, // Иконка солнца
-                        color: Colors.white, // Цвет иконки белый
-                        size: 24, // Увеличенный размер иконки
+                        Icons.wb_sunny_outlined,
+                        color: Colors.white,
+                        size: 24,
                       ),
                     ),
                     onTap: () {
@@ -82,18 +81,22 @@ class AppearanceScreen extends StatelessWidget {
                       ),
                     ),
                     trailing: Container(
-                      width: 50, // Установите одинаковую ширину
-                      height: 50, // Установите одинаковую высоту
+                      width: 40, // Установите одинаковую ширину
+                      height: 40, // Установите одинаковую высоту
                       decoration: BoxDecoration(
                         color: Theme.of(context)
                             .colorScheme
                             .primary, // Прозрачный фиолетовый цвет
                         borderRadius: BorderRadius.circular(6.0),
                       ),
-                      child: const Icon(
-                        Icons.language, // Иконка языка
-                        color: Colors.white, // Цвет иконки белый
-                        size: 24, // Увеличенный размер иконки
+                      alignment: Alignment
+                          .center, // Центрирование текста внутри контейнера
+                      child: Text(
+                        S.of(context).ru_enTitle, // Текст вместо иконки
+                        style: const TextStyle(
+                          color: Colors.white, // Цвет текста
+                          fontSize: 16, // Размер текста
+                        ),
                       ),
                     ),
                     onTap: () {

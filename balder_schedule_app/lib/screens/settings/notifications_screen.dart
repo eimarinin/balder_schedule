@@ -51,11 +51,11 @@ class _NotificationsContentState extends State<NotificationsContent> {
               children: [
                 Expanded(
                   child: Text(
-                    S.of(context).applanguageTitle,
+                    S.of(context).shedule_tomorrowTitle,
                     style: const TextStyle(
                       fontSize: 20,
                       height: 1.2,
-                      color: Colors.black, // Цвет текста
+                      // Цвет текста
                     ),
                   ),
                 ),
@@ -66,8 +66,9 @@ class _NotificationsContentState extends State<NotificationsContent> {
                       isChecked = value;
                     });
                   },
-                  activeColor: const Color.fromARGB(
-                      255, 255, 255, 255), // Цвет фона в включенном состоянии
+                  activeColor: Theme.of(context)
+                      .colorScheme
+                      .onPrimary, // Цвет фона в включенном состоянии
                   activeTrackColor: Theme.of(context)
                       .colorScheme
                       .primary, // Цвет дорожки в включенном состоянии
