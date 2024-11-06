@@ -81,6 +81,7 @@ class _NotificationsContentState extends State<NotificationsContent> {
               ],
             ),
           ),
+          Gap(12),
         ],
       ),
     );

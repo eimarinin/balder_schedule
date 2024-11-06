@@ -72,6 +72,7 @@ class QrContent extends StatelessWidget {
               ],
             ),
           ),
+          Gap(12),
         ],
       ),
     );

@@ -61,6 +61,7 @@ class SettingsContent extends StatelessWidget {
               ],
             ),
           ),
+          Gap(12),
         ],
       ),
     );

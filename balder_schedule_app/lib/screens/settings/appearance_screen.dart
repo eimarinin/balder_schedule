@@ -95,6 +95,7 @@ class AppearanceContent extends StatelessWidget {
               ],
             ),
           ),
+          Gap(12),
         ],
       ),
     );
