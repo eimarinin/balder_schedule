@@ -31,55 +31,58 @@ class _NotificationsContentState extends State<NotificationsContent> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Gap(12),
-        Container(
-          padding: const EdgeInsets.all(12.0),
-          decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.surfaceContainer,
-            borderRadius: BorderRadius.circular(6.0),
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Container(
-                padding: EdgeInsets.symmetric(vertical: 24.0, horizontal: 12.0),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: Text(
-                        S.of(context).shedule_tomorrowTitle,
-                        style: const TextStyle(
-                          fontSize: 20,
-                          height: 1.2,
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          Gap(12),
+          Container(
+            padding: const EdgeInsets.all(12.0),
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.surfaceContainer,
+              borderRadius: BorderRadius.circular(6.0),
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Container(
+                  padding:
+                      EdgeInsets.symmetric(vertical: 24.0, horizontal: 12.0),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          S.of(context).shedule_tomorrowTitle,
+                          style: const TextStyle(
+                            fontSize: 20,
+                            height: 1.2,
+                          ),
                         ),
                       ),
-                    ),
-                    Switch.adaptive(
-                      thumbIcon: WidgetStateProperty.resolveWith<Icon?>(
-                        (states) {
-                          if (states.contains(WidgetState.selected)) {
-                            return Icon(Icons.check_outlined);
-                          } else {
-                            return Icon(Icons.remove_outlined);
-                          }
+                      Switch.adaptive(
+                        thumbIcon: WidgetStateProperty.resolveWith<Icon?>(
+                          (states) {
+                            if (states.contains(WidgetState.selected)) {
+                              return Icon(Icons.check_outlined);
+                            } else {
+                              return Icon(Icons.remove_outlined);
+                            }
+                          },
+                        ),
+                        value: isChecked,
+                        onChanged: (value) {
+                          setState(() {
+                            isChecked = value;
+                          });
                         },
                       ),
-                      value: isChecked,
-                      onChanged: (value) {
-                        setState(() {
-                          isChecked = value;
-                        });
-                      },
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

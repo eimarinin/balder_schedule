@@ -24,53 +24,56 @@ class QrContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        const Gap(12),
-        Container(
-          padding: const EdgeInsets.all(12.0),
-          decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.surfaceContainer,
-            borderRadius: BorderRadius.circular(6.0),
-          ),
-          child: Column(
-            children: [
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton.icon(
-                  onPressed: () {},
-                  icon: const Icon(Icons.video_camera_front_outlined, size: 18),
-                  label: Text(S.of(context).scanNewScheduleTitle),
-                ),
-              ),
-              Gap(12),
-              Container(
-                width: 364,
-                height: 364,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(8),
-                  child: Image.asset(
-                    'assets/images/qr.png',
-                    fit: BoxFit.cover,
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          const Gap(12),
+          Container(
+            padding: const EdgeInsets.all(12.0),
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.surfaceContainer,
+              borderRadius: BorderRadius.circular(6.0),
+            ),
+            child: Column(
+              children: [
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton.icon(
+                    onPressed: () {},
+                    icon:
+                        const Icon(Icons.video_camera_front_outlined, size: 18),
+                    label: Text(S.of(context).scanNewScheduleTitle),
                   ),
                 ),
-              ),
-              Gap(12),
-              SizedBox(
-                width: double.infinity,
-                child: TextButton.icon(
-                  onPressed: () {},
-                  icon: Icon(Icons.share_outlined, size: 18),
-                  label: Text(S.of(context).shareScheduleTitle),
+                Gap(12),
+                Container(
+                  width: 364,
+                  height: 364,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(8),
+                    child: Image.asset(
+                      'assets/images/qr.png',
+                      fit: BoxFit.cover,
+                    ),
+                  ),
                 ),
-              ),
-            ],
+                Gap(12),
+                SizedBox(
+                  width: double.infinity,
+                  child: TextButton.icon(
+                    onPressed: () {},
+                    icon: Icon(Icons.share_outlined, size: 18),
+                    label: Text(S.of(context).shareScheduleTitle),
+                  ),
+                ),
+              ],
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
