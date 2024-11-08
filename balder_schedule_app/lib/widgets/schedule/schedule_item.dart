@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:go_router/go_router.dart';
 
 import 'schedule_tag.dart';
 import 'schedule_time.dart';
@@ -25,9 +26,7 @@ class ScheduleItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {
-        Navigator.of(context).pushNamed('/lesson');
-      },
+      onTap: () => context.go('/schedule/lesson'),
       child: IntrinsicHeight(
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,

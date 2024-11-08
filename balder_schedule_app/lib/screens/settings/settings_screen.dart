@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../utils/padded_screen.dart';
 import '../../widgets/page_header.dart';
@@ -38,25 +39,19 @@ class SettingsContent extends StatelessWidget {
                 SettingsItem(
                   icon: Icons.palette_outlined,
                   title: S.of(context).appearanceTitle,
-                  onTap: () {
-                    Navigator.of(context).pushNamed('/appearance');
-                  },
+                  onTap: () => context.go('/settings/appearance'),
                 ),
                 Divider(thickness: 2, height: 0, indent: 12, endIndent: 12),
                 SettingsItem(
                   icon: Icons.notifications_outlined,
                   title: S.of(context).notificationsTitle,
-                  onTap: () {
-                    Navigator.of(context).pushNamed('/notifications');
-                  },
+                  onTap: () => context.go('/settings/notifications'),
                 ),
                 Divider(thickness: 2, height: 0, indent: 12, endIndent: 12),
                 SettingsItem(
                   icon: Icons.qr_code_outlined,
                   title: S.of(context).qrTitle,
-                  onTap: () {
-                    Navigator.of(context).pushNamed('/qr');
-                  },
+                  onTap: () => context.go('/settings/qr'),
                 ),
               ],
             ),
