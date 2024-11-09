@@ -20,7 +20,7 @@ class AppConfig {
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
-          padding: const EdgeInsets.symmetric(vertical: 18.0),
+          padding: const EdgeInsets.symmetric(vertical: 18.0, horizontal: 24.0),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(4),
           ),
@@ -45,6 +45,13 @@ class AppConfig {
       filledButtonTheme: FilledButtonThemeData(
         style: FilledButton.styleFrom(
           padding: const EdgeInsets.symmetric(vertical: 18.0),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(4),
+          ),
+        ),
+      ),
+      iconButtonTheme: IconButtonThemeData(
+        style: IconButton.styleFrom(
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(4),
           ),

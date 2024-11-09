@@ -25,7 +25,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "appearanceTitle": MessageLookupByLibrary.simpleMessage("Appearance"),
         "applanguageTitle":
             MessageLookupByLibrary.simpleMessage("app language"),
-        "editTitle": MessageLookupByLibrary.simpleMessage("Edit"),
+        "editTitle": MessageLookupByLibrary.simpleMessage("Schedule editor"),
         "lightthemeTitle": MessageLookupByLibrary.simpleMessage("Light theme"),
         "notificationsTitle":
             MessageLookupByLibrary.simpleMessage("Notifications"),
@@ -34,6 +34,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "scanNewScheduleTitle":
             MessageLookupByLibrary.simpleMessage("Scan new schedule"),
         "scheduleTitle": MessageLookupByLibrary.simpleMessage("Schedule"),
+        "settingsHonesty":
+            MessageLookupByLibrary.simpleMessage("The parity of the week"),
         "settingsTitle": MessageLookupByLibrary.simpleMessage("Settings"),
         "shareScheduleTitle":
             MessageLookupByLibrary.simpleMessage("Share schedule"),

@@ -60,10 +60,10 @@ class S {
     );
   }
 
-  /// `Edit`
+  /// `Schedule editor`
   String get editTitle {
     return Intl.message(
-      'Edit',
+      'Schedule editor',
       name: 'editTitle',
       desc: '',
       args: [],
@@ -165,6 +165,16 @@ class S {
     return Intl.message(
       'Share schedule',
       name: 'shareScheduleTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `The parity of the week`
+  String get settingsHonesty {
+    return Intl.message(
+      'The parity of the week',
+      name: 'settingsHonesty',
       desc: '',
       args: [],
     );

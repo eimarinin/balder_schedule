@@ -1,7 +1,7 @@
 {
     "@@locale": "ru",
     "scheduleTitle": "Расписание",
-    "editTitle": "Редактирование",
+    "editTitle": "Редактор расписания",
     "settingsTitle": "Настройки",
     "appearanceTitle": "Внешний вид",
     "notificationsTitle": "Уведомления",
@@ -11,5 +11,6 @@
     "ru_enTitle": "ru",
     "shedule_tomorrowTitle": "Расписание на завтра",
     "scanNewScheduleTitle": "Сканировать новое расписание",
-    "shareScheduleTitle": "Поделиться расписанием"
+    "shareScheduleTitle": "Поделиться расписанием",
+    "settingsHonesty": "Четность недели"
 }

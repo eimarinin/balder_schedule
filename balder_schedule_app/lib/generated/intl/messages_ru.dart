@@ -25,7 +25,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "appearanceTitle": MessageLookupByLibrary.simpleMessage("Внешний вид"),
         "applanguageTitle":
             MessageLookupByLibrary.simpleMessage("Язык приложения"),
-        "editTitle": MessageLookupByLibrary.simpleMessage("Редактирование"),
+        "editTitle":
+            MessageLookupByLibrary.simpleMessage("Редактор расписания"),
         "lightthemeTitle": MessageLookupByLibrary.simpleMessage("Светлая тема"),
         "notificationsTitle":
             MessageLookupByLibrary.simpleMessage("Уведомления"),
@@ -34,6 +35,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "scanNewScheduleTitle": MessageLookupByLibrary.simpleMessage(
             "Сканировать новое расписание"),
         "scheduleTitle": MessageLookupByLibrary.simpleMessage("Расписание"),
+        "settingsHonesty":
+            MessageLookupByLibrary.simpleMessage("Четность недели"),
         "settingsTitle": MessageLookupByLibrary.simpleMessage("Настройки"),
         "shareScheduleTitle":
             MessageLookupByLibrary.simpleMessage("Поделиться расписанием"),

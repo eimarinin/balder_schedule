@@ -53,6 +53,12 @@ class SettingsContent extends StatelessWidget {
                   title: S.of(context).qrTitle,
                   onTap: () => context.go('/settings/qr'),
                 ),
+                Divider(thickness: 2, height: 0, indent: 12, endIndent: 12),
+                SettingsItem(
+                  icon: Icons.event_repeat_outlined,
+                  title: S.of(context).settingsHonesty,
+                  onTap: () => context.go(''),
+                ),
               ],
             ),
           ),

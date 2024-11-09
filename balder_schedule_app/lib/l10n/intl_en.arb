@@ -1,7 +1,7 @@
 {
     "@@locale": "en",
     "scheduleTitle": "Schedule",
-    "editTitle": "Edit",
+    "editTitle": "Schedule editor",
     "settingsTitle": "Settings",
     "appearanceTitle": "Appearance",
     "notificationsTitle": "Notifications",
@@ -11,5 +11,6 @@
     "ru_enTitle": "en",
     "shedule_tomorrowTitle": "Shedule for tomorrow",
     "scanNewScheduleTitle": "Scan new schedule",
-    "shareScheduleTitle": "Share schedule"
+    "shareScheduleTitle": "Share schedule",
+    "settingsHonesty": "The parity of the week"
 }

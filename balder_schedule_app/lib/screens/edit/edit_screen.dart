@@ -1,4 +1,6 @@
+import 'package:balder_schedule_app/widgets/edit/day_selector.dart';
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 
 import '../../utils/padded_screen.dart';
 import '../../widgets/page_header.dart';
@@ -12,6 +14,11 @@ class EditScreen extends StatelessWidget {
     return Scaffold(
       appBar: PageHeader(title: S.of(context).editTitle),
       body: const PaddedScreen(child: EditContent()),
+      floatingActionButton: ElevatedButton.icon(
+        onPressed: () {},
+        icon: Icon(Icons.add_outlined),
+        label: Text('Добавить'),
+      ),
     );
   }
 }
@@ -21,6 +28,13 @@ class EditContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          Gap(12),
+          const DaySelector(),
+        ],
+      ),
+    );
   }
 }
