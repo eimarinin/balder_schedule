@@ -1,11 +1,11 @@
 // lib/screens/notifications_screen.dart
 
 import 'package:balder_schedule_app/generated/l10n.dart';
+import 'package:balder_schedule_app/utils/padded_screen.dart';
+import 'package:balder_schedule_app/widgets/page_header_child.dart';
+
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-
-import '../../utils/padded_screen.dart';
-import '../../widgets/page_header_child.dart';
 
 class QrScreen extends StatelessWidget {
   const QrScreen({super.key});
@@ -14,7 +14,7 @@ class QrScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: PageHeaderChild(title: S.of(context).qrTitle),
-      body: const PaddedScreen(child: QrContent()),
+      body: PaddedScreen(child: QrContent()),
     );
   }
 }
@@ -40,12 +40,11 @@ class QrContent extends StatelessWidget {
                   width: double.infinity,
                   child: ElevatedButton.icon(
                     onPressed: () {},
-                    icon:
-                        const Icon(Icons.video_camera_front_outlined, size: 18),
+                    icon: Icon(Icons.video_camera_front_outlined, size: 18),
                     label: Text(S.of(context).scanNewScheduleTitle),
                   ),
                 ),
-                Gap(12),
+                const Gap(12),
                 Container(
                   width: 364,
                   height: 364,
@@ -60,7 +59,7 @@ class QrContent extends StatelessWidget {
                     ),
                   ),
                 ),
-                Gap(12),
+                const Gap(12),
                 SizedBox(
                   width: double.infinity,
                   child: TextButton.icon(
@@ -72,7 +71,7 @@ class QrContent extends StatelessWidget {
               ],
             ),
           ),
-          Gap(12),
+          const Gap(12),
         ],
       ),
     );

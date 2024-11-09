@@ -1,8 +1,9 @@
 // lib/app_config.dart
 
+import 'package:balder_schedule_app/generated/l10n.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'generated/l10n.dart';
 
 class AppConfig {
   static ThemeData themeData() {

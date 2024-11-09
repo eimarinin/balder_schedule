@@ -12,5 +12,6 @@
     "shedule_tomorrowTitle": "Shedule for tomorrow",
     "scanNewScheduleTitle": "Scan new schedule",
     "shareScheduleTitle": "Share schedule",
-    "settingsHonesty": "The parity of the week"
+    "settingsHonesty": "The parity of the week",
+    "lessonCreateScreenTitle": "Add a lesson"
 }

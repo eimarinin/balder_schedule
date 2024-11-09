@@ -1,11 +1,11 @@
 // lib/main.dart
+import 'package:balder_schedule_app/app_config.dart';
+import 'package:balder_schedule_app/router.dart';
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 // ignore: depend_on_referenced_packages
 import 'package:flutter_web_plugins/url_strategy.dart';
-
-import 'router.dart';
-import 'app_config.dart';
 
 void main() {
   // turn off the # in the URLs on the web

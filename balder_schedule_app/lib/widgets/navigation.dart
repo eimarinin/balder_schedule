@@ -1,9 +1,9 @@
 // lib/widgets/bottom_navigation.dart
 
+import 'package:balder_schedule_app/generated/l10n.dart';
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-
-import '../generated/l10n.dart';
 
 class ScaffoldWithNestedNavigation extends StatelessWidget {
   const ScaffoldWithNestedNavigation({

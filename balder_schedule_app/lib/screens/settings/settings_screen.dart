@@ -1,11 +1,11 @@
+import 'package:balder_schedule_app/generated/l10n.dart';
+import 'package:balder_schedule_app/utils/padded_screen.dart';
+import 'package:balder_schedule_app/widgets/page_header.dart';
+import 'package:balder_schedule_app/widgets/settings/settings_item.dart';
+
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
-
-import '../../utils/padded_screen.dart';
-import '../../widgets/page_header.dart';
-import '../../generated/l10n.dart';
-import '../../widgets/settings/settings_item.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
@@ -14,7 +14,7 @@ class SettingsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: PageHeader(title: S.of(context).settingsTitle),
-      body: const PaddedScreen(child: SettingsContent()),
+      body: PaddedScreen(child: SettingsContent()),
     );
   }
 }
@@ -27,7 +27,7 @@ class SettingsContent extends StatelessWidget {
     return SingleChildScrollView(
       child: Column(
         children: [
-          Gap(12),
+          const Gap(12),
           Container(
             padding: EdgeInsets.all(12.0),
             decoration: BoxDecoration(
@@ -62,7 +62,7 @@ class SettingsContent extends StatelessWidget {
               ],
             ),
           ),
-          Gap(12),
+          const Gap(12),
         ],
       ),
     );

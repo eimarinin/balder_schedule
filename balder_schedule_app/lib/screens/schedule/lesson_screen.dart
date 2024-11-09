@@ -2,6 +2,7 @@ import 'package:balder_schedule_app/utils/padded_screen.dart';
 import 'package:balder_schedule_app/widgets/page_header_child.dart';
 import 'package:balder_schedule_app/widgets/schedule/lesson/lesson_tag.dart';
 import 'package:balder_schedule_app/widgets/schedule/lesson/lesson_time.dart';
+
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
@@ -12,7 +13,7 @@ class LessonScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: PageHeaderChild(title: 'Алгебра'),
-      body: const PaddedScreen(child: LessonContent()),
+      body: PaddedScreen(child: LessonContent()),
     );
   }
 }
@@ -25,22 +26,22 @@ class LessonContent extends StatelessWidget {
     return SingleChildScrollView(
       child: Column(
         children: [
-          Gap(12),
+          const Gap(12),
           Row(
             children: [
               LessonTime(text: '8:00'),
-              Gap(12),
+              const Gap(12),
               Text('-', style: TextStyle(fontSize: 24)),
-              Gap(12),
+              const Gap(12),
               LessonTime(text: '9:35'),
             ],
           ),
-          Gap(12),
+          const Gap(12),
           Row(
             children: [
               Expanded(
                 child: Container(
-                  padding: EdgeInsets.all(24.0),
+                  padding: const EdgeInsets.all(24.0),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(6.0),
                     color: Theme.of(context).colorScheme.surfaceContainer,
@@ -67,7 +68,7 @@ class LessonContent extends StatelessWidget {
               ),
             ],
           ),
-          Gap(12),
+          const Gap(12),
           TextField(
             decoration: InputDecoration(
               labelText: 'Заметка на 28.10',
@@ -75,14 +76,14 @@ class LessonContent extends StatelessWidget {
               alignLabelWithHint: true,
               hintText: 'Например, сделать домашку...',
               hintStyle: TextStyle(
-                fontWeight: FontWeight.w400, // уменьшенная жирность
+                fontWeight: FontWeight.w400,
                 color: Theme.of(context).colorScheme.outline,
               ),
             ),
             maxLines: null,
             minLines: 5,
           ),
-          Gap(12),
+          const Gap(12),
           Row(
             children: [
               Expanded(
@@ -100,7 +101,7 @@ class LessonContent extends StatelessWidget {
               ),
             ],
           ),
-          Gap(12),
+          const Gap(12),
         ],
       ),
     );

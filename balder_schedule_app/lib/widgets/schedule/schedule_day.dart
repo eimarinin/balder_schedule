@@ -1,7 +1,7 @@
+import 'package:balder_schedule_app/widgets/schedule/schedule_item.dart';
+
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-
-import 'schedule_item.dart';
 
 class ScheduleDay extends StatelessWidget {
   final String date;

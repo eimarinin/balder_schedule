@@ -1,9 +1,9 @@
+import 'package:balder_schedule_app/widgets/schedule/schedule_tag.dart';
+import 'package:balder_schedule_app/widgets/schedule/schedule_time.dart';
+
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
-
-import 'schedule_tag.dart';
-import 'schedule_time.dart';
 
 class ScheduleItem extends StatelessWidget {
   final String startTime;
@@ -54,9 +54,9 @@ class ScheduleItem extends StatelessWidget {
                   children: [
                     Row(
                       children: [
-                        ScheduleTag(text: lectureType),
-                        const Gap(2),
                         ScheduleTag(text: room),
+                        const Gap(2),
+                        ScheduleTag(text: lectureType),
                       ],
                     ),
                     const Gap(2),

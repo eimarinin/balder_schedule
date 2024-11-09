@@ -27,6 +27,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Язык приложения"),
         "editTitle":
             MessageLookupByLibrary.simpleMessage("Редактор расписания"),
+        "lessonCreateScreenTitle":
+            MessageLookupByLibrary.simpleMessage("Добавить предмет"),
         "lightthemeTitle": MessageLookupByLibrary.simpleMessage("Светлая тема"),
         "notificationsTitle":
             MessageLookupByLibrary.simpleMessage("Уведомления"),

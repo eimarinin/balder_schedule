@@ -28,7 +28,7 @@ class _DaySelectorState extends State<DaySelector> {
             borderRadius: BorderRadius.circular(4),
           ),
           child: IconButton(
-            icon: const Icon(Icons.arrow_back),
+            icon: Icon(Icons.arrow_back),
             color: Theme.of(context).colorScheme.onPrimary,
             onPressed: () => _changeDay(-1),
           ),
@@ -44,7 +44,7 @@ class _DaySelectorState extends State<DaySelector> {
             borderRadius: BorderRadius.circular(4),
           ),
           child: IconButton(
-            icon: const Icon(Icons.arrow_forward),
+            icon: Icon(Icons.arrow_forward),
             color: Theme.of(context).colorScheme.onPrimary,
             onPressed: () => _changeDay(1),
           ),

@@ -1,10 +1,11 @@
+import 'package:balder_schedule_app/generated/l10n.dart';
+import 'package:balder_schedule_app/utils/padded_screen.dart';
 import 'package:balder_schedule_app/widgets/edit/day_selector.dart';
+import 'package:balder_schedule_app/widgets/page_header.dart';
+
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-
-import '../../utils/padded_screen.dart';
-import '../../widgets/page_header.dart';
-import '../../generated/l10n.dart';
+import 'package:go_router/go_router.dart';
 
 class EditScreen extends StatelessWidget {
   const EditScreen({super.key});
@@ -13,9 +14,9 @@ class EditScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: PageHeader(title: S.of(context).editTitle),
-      body: const PaddedScreen(child: EditContent()),
+      body: PaddedScreen(child: EditContent()),
       floatingActionButton: ElevatedButton.icon(
-        onPressed: () {},
+        onPressed: () => context.go('/edit/lesson_create'),
         icon: Icon(Icons.add_outlined),
         label: Text('Добавить'),
       ),
@@ -31,8 +32,9 @@ class EditContent extends StatelessWidget {
     return SingleChildScrollView(
       child: Column(
         children: [
-          Gap(12),
-          const DaySelector(),
+          const Gap(12),
+          DaySelector(),
+          const Gap(12),
         ],
       ),
     );

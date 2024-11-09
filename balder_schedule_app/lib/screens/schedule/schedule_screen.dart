@@ -1,14 +1,14 @@
+import 'package:balder_schedule_app/generated/l10n.dart';
+import 'package:balder_schedule_app/state/schedule_state.dart';
+import 'package:balder_schedule_app/utils/padded_screen.dart';
+import 'package:balder_schedule_app/widgets/page_header.dart';
+import 'package:balder_schedule_app/widgets/schedule/schedule_calendar.dart';
+import 'package:balder_schedule_app/widgets/schedule/schedule_day.dart';
+import 'package:balder_schedule_app/widgets/schedule/schedule_item.dart';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:gap/gap.dart';
-
-import '../../state/schedule_state.dart';
-import '../../utils/padded_screen.dart';
-import '../../generated/l10n.dart';
-import '../../widgets/page_header.dart';
-import '../../widgets/schedule/schedule_calendar.dart';
-import '../../widgets/schedule/schedule_day.dart';
-import '../../widgets/schedule/schedule_item.dart';
 
 class ScheduleScreen extends StatelessWidget {
   const ScheduleScreen({super.key});
@@ -19,7 +19,7 @@ class ScheduleScreen extends StatelessWidget {
       create: (context) => ScheduleState(),
       child: Scaffold(
         appBar: PageHeader(title: S.of(context).scheduleTitle),
-        body: const PaddedScreen(child: ScheduleContent()),
+        body: PaddedScreen(child: ScheduleContent()),
       ),
     );
   }
@@ -34,9 +34,9 @@ class ScheduleContent extends StatelessWidget {
     return SingleChildScrollView(
       child: Column(
         children: [
-          Gap(12),
+          const Gap(12),
           ScheduleCalendar(scheduleState: scheduleState),
-          Gap(12),
+          const Gap(12),
           ScheduleDay(
             date: "Понедельник - 28.10",
             lessons: [
@@ -58,7 +58,7 @@ class ScheduleContent extends StatelessWidget {
               ),
             ],
           ),
-          Gap(12),
+          const Gap(12),
           ScheduleDay(
             date: "Вторник - 29.10",
             lessons: [
@@ -80,7 +80,7 @@ class ScheduleContent extends StatelessWidget {
               ),
             ],
           ),
-          Gap(12),
+          const Gap(12),
           ScheduleDay(
             date: "Среда - 30.10",
             lessons: [
@@ -102,7 +102,7 @@ class ScheduleContent extends StatelessWidget {
               ),
             ],
           ),
-          Gap(12),
+          const Gap(12),
         ],
       ),
     );

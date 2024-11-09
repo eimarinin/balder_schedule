@@ -1,6 +1,7 @@
-import 'package:flutter/material.dart';
+import 'package:balder_schedule_app/state/schedule_state.dart';
 
-import '../../state/schedule_state.dart';
+import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 
 class ScheduleCalendar extends StatelessWidget {
   final ScheduleState scheduleState;
@@ -21,7 +22,7 @@ class ScheduleCalendar extends StatelessWidget {
         ),
         FilledButton(
           style: FilledButton.styleFrom(
-            padding: EdgeInsets.only(top: 12, bottom: 12, left: 16, right: 24),
+            padding: EdgeInsets.only(top: 10, bottom: 10, left: 16, right: 24),
             backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
             foregroundColor: Theme.of(context).colorScheme.onSecondaryContainer,
           ),
@@ -51,13 +52,13 @@ class ScheduleCalendar extends StatelessWidget {
                 Icons.today_outlined,
                 color: Theme.of(context).colorScheme.onSecondaryContainer,
               ),
-              const SizedBox(width: 8.0),
+              const Gap(8),
               Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Text(
-                    '${scheduleState.getWeekNumber()} неделя',
+                    'Четность: 2',
                     style: Theme.of(context).textTheme.labelLarge,
                   ),
                   Text(

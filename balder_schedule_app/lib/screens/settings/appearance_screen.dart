@@ -1,11 +1,11 @@
 // lib/screens/notifications_screen.dart
 
+import 'package:balder_schedule_app/generated/l10n.dart';
+import 'package:balder_schedule_app/utils/padded_screen.dart';
+import 'package:balder_schedule_app/widgets/page_header_child.dart';
+
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-
-import '../../generated/l10n.dart';
-import '../../utils/padded_screen.dart';
-import '../../widgets/page_header_child.dart';
 
 class AppearanceScreen extends StatelessWidget {
   const AppearanceScreen({super.key});
@@ -14,7 +14,7 @@ class AppearanceScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: PageHeaderChild(title: S.of(context).appearanceTitle),
-      body: const PaddedScreen(child: AppearanceContent()),
+      body: PaddedScreen(child: AppearanceContent()),
     );
   }
 }
@@ -27,9 +27,9 @@ class AppearanceContent extends StatelessWidget {
     return SingleChildScrollView(
       child: Column(
         children: [
-          Gap(12),
+          const Gap(12),
           Container(
-            padding: EdgeInsets.all(12.0),
+            padding: const EdgeInsets.all(12.0),
             decoration: BoxDecoration(
               color: Theme.of(context).colorScheme.surfaceContainer,
               borderRadius: BorderRadius.circular(6.0),
@@ -37,8 +37,8 @@ class AppearanceContent extends StatelessWidget {
             child: Column(
               children: [
                 ListTile(
-                  contentPadding:
-                      EdgeInsets.symmetric(horizontal: 12.0, vertical: 20.0),
+                  contentPadding: const EdgeInsets.symmetric(
+                      horizontal: 12.0, vertical: 20.0),
                   title: Text(
                     S.of(context).lightthemeTitle,
                     style: const TextStyle(
@@ -64,8 +64,8 @@ class AppearanceContent extends StatelessWidget {
                   },
                 ),
                 ListTile(
-                  contentPadding:
-                      EdgeInsets.symmetric(horizontal: 12.0, vertical: 20.0),
+                  contentPadding: const EdgeInsets.symmetric(
+                      horizontal: 12.0, vertical: 20.0),
                   title: Text(
                     S.of(context).applanguageTitle,
                     style: const TextStyle(
@@ -95,7 +95,7 @@ class AppearanceContent extends StatelessWidget {
               ],
             ),
           ),
-          Gap(12),
+          const Gap(12),
         ],
       ),
     );

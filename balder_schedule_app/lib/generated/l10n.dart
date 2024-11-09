@@ -179,6 +179,16 @@ class S {
       args: [],
     );
   }
+
+  /// `Add a lesson`
+  String get lessonCreateScreenTitle {
+    return Intl.message(
+      'Add a lesson',
+      name: 'lessonCreateScreenTitle',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

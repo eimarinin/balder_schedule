@@ -1,11 +1,11 @@
 // lib/screens/notifications_screen.dart
 
 import 'package:balder_schedule_app/generated/l10n.dart';
+import 'package:balder_schedule_app/utils/padded_screen.dart';
+import 'package:balder_schedule_app/widgets/page_header_child.dart';
+
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-
-import '../../utils/padded_screen.dart';
-import '../../widgets/page_header_child.dart';
 
 class NotificationsScreen extends StatelessWidget {
   const NotificationsScreen({super.key});
@@ -14,7 +14,7 @@ class NotificationsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: PageHeaderChild(title: S.of(context).notificationsTitle),
-      body: const PaddedScreen(child: NotificationsContent()),
+      body: PaddedScreen(child: NotificationsContent()),
     );
   }
 }
@@ -34,7 +34,7 @@ class _NotificationsContentState extends State<NotificationsContent> {
     return SingleChildScrollView(
       child: Column(
         children: [
-          Gap(12),
+          const Gap(12),
           Container(
             padding: const EdgeInsets.all(12.0),
             decoration: BoxDecoration(
@@ -45,8 +45,8 @@ class _NotificationsContentState extends State<NotificationsContent> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Container(
-                  padding:
-                      EdgeInsets.symmetric(vertical: 24.0, horizontal: 12.0),
+                  padding: const EdgeInsets.symmetric(
+                      vertical: 24.0, horizontal: 12.0),
                   child: Row(
                     children: [
                       Expanded(
@@ -62,9 +62,9 @@ class _NotificationsContentState extends State<NotificationsContent> {
                         thumbIcon: WidgetStateProperty.resolveWith<Icon?>(
                           (states) {
                             if (states.contains(WidgetState.selected)) {
-                              return Icon(Icons.check_outlined);
+                              return const Icon(Icons.check_outlined);
                             } else {
-                              return Icon(Icons.remove_outlined);
+                              return const Icon(Icons.remove_outlined);
                             }
                           },
                         ),
@@ -81,7 +81,7 @@ class _NotificationsContentState extends State<NotificationsContent> {
               ],
             ),
           ),
-          Gap(12),
+          const Gap(12),
         ],
       ),
     );
