@@ -50,11 +50,11 @@ class LessonContent extends StatelessWidget {
                     runSpacing: 24.0,
                     children: [
                       LessonTag(label: 'Лекция'),
-                      Divider(thickness: 2, height: 0),
+                      const Divider(thickness: 2, height: 0),
                       LessonTag(label: '6512'),
-                      Divider(thickness: 2, height: 0),
+                      const Divider(thickness: 2, height: 0),
                       LessonTag(label: 'Багаев Андрей Владимирович'),
-                      Divider(thickness: 2, height: 0),
+                      const Divider(thickness: 2, height: 0),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [

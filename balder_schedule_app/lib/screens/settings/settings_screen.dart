@@ -41,19 +41,22 @@ class SettingsContent extends StatelessWidget {
                   title: S.of(context).appearanceTitle,
                   onTap: () => context.go('/settings/appearance'),
                 ),
-                Divider(thickness: 2, height: 0, indent: 12, endIndent: 12),
+                const Divider(
+                    thickness: 2, height: 0, indent: 12, endIndent: 12),
                 SettingsItem(
                   icon: Icons.notifications_outlined,
                   title: S.of(context).notificationsTitle,
                   onTap: () => context.go('/settings/notifications'),
                 ),
-                Divider(thickness: 2, height: 0, indent: 12, endIndent: 12),
+                const Divider(
+                    thickness: 2, height: 0, indent: 12, endIndent: 12),
                 SettingsItem(
                   icon: Icons.qr_code_outlined,
                   title: S.of(context).qrTitle,
                   onTap: () => context.go('/settings/qr'),
                 ),
-                Divider(thickness: 2, height: 0, indent: 12, endIndent: 12),
+                const Divider(
+                    thickness: 2, height: 0, indent: 12, endIndent: 12),
                 SettingsItem(
                   icon: Icons.event_repeat_outlined,
                   title: S.of(context).settingsHonesty,

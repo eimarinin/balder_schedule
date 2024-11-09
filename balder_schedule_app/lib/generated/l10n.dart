@@ -111,10 +111,20 @@ class S {
   }
 
   /// `Light theme`
-  String get lightthemeTitle {
+  String get appearanceScreenThemeLight {
     return Intl.message(
       'Light theme',
-      name: 'lightthemeTitle',
+      name: 'appearanceScreenThemeLight',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Dark theme`
+  String get appearanceScreenThemeDark {
+    return Intl.message(
+      'Dark theme',
+      name: 'appearanceScreenThemeDark',
       desc: '',
       args: [],
     );

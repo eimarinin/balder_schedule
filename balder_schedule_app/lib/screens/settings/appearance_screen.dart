@@ -1,11 +1,13 @@
 // lib/screens/notifications_screen.dart
 
+import 'package:balder_schedule_app/app_config.dart';
 import 'package:balder_schedule_app/generated/l10n.dart';
 import 'package:balder_schedule_app/utils/padded_screen.dart';
 import 'package:balder_schedule_app/widgets/page_header_child.dart';
 
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:provider/provider.dart';
 
 class AppearanceScreen extends StatelessWidget {
   const AppearanceScreen({super.key});
@@ -24,6 +26,8 @@ class AppearanceContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool isLightTheme = Theme.of(context).brightness == Brightness.light;
+
     return SingleChildScrollView(
       child: Column(
         children: [
@@ -40,7 +44,9 @@ class AppearanceContent extends StatelessWidget {
                   contentPadding: const EdgeInsets.symmetric(
                       horizontal: 12.0, vertical: 20.0),
                   title: Text(
-                    S.of(context).lightthemeTitle,
+                    isLightTheme
+                        ? S.of(context).appearanceScreenThemeLight
+                        : S.of(context).appearanceScreenThemeDark,
                     style: const TextStyle(
                       fontSize: 20,
                       height: 1.2,
@@ -54,13 +60,15 @@ class AppearanceContent extends StatelessWidget {
                       borderRadius: BorderRadius.circular(4.0),
                     ),
                     child: Icon(
-                      Icons.wb_sunny_outlined,
+                      isLightTheme
+                          ? Icons.wb_sunny_outlined
+                          : Icons.nights_stay_outlined,
                       color: Theme.of(context).colorScheme.onPrimary,
                       size: 24,
                     ),
                   ),
                   onTap: () {
-                    // Логика для переключения темы
+                    context.read<AppConfig>().toggleTheme();
                   },
                 ),
                 ListTile(

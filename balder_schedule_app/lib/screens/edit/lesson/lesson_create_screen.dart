@@ -24,7 +24,26 @@ class LessonCreateContent extends StatelessWidget {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Column(
-        children: [],
+        children: [
+          const Gap(12),
+          Wrap(
+            runSpacing: 12.0,
+            children: [
+              TextField(
+                decoration: InputDecoration(
+                  labelText: "Название предмета",
+                  filled: true,
+                  fillColor: Theme.of(context).colorScheme.surfaceContainer,
+                  contentPadding: const EdgeInsets.symmetric(
+                    horizontal: 16.0,
+                    vertical: 12.0,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const Gap(12),
+        ],
       ),
     );
   }
