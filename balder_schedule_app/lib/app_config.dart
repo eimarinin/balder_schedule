@@ -105,11 +105,20 @@ class AppConfig extends ChangeNotifier {
   );
 
   ThemeData _currentTheme = lightTheme;
+  Locale _currentLocale = const Locale('ru');
 
   ThemeData get currentTheme => _currentTheme;
+  Locale get currentLocale => _currentLocale;
 
   void toggleTheme() {
     _currentTheme = _currentTheme == lightTheme ? darkTheme : lightTheme;
+    notifyListeners();
+  }
+
+  void toggleLanguage() {
+    _currentLocale = _currentLocale.languageCode == 'ru'
+        ? const Locale('en')
+        : const Locale('ru');
     notifyListeners();
   }
 
@@ -122,9 +131,5 @@ class AppConfig extends ChangeNotifier {
 
   static List<Locale> getSupportedLocales() {
     return S.delegate.supportedLocales;
-  }
-
-  static Locale getDefaultLocale() {
-    return const Locale('ru');
   }
 }

@@ -29,9 +29,9 @@ class MyApp extends StatelessWidget {
             routerConfig: goRouter,
             debugShowCheckedModeBanner: false,
             theme: appConfig.currentTheme,
+            locale: appConfig.currentLocale,
             localizationsDelegates: AppConfig.localizationsDelegates,
             supportedLocales: AppConfig.getSupportedLocales(),
-            locale: AppConfig.getDefaultLocale(),
           );
         },
       ),

@@ -97,7 +97,7 @@ class AppearanceContent extends StatelessWidget {
                     ),
                   ),
                   onTap: () {
-                    // Логика для выбора языка
+                    context.read<AppConfig>().toggleLanguage();
                   },
                 ),
               ],
