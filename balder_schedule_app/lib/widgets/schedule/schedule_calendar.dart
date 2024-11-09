@@ -20,7 +20,7 @@ class ScheduleCalendar extends StatelessWidget {
           icon: const Icon(Icons.arrow_back_outlined),
           onPressed: scheduleState.previousWeek,
         ),
-        FilledButton(
+        FilledButton.tonal(
           style: FilledButton.styleFrom(
             padding: EdgeInsets.only(top: 10, bottom: 10, left: 16, right: 24),
             backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
