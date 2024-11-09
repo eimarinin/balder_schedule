@@ -4,6 +4,7 @@ import 'package:balder_schedule_app/generated/l10n.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AppConfig extends ChangeNotifier {
   static var lightTheme = ThemeData(
@@ -110,8 +111,31 @@ class AppConfig extends ChangeNotifier {
   ThemeData get currentTheme => _currentTheme;
   Locale get currentLocale => _currentLocale;
 
+  AppConfig() {
+    _loadPreferences();
+  }
+
+  Future<void> _loadPreferences() async {
+    final prefs = await SharedPreferences.getInstance();
+    final themeIndex = prefs.getInt('theme') ?? 0; // 0 = light, 1 = dark
+    final languageCode = prefs.getString('language') ?? 'ru';
+
+    _currentTheme = themeIndex == 1 ? darkTheme : lightTheme;
+    _currentLocale = Locale(languageCode);
+
+    notifyListeners();
+  }
+
+  Future<void> _savePreferences() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setInt('theme', _currentTheme == darkTheme ? 1 : 0);
+    await prefs.setString('language', _currentLocale.languageCode);
+  }
+
   void toggleTheme() {
     _currentTheme = _currentTheme == lightTheme ? darkTheme : lightTheme;
+    _savePreferences();
+    _savePreferences();
     notifyListeners();
   }
 
