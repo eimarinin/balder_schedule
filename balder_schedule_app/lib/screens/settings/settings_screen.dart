@@ -2,6 +2,7 @@ import 'package:balder_schedule_app/generated/l10n.dart';
 import 'package:balder_schedule_app/utils/padded_screen.dart';
 import 'package:balder_schedule_app/widgets/page_header.dart';
 import 'package:balder_schedule_app/widgets/settings/settings_item.dart';
+import 'package:balder_schedule_app/utils/logger.dart'; // Импорт логгера
 
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
@@ -39,28 +40,40 @@ class SettingsContent extends StatelessWidget {
                 SettingsItem(
                   icon: Icons.palette_outlined,
                   title: S.of(context).appearanceTitle,
-                  onTap: () => context.go('/settings/appearance'),
+                  onTap: () {
+                    info('Navigating to Appearance Settings');
+                    context.go('/settings/appearance');
+                  },
                 ),
                 const Divider(
                     thickness: 2, height: 0, indent: 12, endIndent: 12),
                 SettingsItem(
                   icon: Icons.notifications_outlined,
                   title: S.of(context).notificationsTitle,
-                  onTap: () => context.go('/settings/notifications'),
+                  onTap: () {
+                    info('Navigating to Notifications Settings');
+                    context.go('/settings/notifications');
+                  },
                 ),
                 const Divider(
                     thickness: 2, height: 0, indent: 12, endIndent: 12),
                 SettingsItem(
                   icon: Icons.qr_code_outlined,
                   title: S.of(context).qrTitle,
-                  onTap: () => context.go('/settings/qr'),
+                  onTap: () {
+                    info('Navigating to QR Settings');
+                    context.go('/settings/qr');
+                  },
                 ),
                 const Divider(
                     thickness: 2, height: 0, indent: 12, endIndent: 12),
                 SettingsItem(
                   icon: Icons.event_repeat_outlined,
                   title: S.of(context).settingsHonesty,
-                  onTap: () => context.go(''),
+                  onTap: () {
+                    info('Navigating to Honesty Settings');
+                    context.go('');
+                  },
                 ),
               ],
             ),

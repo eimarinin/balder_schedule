@@ -3,6 +3,7 @@
 import 'package:balder_schedule_app/generated/l10n.dart';
 import 'package:balder_schedule_app/utils/padded_screen.dart';
 import 'package:balder_schedule_app/widgets/page_header_child.dart';
+import 'package:balder_schedule_app/utils/logger.dart'; // Импорт логгера
 
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
@@ -72,6 +73,16 @@ class _NotificationsContentState extends State<NotificationsContent> {
                         onChanged: (value) {
                           setState(() {
                             isChecked = value;
+                            // Логирование при изменении состояния Switch
+                            if (isChecked) {
+                              info('Notifications enabled', data: {
+                                'notification': 'Schedule for tomorrow'
+                              });
+                            } else {
+                              info('Notifications disabled', data: {
+                                'notification': 'Schedule for tomorrow'
+                              });
+                            }
                           });
                         },
                       ),
