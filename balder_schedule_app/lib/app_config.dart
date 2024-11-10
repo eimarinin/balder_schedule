@@ -17,7 +17,7 @@ class AppConfig extends ChangeNotifier {
     ),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
-        padding: const EdgeInsets.symmetric(vertical: 18.0, horizontal: 24.0),
+        padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 24.0),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(4),
         ),
@@ -25,7 +25,7 @@ class AppConfig extends ChangeNotifier {
     ),
     outlinedButtonTheme: OutlinedButtonThemeData(
       style: OutlinedButton.styleFrom(
-        padding: const EdgeInsets.symmetric(vertical: 18.0),
+        padding: const EdgeInsets.symmetric(vertical: 16.0),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(4),
         ),
@@ -33,7 +33,7 @@ class AppConfig extends ChangeNotifier {
     ),
     textButtonTheme: TextButtonThemeData(
       style: TextButton.styleFrom(
-        padding: const EdgeInsets.symmetric(vertical: 18.0),
+        padding: const EdgeInsets.symmetric(vertical: 16.0),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(4),
         ),
@@ -41,7 +41,7 @@ class AppConfig extends ChangeNotifier {
     ),
     filledButtonTheme: FilledButtonThemeData(
       style: FilledButton.styleFrom(
-        padding: const EdgeInsets.symmetric(vertical: 18.0),
+        padding: const EdgeInsets.symmetric(vertical: 16.0),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(4),
         ),
@@ -66,7 +66,7 @@ class AppConfig extends ChangeNotifier {
     ),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
-        padding: const EdgeInsets.symmetric(vertical: 18.0, horizontal: 24.0),
+        padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 24.0),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(4),
         ),
@@ -74,7 +74,7 @@ class AppConfig extends ChangeNotifier {
     ),
     outlinedButtonTheme: OutlinedButtonThemeData(
       style: OutlinedButton.styleFrom(
-        padding: const EdgeInsets.symmetric(vertical: 18.0),
+        padding: const EdgeInsets.symmetric(vertical: 16.0),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(4),
         ),
@@ -82,7 +82,7 @@ class AppConfig extends ChangeNotifier {
     ),
     textButtonTheme: TextButtonThemeData(
       style: TextButton.styleFrom(
-        padding: const EdgeInsets.symmetric(vertical: 18.0),
+        padding: const EdgeInsets.symmetric(vertical: 16.0),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(4),
         ),
@@ -90,7 +90,7 @@ class AppConfig extends ChangeNotifier {
     ),
     filledButtonTheme: FilledButtonThemeData(
       style: FilledButton.styleFrom(
-        padding: const EdgeInsets.symmetric(vertical: 18.0),
+        padding: const EdgeInsets.symmetric(vertical: 16.0),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(4),
         ),
