@@ -4,12 +4,10 @@ import 'package:balder_schedule_app/app_config.dart';
 import 'package:balder_schedule_app/generated/l10n.dart';
 import 'package:balder_schedule_app/utils/padded_screen.dart';
 import 'package:balder_schedule_app/widgets/page_header_child.dart';
+
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:provider/provider.dart';
-
-// Импорт логгера
-import 'package:balder_schedule_app/utils/logger.dart';
 
 class AppearanceScreen extends StatelessWidget {
   const AppearanceScreen({super.key});
@@ -70,12 +68,6 @@ class AppearanceContent extends StatelessWidget {
                     ),
                   ),
                   onTap: () {
-                    // Логирование переключения темы
-                    info(
-                      'Тема изменена',
-                      data: {'новая тема': isLightTheme ? 'темная' : 'светлая'},
-                    );
-
                     context.read<AppConfig>().toggleTheme();
                   },
                 ),
@@ -105,12 +97,6 @@ class AppearanceContent extends StatelessWidget {
                     ),
                   ),
                   onTap: () {
-                    // Логирование переключения языка
-                    info(
-                      'Язык изменен',
-                      data: {'новый язык': S.of(context).ru_enTitle},
-                    );
-
                     context.read<AppConfig>().toggleLanguage();
                   },
                 ),

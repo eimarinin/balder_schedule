@@ -3,7 +3,6 @@
 import 'package:balder_schedule_app/generated/l10n.dart';
 import 'package:balder_schedule_app/utils/padded_screen.dart';
 import 'package:balder_schedule_app/widgets/page_header_child.dart';
-import 'package:balder_schedule_app/utils/logger.dart'; // Импорт логгера
 
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
@@ -40,11 +39,7 @@ class QrContent extends StatelessWidget {
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton.icon(
-                    onPressed: () {
-                      // Логирование события нажатия кнопки "Сканировать новый график"
-                      info('Scan new schedule button clicked');
-                      // Действие при нажатии кнопки
-                    },
+                    onPressed: () {},
                     icon: Icon(Icons.video_camera_front_outlined, size: 18),
                     label: Text(S.of(context).scanNewScheduleTitle),
                   ),
@@ -68,11 +63,7 @@ class QrContent extends StatelessWidget {
                 SizedBox(
                   width: double.infinity,
                   child: TextButton.icon(
-                    onPressed: () {
-                      // Логирование события нажатия кнопки "Поделиться графиком"
-                      info('Share schedule button clicked');
-                      // Действие при нажатии кнопки
-                    },
+                    onPressed: () {},
                     icon: Icon(Icons.share_outlined, size: 18),
                     label: Text(S.of(context).shareScheduleTitle),
                   ),

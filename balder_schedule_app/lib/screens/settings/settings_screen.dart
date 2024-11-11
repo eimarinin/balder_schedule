@@ -2,7 +2,6 @@ import 'package:balder_schedule_app/generated/l10n.dart';
 import 'package:balder_schedule_app/utils/padded_screen.dart';
 import 'package:balder_schedule_app/widgets/page_header.dart';
 import 'package:balder_schedule_app/widgets/settings/settings_item.dart';
-import 'package:balder_schedule_app/utils/logger.dart'; // Импорт логгера
 
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
@@ -41,7 +40,6 @@ class SettingsContent extends StatelessWidget {
                   icon: Icons.palette_outlined,
                   title: S.of(context).appearanceTitle,
                   onTap: () {
-                    info('Navigating to Appearance Settings');
                     context.go('/settings/appearance');
                   },
                 ),
@@ -51,7 +49,6 @@ class SettingsContent extends StatelessWidget {
                   icon: Icons.notifications_outlined,
                   title: S.of(context).notificationsTitle,
                   onTap: () {
-                    info('Navigating to Notifications Settings');
                     context.go('/settings/notifications');
                   },
                 ),
@@ -61,7 +58,6 @@ class SettingsContent extends StatelessWidget {
                   icon: Icons.qr_code_outlined,
                   title: S.of(context).qrTitle,
                   onTap: () {
-                    info('Navigating to QR Settings');
                     context.go('/settings/qr');
                   },
                 ),
@@ -71,7 +67,6 @@ class SettingsContent extends StatelessWidget {
                   icon: Icons.event_repeat_outlined,
                   title: S.of(context).settingsHonesty,
                   onTap: () {
-                    info('Navigating to Honesty Settings');
                     context.go('');
                   },
                 ),
