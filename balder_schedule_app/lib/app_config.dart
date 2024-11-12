@@ -118,7 +118,7 @@ class AppConfig extends ChangeNotifier {
   Future<void> _loadPreferences() async {
     final prefs = await SharedPreferences.getInstance();
     final themeIndex = prefs.getInt('theme') ?? 0; // 0 = light, 1 = dark
-    final languageCode = prefs.getString('language') ?? 'ru';
+    final languageCode = prefs.getString('language') ?? 'ru'; // default to 'ru'
 
     _currentTheme = themeIndex == 1 ? darkTheme : lightTheme;
     _currentLocale = Locale(languageCode);

@@ -20,7 +20,7 @@ class ScheduleState extends ChangeNotifier {
 
   String getFormattedWeek() {
     final startOfWeek =
-        currentWeek.subtract(Duration(days: currentWeek.weekday - 1));
+        currentWeek.subtract(Duration(days: currentWeek.weekday));
     final endOfWeek = startOfWeek.add(Duration(days: 6));
     return "${startOfWeek.day}.${startOfWeek.month} - ${endOfWeek.day}.${endOfWeek.month}";
   }

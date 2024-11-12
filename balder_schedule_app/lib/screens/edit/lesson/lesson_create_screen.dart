@@ -80,23 +80,35 @@ class LessonCreateContent extends StatefulWidget {
 }
 
 enum ListTime {
-  first('8:00-9:45'),
-  second('9:45-11:20'),
-  third('11:35-13:10'),
-  fourth('13:40-15:15'),
-  fifth('15:25-17:00'),
-  sixth('17:10-18:45'),
-  seventh('18:55-20:30');
+  first('8:00-9:35', '8:00', '9:35'),
+  second('9:45-11:20', '9:45', '11:20'),
+  third('11:35-13:10', '11:35', '13:10'),
+  fourth('13:40-15:15', '13:40', '15:15'),
+  fifth('15:25-17:00', '15:25', '17:00'),
+  sixth('17:10-18:45', '17:10', '18:45'),
+  seventh('18:55-20:30', '18:55', '20:30');
 
-  const ListTime(this.label);
+  const ListTime(this.label, this.start, this.end);
   final String label;
+  final String start;
+  final String end;
 }
 
 class _LessonCreateContentState extends State<LessonCreateContent> {
   final TextEditingController _customLessonTypeController =
       TextEditingController();
 
+  final TextEditingController _startController = TextEditingController();
+  final TextEditingController _endController = TextEditingController();
+
   ListTime? _selectedTime = ListTime.first;
+
+  @override
+  void initState() {
+    super.initState();
+    _startController.text = _selectedTime?.start ?? '';
+    _endController.text = _selectedTime?.end ?? '';
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -181,6 +193,7 @@ class _LessonCreateContentState extends State<LessonCreateContent> {
                     const Gap(12),
                     DropdownMenu<ListTime>(
                       width: double.infinity,
+                      menuStyle: MenuStyle(),
                       leadingIcon: Icon(
                         Icons.schedule_outlined,
                         size: 20,
@@ -191,6 +204,8 @@ class _LessonCreateContentState extends State<LessonCreateContent> {
                       onSelected: (ListTime? time) {
                         setState(() {
                           _selectedTime = time;
+                          _startController.text = time?.start ?? '';
+                          _endController.text = time?.end ?? '';
                           widget.timeController.text = time?.label ?? '';
                         });
                       },
@@ -199,12 +214,107 @@ class _LessonCreateContentState extends State<LessonCreateContent> {
                         return DropdownMenuEntry<ListTime>(
                           value: time,
                           label: time.label,
-                          style: MenuItemButton.styleFrom(
-                            foregroundColor:
-                                Theme.of(context).colorScheme.onSurfaceVariant,
-                          ),
                         );
                       }).toList(),
+                    ),
+                    const Gap(12),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Expanded(
+                          child: Divider(
+                            color: Theme.of(context).colorScheme.onSurface,
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 8),
+                          child: Text(
+                            'или',
+                            style: Theme.of(context).textTheme.bodySmall,
+                          ),
+                        ),
+                        Expanded(
+                          child: Divider(
+                            color: Theme.of(context).colorScheme.onSurface,
+                          ),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Начало занятия',
+                                style: Theme.of(context).textTheme.titleMedium,
+                              ),
+                              const Gap(8),
+                              TextFormField(
+                                controller: _startController,
+                                decoration: InputDecoration(
+                                  border: OutlineInputBorder(),
+                                  hintText: '8:00',
+                                ),
+                                onChanged: (value) {
+                                  setState(() {
+                                    // Если пользователь изменяет время, обновляем start
+                                    _selectedTime = ListTime.values.firstWhere(
+                                      (time) => time.start == value,
+                                      orElse: () => ListTime.first,
+                                    );
+                                  });
+                                },
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return 'Пожалуйста, введите время начала';
+                                  }
+                                  return null;
+                                },
+                                keyboardType: TextInputType.datetime,
+                              ),
+                            ],
+                          ),
+                        ),
+                        const Gap(12),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Конец занятия',
+                                style: Theme.of(context).textTheme.titleMedium,
+                              ),
+                              const Gap(8),
+                              TextFormField(
+                                controller: _endController,
+                                decoration: InputDecoration(
+                                  border: OutlineInputBorder(),
+                                  hintText: '9:35',
+                                ),
+                                onChanged: (value) {
+                                  setState(() {
+                                    // Если пользователь изменяет время, обновляем end
+                                    _selectedTime = ListTime.values.firstWhere(
+                                      (time) => time.end == value,
+                                      orElse: () => ListTime.first,
+                                    );
+                                  });
+                                },
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return 'Пожалуйста, введите время конца';
+                                  }
+                                  return null;
+                                },
+                                keyboardType: TextInputType.datetime,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
@@ -220,6 +330,8 @@ class _LessonCreateContentState extends State<LessonCreateContent> {
   @override
   void dispose() {
     _customLessonTypeController.dispose();
+    _startController.dispose();
+    _endController.dispose();
 
     super.dispose();
   }
