@@ -1,4 +1,5 @@
 import 'package:balder_schedule_app/generated/l10n.dart';
+import 'package:balder_schedule_app/services/storage_service.dart';
 import 'package:balder_schedule_app/widgets/edit/lesson/lesson_segments.dart';
 import 'package:balder_schedule_app/utils/padded_screen.dart';
 import 'package:balder_schedule_app/widgets/edit/lesson/lesson_field.dart';
@@ -22,6 +23,39 @@ class _LessonCreateScreenState extends State<LessonCreateScreen> {
   final TextEditingController _timeController = TextEditingController();
 
   final _formKey = GlobalKey<FormState>();
+
+  final StorageService _storageService = StorageService();
+
+  void _saveToJson() async {
+    final lessonData = {
+      'name': _nameController.text,
+      'class': _classController.text,
+      'lessonType': _lessonTypeController.text,
+      'time': _timeController.text,
+    };
+
+    try {
+      await _storageService.saveLessonData(lessonData);
+
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Занятие успешно сохранено!'),
+            backgroundColor: Colors.green,
+          ),
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Ошибка при сохранении занятия: $e'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    }
+  }
 
   @override
   void dispose() {
@@ -51,8 +85,7 @@ class _LessonCreateScreenState extends State<LessonCreateScreen> {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           if (_formKey.currentState?.validate() ?? false) {
-            // Если форма валидна
-            // Ваша логика
+            _saveToJson();
           }
         },
         child: const Icon(Icons.save),
