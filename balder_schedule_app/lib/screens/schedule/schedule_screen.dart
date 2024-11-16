@@ -1,6 +1,6 @@
 import 'package:balder_schedule_app/generated/l10n.dart';
 import 'package:balder_schedule_app/state/schedule_state.dart';
-import 'package:balder_schedule_app/utils/padded_screen.dart';
+import 'package:balder_schedule_app/utils/margin_screen.dart';
 import 'package:balder_schedule_app/widgets/page_header.dart';
 import 'package:balder_schedule_app/widgets/schedule/schedule_calendar.dart';
 import 'package:balder_schedule_app/widgets/schedule/schedule_day.dart';
@@ -19,7 +19,7 @@ class ScheduleScreen extends StatelessWidget {
       create: (context) => ScheduleState(),
       child: Scaffold(
         appBar: PageHeader(title: S.of(context).scheduleTitle),
-        body: PaddedScreen(child: ScheduleContent()),
+        body: MarginScreen(child: ScheduleContent()),
       ),
     );
   }

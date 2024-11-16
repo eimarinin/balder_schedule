@@ -24,6 +24,7 @@ class LessonSegments extends FormField<String> {
                     SizedBox(
                       width: double.infinity,
                       child: SegmentedButton<String>(
+                        showSelectedIcon: false,
                         emptySelectionAllowed: true,
                         style: SegmentedButton.styleFrom(
                           shape: const RoundedRectangleBorder(
@@ -47,10 +48,12 @@ class LessonSegments extends FormField<String> {
                     ),
                     const Gap(12),
                     TextFormField(
+                      textAlign: TextAlign.center,
                       controller: customController,
                       decoration: InputDecoration(
-                        labelText: 'Другой тип занятия',
                         border: OutlineInputBorder(),
+                        hintText: 'Свой вариант',
+                        hintStyle: Theme.of(context).textTheme.labelLarge,
                       ),
                       onChanged: (value) {
                         if (value.isNotEmpty) {

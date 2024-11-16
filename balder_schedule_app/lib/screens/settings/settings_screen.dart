@@ -1,5 +1,5 @@
 import 'package:balder_schedule_app/generated/l10n.dart';
-import 'package:balder_schedule_app/utils/padded_screen.dart';
+import 'package:balder_schedule_app/utils/margin_screen.dart';
 import 'package:balder_schedule_app/widgets/page_header.dart';
 import 'package:balder_schedule_app/widgets/settings/settings_item.dart';
 
@@ -14,7 +14,7 @@ class SettingsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: PageHeader(title: S.of(context).settingsTitle),
-      body: PaddedScreen(child: SettingsContent()),
+      body: MarginScreen(child: SettingsContent()),
     );
   }
 }

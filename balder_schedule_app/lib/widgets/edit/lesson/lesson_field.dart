@@ -29,7 +29,7 @@ class LessonField extends StatelessWidget {
           return 'Поле не может быть пустым';
         }
 
-        if (isNumeric && double.tryParse(value) == null) {
+        if (isNumeric && int.tryParse(value) == null) {
           return 'Введите число';
         }
 

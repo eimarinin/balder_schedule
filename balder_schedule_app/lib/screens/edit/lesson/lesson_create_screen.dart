@@ -1,7 +1,7 @@
 import 'package:balder_schedule_app/generated/l10n.dart';
 import 'package:balder_schedule_app/services/storage/storage_service.dart';
 import 'package:balder_schedule_app/widgets/edit/lesson/lesson_segments.dart';
-import 'package:balder_schedule_app/utils/padded_screen.dart';
+import 'package:balder_schedule_app/utils/margin_screen.dart';
 import 'package:balder_schedule_app/widgets/edit/lesson/lesson_field.dart';
 import 'package:balder_schedule_app/widgets/edit/lesson/lesson_segment.dart';
 import 'package:balder_schedule_app/widgets/page_header_child.dart';
@@ -21,6 +21,7 @@ class _LessonCreateScreenState extends State<LessonCreateScreen> {
   final TextEditingController _classController = TextEditingController();
   final TextEditingController _lessonTypeController = TextEditingController();
   final TextEditingController _timeController = TextEditingController();
+  final TextEditingController _weekParityController = TextEditingController();
 
   final _formKey = GlobalKey<FormState>();
 
@@ -32,6 +33,7 @@ class _LessonCreateScreenState extends State<LessonCreateScreen> {
       'class': _classController.text,
       'lessonType': _lessonTypeController.text,
       'time': _timeController.text,
+      'weekParity': _weekParityController.text,
     };
 
     try {
@@ -63,6 +65,7 @@ class _LessonCreateScreenState extends State<LessonCreateScreen> {
     _classController.dispose();
     _lessonTypeController.dispose();
     _timeController.dispose();
+    _weekParityController.dispose();
 
     super.dispose();
   }
@@ -71,7 +74,7 @@ class _LessonCreateScreenState extends State<LessonCreateScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: PageHeaderChild(title: S.of(context).lessonCreateScreenTitle),
-      body: PaddedScreen(
+      body: MarginScreen(
         child: Form(
           key: _formKey,
           child: LessonCreateContent(
@@ -79,6 +82,7 @@ class _LessonCreateScreenState extends State<LessonCreateScreen> {
             classController: _classController,
             lessonTypeController: _lessonTypeController,
             timeController: _timeController,
+            weekParityController: _weekParityController,
           ),
         ),
       ),
@@ -99,6 +103,7 @@ class LessonCreateContent extends StatefulWidget {
   final TextEditingController classController;
   final TextEditingController lessonTypeController;
   final TextEditingController timeController;
+  final TextEditingController weekParityController;
 
   const LessonCreateContent({
     super.key,
@@ -106,6 +111,7 @@ class LessonCreateContent extends StatefulWidget {
     required this.classController,
     required this.lessonTypeController,
     required this.timeController,
+    required this.weekParityController,
   });
 
   @override
@@ -129,6 +135,8 @@ enum ListTime {
 
 class _LessonCreateContentState extends State<LessonCreateContent> {
   final TextEditingController _customLessonTypeController =
+      TextEditingController();
+  final TextEditingController _customWeekParityController =
       TextEditingController();
 
   final TextEditingController _startController = TextEditingController();
@@ -157,7 +165,6 @@ class _LessonCreateContentState extends State<LessonCreateContent> {
                 controller: widget.nameController,
               ),
               Container(
-                width: double.infinity,
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(6),
@@ -210,7 +217,6 @@ class _LessonCreateContentState extends State<LessonCreateContent> {
                 isNumeric: true,
               ),
               Container(
-                width: double.infinity,
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(6),
@@ -275,6 +281,7 @@ class _LessonCreateContentState extends State<LessonCreateContent> {
                         ),
                       ],
                     ),
+                    const Gap(12),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -282,12 +289,8 @@ class _LessonCreateContentState extends State<LessonCreateContent> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(
-                                'Начало занятия',
-                                style: Theme.of(context).textTheme.titleMedium,
-                              ),
-                              const Gap(8),
                               TextFormField(
+                                textAlign: TextAlign.center,
                                 controller: _startController,
                                 decoration: InputDecoration(
                                   border: OutlineInputBorder(),
@@ -311,17 +314,13 @@ class _LessonCreateContentState extends State<LessonCreateContent> {
                             ],
                           ),
                         ),
-                        const Gap(12),
+                        const Gap(8),
                         Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(
-                                'Конец занятия',
-                                style: Theme.of(context).textTheme.titleMedium,
-                              ),
-                              const Gap(8),
                               TextFormField(
+                                textAlign: TextAlign.center,
                                 controller: _endController,
                                 decoration: InputDecoration(
                                   border: OutlineInputBorder(),
@@ -350,6 +349,60 @@ class _LessonCreateContentState extends State<LessonCreateContent> {
                   ],
                 ),
               ),
+              Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(6),
+                  color: Theme.of(context).colorScheme.surfaceContainer,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Четность недели',
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
+                    const Gap(12),
+                    LessonSegments(
+                      selected: {widget.weekParityController.text},
+                      onSelectionChanged: (newSelection) {
+                        setState(() {
+                          if (_customWeekParityController.text.isEmpty) {
+                            widget.weekParityController.text =
+                                newSelection.isNotEmpty
+                                    ? newSelection.first
+                                    : '';
+                          } else {
+                            widget.weekParityController.text =
+                                _customWeekParityController.text;
+                          }
+                        });
+                      },
+                      segments: [
+                        LessonSegment(value: '1', text: '1'),
+                        LessonSegment(value: '2', text: '2'),
+                      ],
+                      customController: _customWeekParityController,
+                      validator: (value) {
+                        final parityValue =
+                            widget.weekParityController.text.isNotEmpty
+                                ? widget.weekParityController.text
+                                : _customWeekParityController.text;
+
+                        if (parityValue.isEmpty) {
+                          return 'Пожалуйста, выберите четность недели';
+                        }
+
+                        if (int.tryParse(parityValue) == null) {
+                          return 'Четность недели должна быть числом';
+                        }
+
+                        return null;
+                      },
+                    ),
+                  ],
+                ),
+              ),
             ],
           ),
           const Gap(12),
@@ -363,6 +416,7 @@ class _LessonCreateContentState extends State<LessonCreateContent> {
     _customLessonTypeController.dispose();
     _startController.dispose();
     _endController.dispose();
+    _customWeekParityController.dispose();
 
     super.dispose();
   }

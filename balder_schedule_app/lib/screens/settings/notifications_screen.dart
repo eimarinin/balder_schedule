@@ -1,7 +1,7 @@
 // lib/screens/notifications_screen.dart
 
 import 'package:balder_schedule_app/generated/l10n.dart';
-import 'package:balder_schedule_app/utils/padded_screen.dart';
+import 'package:balder_schedule_app/utils/margin_screen.dart';
 import 'package:balder_schedule_app/widgets/page_header_child.dart';
 
 import 'package:flutter/material.dart';
@@ -14,7 +14,7 @@ class NotificationsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: PageHeaderChild(title: S.of(context).notificationsTitle),
-      body: PaddedScreen(child: NotificationsContent()),
+      body: MarginScreen(child: NotificationsContent()),
     );
   }
 }

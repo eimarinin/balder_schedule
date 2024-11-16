@@ -1,4 +1,4 @@
-import 'package:balder_schedule_app/utils/padded_screen.dart';
+import 'package:balder_schedule_app/utils/margin_screen.dart';
 import 'package:balder_schedule_app/widgets/page_header_child.dart';
 import 'package:balder_schedule_app/widgets/schedule/lesson/lesson_tag.dart';
 import 'package:balder_schedule_app/widgets/schedule/lesson/lesson_time.dart';
@@ -13,7 +13,7 @@ class LessonScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: PageHeaderChild(title: 'Алгебра'),
-      body: PaddedScreen(child: LessonContent()),
+      body: MarginScreen(child: LessonContent()),
     );
   }
 }

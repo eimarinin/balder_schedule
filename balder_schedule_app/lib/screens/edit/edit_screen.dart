@@ -1,7 +1,7 @@
 import 'package:balder_schedule_app/generated/l10n.dart';
 import 'package:balder_schedule_app/services/storage/storage_service.dart';
 import 'package:balder_schedule_app/utils/export/export.dart';
-import 'package:balder_schedule_app/utils/padded_screen.dart';
+import 'package:balder_schedule_app/utils/margin_screen.dart';
 import 'package:balder_schedule_app/widgets/edit/day_selector.dart';
 import 'package:balder_schedule_app/widgets/page_header.dart';
 import 'package:flutter/foundation.dart';
@@ -17,7 +17,7 @@ class EditScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: PageHeader(title: S.of(context).editTitle),
-      body: PaddedScreen(child: EditContent()),
+      body: MarginScreen(child: EditContent()),
       floatingActionButton: ElevatedButton.icon(
         onPressed: () => context.go('/edit/lesson_create'),
         icon: Icon(Icons.add_outlined),
