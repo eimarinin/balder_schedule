@@ -45,6 +45,7 @@ dependencies:
   logger: ^2.4.0
   path_provider: ^2.1.5
   web: ^1.1.0
+  idb_shim: ^2.6.1+7
 
 dev_dependencies:
   flutter_test:

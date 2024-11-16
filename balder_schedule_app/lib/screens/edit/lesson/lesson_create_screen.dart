@@ -225,7 +225,7 @@ class _LessonCreateContentState extends State<LessonCreateContent> {
                     ),
                     const Gap(12),
                     DropdownMenu<ListTime>(
-                      width: double.infinity,
+                      width: MediaQuery.of(context).size.width,
                       menuStyle: MenuStyle(),
                       leadingIcon: Icon(
                         Icons.schedule_outlined,
@@ -236,10 +236,12 @@ class _LessonCreateContentState extends State<LessonCreateContent> {
                       requestFocusOnTap: false,
                       onSelected: (ListTime? time) {
                         setState(() {
-                          _selectedTime = time;
-                          _startController.text = time?.start ?? '';
-                          _endController.text = time?.end ?? '';
-                          widget.timeController.text = time?.label ?? '';
+                          if (time != null) {
+                            _selectedTime = time;
+                            _startController.text = time.start;
+                            _endController.text = time.end;
+                            widget.timeController.text = time.label;
+                          }
                         });
                       },
                       dropdownMenuEntries: ListTime.values
@@ -293,11 +295,9 @@ class _LessonCreateContentState extends State<LessonCreateContent> {
                                 ),
                                 onChanged: (value) {
                                   setState(() {
-                                    // Если пользователь изменяет время, обновляем start
-                                    _selectedTime = ListTime.values.firstWhere(
-                                      (time) => time.start == value,
-                                      orElse: () => ListTime.first,
-                                    );
+                                    _selectedTime = null;
+                                    widget.timeController.text =
+                                        '${_startController.text}-${_endController.text}';
                                   });
                                 },
                                 validator: (value) {
@@ -329,11 +329,9 @@ class _LessonCreateContentState extends State<LessonCreateContent> {
                                 ),
                                 onChanged: (value) {
                                   setState(() {
-                                    // Если пользователь изменяет время, обновляем end
-                                    _selectedTime = ListTime.values.firstWhere(
-                                      (time) => time.end == value,
-                                      orElse: () => ListTime.first,
-                                    );
+                                    _selectedTime = null;
+                                    widget.timeController.text =
+                                        '${_startController.text}-${_endController.text}';
                                   });
                                 },
                                 validator: (value) {
