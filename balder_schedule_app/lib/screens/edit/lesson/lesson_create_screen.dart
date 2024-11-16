@@ -1,5 +1,5 @@
 import 'package:balder_schedule_app/generated/l10n.dart';
-import 'package:balder_schedule_app/services/storage_service.dart';
+import 'package:balder_schedule_app/services/storage/storage_service.dart';
 import 'package:balder_schedule_app/widgets/edit/lesson/lesson_segments.dart';
 import 'package:balder_schedule_app/utils/padded_screen.dart';
 import 'package:balder_schedule_app/widgets/edit/lesson/lesson_field.dart';
