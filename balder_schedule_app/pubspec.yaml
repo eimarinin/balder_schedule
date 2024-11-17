@@ -1,5 +1,5 @@
 name: balder_schedule_app
-description: "A new Flutter project."
+description: "A scheduled application for students."
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: "none" # Remove this line if you wish to publish to pub.dev
@@ -46,6 +46,8 @@ dependencies:
   path_provider: ^2.1.5
   web: ^1.1.0
   idb_shim: ^2.6.1+7
+  flutter_launcher_icons: ^0.14.1
+  flutter_svg: ^2.0.14
 
 dev_dependencies:
   flutter_test:
@@ -101,4 +103,21 @@ flutter_intl:
   dependencies:
   flutter:
     sdk: flutter
-  flutter_svg: ^1.1.1
+
+flutter_launcher_icons:
+  image_path: "assets/images/logo.png"
+  adaptive_icon_background: "#ffffff"
+  adaptive_icon_foreground: "assets/images/logo.png"
+  android: true
+  ios: true
+  web:
+    generate: true
+    image_path: "assets/images/logo.png"
+    background_color: "#ffffff"
+    theme_color: "#ffffff"
+  windows:
+    generate: true
+    image_path: "assets/images/logo.png"
+  macos:
+    generate: true
+    image_path: "assets/images/logo.png"

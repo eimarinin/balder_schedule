@@ -8,7 +8,7 @@ plugins {
 android {
     namespace = "com.example.balder_schedule_app"
     compileSdk = flutter.compileSdkVersion
-    ndkVersion = "25.1.8937393"
+    ndkVersion = "28.0.1"
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17

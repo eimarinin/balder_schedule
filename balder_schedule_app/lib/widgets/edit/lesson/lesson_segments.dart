@@ -46,7 +46,7 @@ class LessonSegments extends FormField<String> {
                         },
                       ),
                     ),
-                    const Gap(12),
+                    const Gap(8),
                     TextFormField(
                       textAlign: TextAlign.center,
                       controller: customController,
