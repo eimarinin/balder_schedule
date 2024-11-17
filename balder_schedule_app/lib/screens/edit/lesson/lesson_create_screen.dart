@@ -8,6 +8,7 @@ import 'package:balder_schedule_app/widgets/page_header_child.dart';
 
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:intl/intl.dart';
 
 class LessonCreateScreen extends StatefulWidget {
   const LessonCreateScreen({super.key});
@@ -22,6 +23,15 @@ class _LessonCreateScreenState extends State<LessonCreateScreen> {
   final TextEditingController _lessonTypeController = TextEditingController();
   final TextEditingController _timeController = TextEditingController();
   final TextEditingController _weekParityController = TextEditingController();
+  final TextEditingController _dateController = TextEditingController();
+
+  bool _isSpecificDate = false;
+
+  void _toggleSpecificDate(bool value) {
+    setState(() {
+      _isSpecificDate = value;
+    });
+  }
 
   final _formKey = GlobalKey<FormState>();
 
@@ -33,7 +43,8 @@ class _LessonCreateScreenState extends State<LessonCreateScreen> {
       'class': _classController.text,
       'lessonType': _lessonTypeController.text,
       'time': _timeController.text,
-      'weekParity': _weekParityController.text,
+      if (!_isSpecificDate) 'weekParity': _weekParityController.text,
+      if (_isSpecificDate) 'lessonDate': _dateController.text,
     };
 
     try {
@@ -66,6 +77,7 @@ class _LessonCreateScreenState extends State<LessonCreateScreen> {
     _lessonTypeController.dispose();
     _timeController.dispose();
     _weekParityController.dispose();
+    _dateController.dispose();
 
     super.dispose();
   }
@@ -83,6 +95,9 @@ class _LessonCreateScreenState extends State<LessonCreateScreen> {
             lessonTypeController: _lessonTypeController,
             timeController: _timeController,
             weekParityController: _weekParityController,
+            dateController: _dateController,
+            isSpecificDate: _isSpecificDate,
+            onSpecificDateChanged: _toggleSpecificDate,
           ),
         ),
       ),
@@ -104,6 +119,9 @@ class LessonCreateContent extends StatefulWidget {
   final TextEditingController lessonTypeController;
   final TextEditingController timeController;
   final TextEditingController weekParityController;
+  final TextEditingController dateController;
+  final bool isSpecificDate;
+  final ValueChanged<bool> onSpecificDateChanged;
 
   const LessonCreateContent({
     super.key,
@@ -112,6 +130,9 @@ class LessonCreateContent extends StatefulWidget {
     required this.lessonTypeController,
     required this.timeController,
     required this.weekParityController,
+    required this.dateController,
+    required this.isSpecificDate,
+    required this.onSpecificDateChanged,
   });
 
   @override
@@ -376,6 +397,8 @@ class _LessonCreateContentState extends State<LessonCreateContent> {
                             widget.weekParityController.text =
                                 _customWeekParityController.text;
                           }
+                          widget.onSpecificDateChanged(false);
+                          widget.dateController.clear();
                         });
                       },
                       segments: [
@@ -389,15 +412,70 @@ class _LessonCreateContentState extends State<LessonCreateContent> {
                                 ? widget.weekParityController.text
                                 : _customWeekParityController.text;
 
-                        if (parityValue.isEmpty) {
-                          return 'Пожалуйста, выберите четность недели';
+                        if (!widget.isSpecificDate && parityValue.isEmpty) {
+                          return 'Пожалуйста, выберите четность недели или дату проведения занятия';
                         }
 
-                        if (int.tryParse(parityValue) == null) {
+                        if (!widget.isSpecificDate &&
+                            int.tryParse(parityValue) == null) {
                           return 'Четность недели должна быть числом';
                         }
 
                         return null;
+                      },
+                    ),
+                    const Gap(12),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Expanded(
+                          child: Divider(
+                            color: Theme.of(context).colorScheme.onSurface,
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 8),
+                          child: Text(
+                            'или',
+                            style: Theme.of(context).textTheme.bodySmall,
+                          ),
+                        ),
+                        Expanded(
+                          child: Divider(
+                            color: Theme.of(context).colorScheme.onSurface,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const Gap(12),
+                    TextFormField(
+                      style: Theme.of(context).textTheme.bodyLarge,
+                      readOnly: true,
+                      controller: widget.dateController,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(),
+                        prefixIcon: Icon(Icons.today_outlined),
+                        hintText: 'Выбрать дату',
+                        helper: Text(
+                          'Вы можете добавить это занятие на конкретный день, например, указать дату проведения экзамена или индивидуального занятия.',
+                        ),
+                      ),
+                      onTap: () async {
+                        final DateTime? selectedDate = await showDatePicker(
+                          context: context,
+                          initialDate: DateTime.now(),
+                          firstDate: DateTime(2020),
+                          lastDate: DateTime(2101),
+                        );
+
+                        if (selectedDate != null) {
+                          setState(() {
+                            widget.onSpecificDateChanged(true);
+                            widget.weekParityController.clear();
+                            widget.dateController.text =
+                                DateFormat('dd.MM.yyyy').format(selectedDate);
+                          });
+                        }
                       },
                     ),
                   ],

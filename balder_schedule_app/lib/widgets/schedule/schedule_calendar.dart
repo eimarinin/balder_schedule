@@ -32,12 +32,6 @@ class ScheduleCalendar extends StatelessWidget {
               initialDate: scheduleState.currentWeek,
               firstDate: DateTime(2020),
               lastDate: DateTime(2101),
-              builder: (BuildContext context, Widget? child) {
-                return Theme(
-                  data: Theme.of(context),
-                  child: child!,
-                );
-              },
             );
 
             if (pickedDate != null && pickedDate != scheduleState.currentWeek) {
