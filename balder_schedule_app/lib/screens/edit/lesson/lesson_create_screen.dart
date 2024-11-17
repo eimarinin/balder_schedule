@@ -1,5 +1,6 @@
 import 'package:balder_schedule_app/generated/l10n.dart';
-import 'package:balder_schedule_app/services/storage/storage_service.dart';
+import 'package:balder_schedule_app/models/lesson_model.dart';
+import 'package:balder_schedule_app/services/database/database_service.dart';
 import 'package:balder_schedule_app/widgets/edit/lesson/lesson_segments.dart';
 import 'package:balder_schedule_app/utils/margin_screen.dart';
 import 'package:balder_schedule_app/widgets/edit/lesson/lesson_field.dart';
@@ -134,25 +135,24 @@ class _LessonCreateContentState extends State<LessonCreateContent> {
 
   ListTime? _selectedTime = ListTime.first;
 
-  final StorageService _storageService = StorageService();
-
-  void _saveToJson() async {
+  void _saveToDatabase() async {
     if (widget.formKey.currentState?.validate() ?? false) {
-      final lessonData = {
-        'name': widget.nameController.text,
-        'class': widget.classController.text,
-        'lessonType': widget.lessonTypeController.text,
-        'time': widget.timeController.text,
-        if (!widget.isSpecificDate)
-          'weekParity': widget.weekParityController.text,
-        if (widget.isSpecificDate) 'lessonDate': widget.dateController.text,
-        'teacher': widget.teacherController.text,
-        if (widget.notesController.text.isNotEmpty)
-          'notes': widget.notesController.text,
-      };
+      final lesson = LessonModel(
+        name: widget.nameController.text,
+        classRoom: widget.classController.text,
+        lessonType: widget.lessonTypeController.text,
+        time: widget.timeController.text,
+        weekParity:
+            widget.isSpecificDate ? null : widget.weekParityController.text,
+        lessonDate: widget.isSpecificDate ? widget.dateController.text : null,
+        teacher: widget.teacherController.text,
+        notes: widget.notesController.text.isNotEmpty
+            ? widget.notesController.text
+            : null,
+      );
 
       try {
-        await _storageService.saveLessonData(context, lessonData);
+        await DatabaseService().insertLesson(lesson);
 
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
@@ -545,7 +545,7 @@ class _LessonCreateContentState extends State<LessonCreateContent> {
                         size: 18,
                       ),
                       label: Text('Сохранить'),
-                      onPressed: _saveToJson,
+                      onPressed: _saveToDatabase,
                     ),
                   ),
                 ],
