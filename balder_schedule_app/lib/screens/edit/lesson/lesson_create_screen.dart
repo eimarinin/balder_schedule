@@ -24,6 +24,8 @@ class _LessonCreateScreenState extends State<LessonCreateScreen> {
   final TextEditingController _timeController = TextEditingController();
   final TextEditingController _weekParityController = TextEditingController();
   final TextEditingController _dateController = TextEditingController();
+  final TextEditingController _teacherController = TextEditingController();
+  final TextEditingController _notesController = TextEditingController();
 
   bool _isSpecificDate = false;
 
@@ -35,41 +37,6 @@ class _LessonCreateScreenState extends State<LessonCreateScreen> {
 
   final _formKey = GlobalKey<FormState>();
 
-  final StorageService _storageService = StorageService();
-
-  void _saveToJson() async {
-    final lessonData = {
-      'name': _nameController.text,
-      'class': _classController.text,
-      'lessonType': _lessonTypeController.text,
-      'time': _timeController.text,
-      if (!_isSpecificDate) 'weekParity': _weekParityController.text,
-      if (_isSpecificDate) 'lessonDate': _dateController.text,
-    };
-
-    try {
-      await _storageService.saveLessonData(lessonData);
-
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Занятие успешно сохранено!'),
-            backgroundColor: Colors.green,
-          ),
-        );
-      }
-    } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Ошибка при сохранении занятия: $e'),
-            backgroundColor: Colors.red,
-          ),
-        );
-      }
-    }
-  }
-
   @override
   void dispose() {
     _nameController.dispose();
@@ -78,6 +45,7 @@ class _LessonCreateScreenState extends State<LessonCreateScreen> {
     _timeController.dispose();
     _weekParityController.dispose();
     _dateController.dispose();
+    _teacherController.dispose();
 
     super.dispose();
   }
@@ -98,16 +66,11 @@ class _LessonCreateScreenState extends State<LessonCreateScreen> {
             dateController: _dateController,
             isSpecificDate: _isSpecificDate,
             onSpecificDateChanged: _toggleSpecificDate,
+            teacherController: _teacherController,
+            notesController: _notesController,
+            formKey: _formKey,
           ),
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          if (_formKey.currentState?.validate() ?? false) {
-            _saveToJson();
-          }
-        },
-        child: const Icon(Icons.save),
       ),
     );
   }
@@ -122,6 +85,9 @@ class LessonCreateContent extends StatefulWidget {
   final TextEditingController dateController;
   final bool isSpecificDate;
   final ValueChanged<bool> onSpecificDateChanged;
+  final TextEditingController teacherController;
+  final TextEditingController notesController;
+  final GlobalKey<FormState> formKey;
 
   const LessonCreateContent({
     super.key,
@@ -133,6 +99,9 @@ class LessonCreateContent extends StatefulWidget {
     required this.dateController,
     required this.isSpecificDate,
     required this.onSpecificDateChanged,
+    required this.teacherController,
+    required this.notesController,
+    required this.formKey,
   });
 
   @override
@@ -164,6 +133,54 @@ class _LessonCreateContentState extends State<LessonCreateContent> {
   final TextEditingController _endController = TextEditingController();
 
   ListTime? _selectedTime = ListTime.first;
+
+  final StorageService _storageService = StorageService();
+
+  void _saveToJson() async {
+    if (widget.formKey.currentState?.validate() ?? false) {
+      final lessonData = {
+        'name': widget.nameController.text,
+        'class': widget.classController.text,
+        'lessonType': widget.lessonTypeController.text,
+        'time': widget.timeController.text,
+        if (!widget.isSpecificDate)
+          'weekParity': widget.weekParityController.text,
+        if (widget.isSpecificDate) 'lessonDate': widget.dateController.text,
+        'teacher': widget.teacherController.text,
+        if (widget.notesController.text.isNotEmpty)
+          'notes': widget.notesController.text,
+      };
+
+      try {
+        await _storageService.saveLessonData(lessonData);
+
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Занятие успешно сохранено!'),
+              backgroundColor: Colors.green,
+            ),
+          );
+        }
+      } catch (e) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Ошибка при сохранении занятия: $e'),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
+      }
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Пожалуйста, проверьте поля.'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
+  }
 
   @override
   void initState() {
@@ -480,6 +497,44 @@ class _LessonCreateContentState extends State<LessonCreateContent> {
                     ),
                   ],
                 ),
+              ),
+              LessonField(
+                labelText: 'Преподаватель',
+                controller: widget.teacherController,
+              ),
+              TextFormField(
+                controller: widget.notesController,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(),
+                  alignLabelWithHint: true,
+                  labelText: 'Заметка',
+                  hintText: 'Например, нельзя опаздывать...',
+                  hintStyle: TextStyle(
+                    fontWeight: FontWeight.w400,
+                    color: Theme.of(context).colorScheme.outline,
+                  ),
+                  helper: Text(
+                      'Необязательное поле. Эта заметка будет отображаться каждую неделю для этого занятия'),
+                ),
+                maxLines: null,
+                minLines: 3,
+              ),
+              Row(
+                children: [
+                  Expanded(
+                    child: FilledButton.icon(
+                      style: FilledButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(vertical: 18.0),
+                      ),
+                      icon: Icon(
+                        Icons.check_outlined,
+                        size: 18,
+                      ),
+                      label: Text('Сохранить'),
+                      onPressed: _saveToJson,
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
