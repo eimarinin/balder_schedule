@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
       child: Consumer<AppConfig>(
         builder: (context, appConfig, child) {
           return MaterialApp.router(
-            title: 'Schedule App',
+            title: 'Balder Schedule',
             routerConfig: goRouter,
             debugShowCheckedModeBanner: false,
             theme: appConfig.currentTheme,

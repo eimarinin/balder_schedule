@@ -1,5 +1,6 @@
 // storage_service_web.dart
 import 'dart:convert';
+import 'package:flutter/material.dart';
 import 'package:web/web.dart';
 import 'package:balder_schedule_app/utils/logger.dart';
 
@@ -17,7 +18,8 @@ class StorageService {
     }
   }
 
-  Future<void> saveLessonData(Map<String, dynamic> lessonData) async {
+  Future<void> saveLessonData(
+      BuildContext context, Map<String, dynamic> lessonData) async {
     try {
       final lessons = await loadLessonData();
       lessonData['id'] = (lessons.length + 1).toString();

@@ -129,8 +129,8 @@ class _LessonCreateContentState extends State<LessonCreateContent> {
   final TextEditingController _customWeekParityController =
       TextEditingController();
 
-  final TextEditingController _startController = TextEditingController();
-  final TextEditingController _endController = TextEditingController();
+  final TextEditingController _startTimeController = TextEditingController();
+  final TextEditingController _endTimeController = TextEditingController();
 
   ListTime? _selectedTime = ListTime.first;
 
@@ -152,7 +152,7 @@ class _LessonCreateContentState extends State<LessonCreateContent> {
       };
 
       try {
-        await _storageService.saveLessonData(lessonData);
+        await _storageService.saveLessonData(context, lessonData);
 
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
@@ -185,8 +185,8 @@ class _LessonCreateContentState extends State<LessonCreateContent> {
   @override
   void initState() {
     super.initState();
-    _startController.text = _selectedTime?.start ?? '';
-    _endController.text = _selectedTime?.end ?? '';
+    _startTimeController.text = _selectedTime?.start ?? '';
+    _endTimeController.text = _selectedTime?.end ?? '';
   }
 
   @override
@@ -282,8 +282,8 @@ class _LessonCreateContentState extends State<LessonCreateContent> {
                         setState(() {
                           if (time != null) {
                             _selectedTime = time;
-                            _startController.text = time.start;
-                            _endController.text = time.end;
+                            _startTimeController.text = time.start;
+                            _endTimeController.text = time.end;
                             widget.timeController.text = time.label;
                           }
                         });
@@ -329,7 +329,7 @@ class _LessonCreateContentState extends State<LessonCreateContent> {
                             children: [
                               TextFormField(
                                 textAlign: TextAlign.center,
-                                controller: _startController,
+                                controller: _startTimeController,
                                 decoration: InputDecoration(
                                   border: OutlineInputBorder(),
                                   hintText: '8:00',
@@ -338,13 +338,20 @@ class _LessonCreateContentState extends State<LessonCreateContent> {
                                   setState(() {
                                     _selectedTime = null;
                                     widget.timeController.text =
-                                        '${_startController.text}-${_endController.text}';
+                                        '${_startTimeController.text}-${_endTimeController.text}';
                                   });
                                 },
                                 validator: (value) {
                                   if (value == null || value.isEmpty) {
-                                    return 'Пожалуйста, введите время начала';
+                                    return 'Пожалуйста, введите время начала занятия';
                                   }
+
+                                  final timeRegex =
+                                      RegExp(r'^(?:\d|[01]\d|2[0-3]):[0-5]\d$');
+                                  if (!timeRegex.hasMatch(value)) {
+                                    return 'Введите время в формате HH:mm';
+                                  }
+
                                   return null;
                                 },
                                 keyboardType: TextInputType.datetime,
@@ -359,7 +366,7 @@ class _LessonCreateContentState extends State<LessonCreateContent> {
                             children: [
                               TextFormField(
                                 textAlign: TextAlign.center,
-                                controller: _endController,
+                                controller: _endTimeController,
                                 decoration: InputDecoration(
                                   border: OutlineInputBorder(),
                                   hintText: '9:35',
@@ -368,13 +375,20 @@ class _LessonCreateContentState extends State<LessonCreateContent> {
                                   setState(() {
                                     _selectedTime = null;
                                     widget.timeController.text =
-                                        '${_startController.text}-${_endController.text}';
+                                        '${_startTimeController.text}-${_endTimeController.text}';
                                   });
                                 },
                                 validator: (value) {
                                   if (value == null || value.isEmpty) {
-                                    return 'Пожалуйста, введите время конца';
+                                    return 'Пожалуйста, введите время завершения занятия';
                                   }
+
+                                  final timeRegex =
+                                      RegExp(r'^(?:\d|[01]\d|2[0-3]):[0-5]\d$');
+                                  if (!timeRegex.hasMatch(value)) {
+                                    return 'Введите время в формате HH:mm';
+                                  }
+
                                   return null;
                                 },
                                 keyboardType: TextInputType.datetime,
@@ -547,8 +561,8 @@ class _LessonCreateContentState extends State<LessonCreateContent> {
   @override
   void dispose() {
     _customLessonTypeController.dispose();
-    _startController.dispose();
-    _endController.dispose();
+    _startTimeController.dispose();
+    _endTimeController.dispose();
     _customWeekParityController.dispose();
 
     super.dispose();
