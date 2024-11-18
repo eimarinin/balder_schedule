@@ -4,6 +4,7 @@ import 'package:balder_schedule_app/services/database/database_service.dart';
 import 'package:balder_schedule_app/utils/export/export.dart';
 import 'package:balder_schedule_app/utils/margin_screen.dart';
 import 'package:balder_schedule_app/widgets/edit/day_selector.dart';
+import 'package:balder_schedule_app/widgets/edit/edit_card.dart';
 import 'package:balder_schedule_app/widgets/page_header.dart';
 import 'package:flutter/foundation.dart';
 
@@ -19,11 +20,6 @@ class EditScreen extends StatelessWidget {
     return Scaffold(
       appBar: PageHeader(title: S.of(context).editTitle),
       body: MarginScreen(child: EditContent()),
-      floatingActionButton: ElevatedButton.icon(
-        onPressed: () => context.go('/edit/lesson_create'),
-        icon: Icon(Icons.add_outlined),
-        label: Text('Добавить'),
-      ),
     );
   }
 }
@@ -43,7 +39,23 @@ class EditContent extends StatelessWidget {
           const Gap(12),
           DaySelector(),
           const Gap(12),
-          if (kIsWeb)
+          Column(
+            children: [
+              Row(
+                children: [
+                  Expanded(
+                    child: FilledButton.tonalIcon(
+                      onPressed: () => context.go('/edit/lesson_create'),
+                      icon: Icon(Icons.add_outlined),
+                      label: Text('Добавить'),
+                    ),
+                  ),
+                ],
+              ),
+              const Gap(12),
+            ],
+          ),
+          if (kIsWeb) ...[
             IconButton(
               icon: Icon(Icons.download_outlined),
               tooltip: 'Экспортировать данные',
@@ -52,7 +64,8 @@ class EditContent extends StatelessWidget {
                 exportData(lessons.map((lesson) => lesson.toMap()).toList());
               },
             ),
-          const Gap(12),
+            const Gap(12),
+          ],
           FutureBuilder<List<LessonModel>>(
             future: _loadLessons(),
             builder: (context, snapshot) {
@@ -64,27 +77,37 @@ class EditContent extends StatelessWidget {
                 return const Text('Данных нет');
               } else {
                 final lessons = snapshot.data!;
-                return DataTable(
-                  columns: const [
-                    DataColumn(label: Text('ID')),
-                    DataColumn(label: Text('Название')),
-                    DataColumn(label: Text('Аудитория')),
-                    DataColumn(label: Text('Тип')),
-                    DataColumn(label: Text('Время')),
-                    DataColumn(label: Text('Преподаватель')),
-                  ],
-                  rows: lessons.map((lesson) {
-                    return DataRow(
-                      cells: [
-                        DataCell(Text(lesson.id?.toString() ?? '-')),
-                        DataCell(Text(lesson.name)),
-                        DataCell(Text(lesson.classRoom)),
-                        DataCell(Text(lesson.lessonType)),
-                        DataCell(Text(lesson.time)),
-                        DataCell(Text(lesson.teacher)),
+                return Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.surfaceContainer,
+                    borderRadius: BorderRadius.circular(4),
+                  ),
+                  child: ListView.separated(
+                    physics: const NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    itemCount: lessons.length,
+                    itemBuilder: (context, index) {
+                      final lesson = lessons[index];
+                      return EditCard(
+                        name: lesson.name,
+                        classRoom: lesson.classRoom,
+                        lessonType: lesson.lessonType,
+                        time: lesson.time,
+                        weekParity: lesson.weekParity,
+                        lessonDate: lesson.lessonDate,
+                        teacher: lesson.teacher,
+                        notes: lesson.notes,
+                      );
+                    },
+                    separatorBuilder: (context, index) => Column(
+                      children: const [
+                        Gap(12),
+                        Divider(thickness: 2, height: 0),
+                        Gap(12),
                       ],
-                    );
-                  }).toList(),
+                    ),
+                  ),
                 );
               }
             },
