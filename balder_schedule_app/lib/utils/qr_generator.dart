@@ -14,7 +14,6 @@ class LessonFormatter {
       List<LessonModel> lessons = await _databaseService.getLessons();
 
       if (lessons.isEmpty) {
-        print('Данные отсутствуют');
         return 'Данные отсутствуют';
       }
 
@@ -32,13 +31,9 @@ class LessonFormatter {
         ''';
       }).join('\n---\n');
 
-      // Выводим строку в консоль
-      print(result);
-
       return result;
     } catch (e) {
       String errorMessage = 'Ошибка при получении данных: $e';
-      print(errorMessage);
       return errorMessage;
     }
   }
@@ -67,7 +62,6 @@ class LessonFormatter {
         ),
       );
     } catch (e) {
-      print('Ошибка при создании QR-кода: $e');
       return Future.value(
         Center(
           child: Text(

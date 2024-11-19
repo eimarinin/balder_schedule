@@ -1,28 +1,18 @@
+import 'package:balder_schedule_app/models/lesson_model.dart';
+import 'package:balder_schedule_app/services/database/database_service.dart';
 import 'package:balder_schedule_app/widgets/schedule/schedule_tag.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 
 class EditCard extends StatelessWidget {
-  final String name;
-  final String classRoom;
-  final String lessonType;
-  final String time;
-  final String? weekParity;
-  final String? lessonDate;
-  final String teacher;
-  final String? notes;
+  final LessonModel lesson;
+  final VoidCallback onDelete;
 
   const EditCard({
     super.key,
-    required this.name,
-    required this.classRoom,
-    required this.lessonType,
-    required this.time,
-    this.weekParity,
-    this.lessonDate,
-    required this.teacher,
-    this.notes,
+    required this.lesson,
+    required this.onDelete,
   });
 
   List<String> _parseTime(String time) {
@@ -33,9 +23,15 @@ class EditCard extends StatelessWidget {
     return ['--:--', '--:--'];
   }
 
+  Future<void> _deleteLesson() async {
+    final databaseService = DatabaseService();
+    await databaseService.deleteLesson(lesson.id!);
+    onDelete();
+  }
+
   @override
   Widget build(BuildContext context) {
-    final times = _parseTime(time);
+    final times = _parseTime(lesson.time);
     final startTime = times[0];
     final endTime = times[1];
 
@@ -44,8 +40,8 @@ class EditCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          if (lessonDate != null && lessonDate!.isNotEmpty) ...[
-            ScheduleTag(text: 'Только $lessonDate'),
+          if (lesson.lessonDate != null && lesson.lessonDate!.isNotEmpty) ...[
+            ScheduleTag(text: 'Только ${lesson.lessonDate}'),
             const Gap(8),
           ],
           IntrinsicHeight(
@@ -79,7 +75,7 @@ class EditCard extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      name,
+                      lesson.name,
                       style: Theme.of(context).textTheme.labelLarge,
                     ),
                     Column(
@@ -87,22 +83,28 @@ class EditCard extends StatelessWidget {
                       children: [
                         Row(
                           children: [
-                            ScheduleTag(text: classRoom),
+                            ScheduleTag(text: lesson.classRoom),
                             const Gap(2),
-                            ScheduleTag(text: lessonType),
-                            if (weekParity != null &&
-                                weekParity!.isNotEmpty) ...[
+                            ScheduleTag(text: lesson.lessonType),
+                            if (lesson.weekParity != null &&
+                                lesson.weekParity!.isNotEmpty) ...[
                               const Gap(2),
-                              ScheduleTag(text: 'Четность недели: $weekParity'),
+                              ScheduleTag(
+                                text: 'Четность недели: ${lesson.weekParity}',
+                              ),
                             ],
                           ],
                         ),
                         const Gap(2),
-                        ScheduleTag(text: teacher),
+                        ScheduleTag(text: lesson.teacher),
                       ],
                     ),
                   ],
                 ),
+                IconButton.filled(
+                  onPressed: _deleteLesson,
+                  icon: Icon(Icons.delete),
+                )
               ],
             ),
           ),

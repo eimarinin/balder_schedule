@@ -24,11 +24,24 @@ class EditScreen extends StatelessWidget {
   }
 }
 
-class EditContent extends StatelessWidget {
+class EditContent extends StatefulWidget {
   const EditContent({super.key});
 
-  Future<List<LessonModel>> _loadLessons() async {
-    return await DatabaseService().getLessons();
+  @override
+  State<EditContent> createState() => _EditContentState();
+}
+
+class _EditContentState extends State<EditContent> {
+  @override
+  void initState() {
+    super.initState();
+    _loadLessons();
+  }
+
+  void _loadLessons() {
+    setState(() {
+      DatabaseService().getLessons();
+    });
   }
 
   @override
@@ -67,7 +80,7 @@ class EditContent extends StatelessWidget {
             const Gap(12),
           ],
           FutureBuilder<List<LessonModel>>(
-            future: _loadLessons(),
+            future: DatabaseService().getLessons(),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const CircularProgressIndicator();
@@ -81,7 +94,7 @@ class EditContent extends StatelessWidget {
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
                     color: Theme.of(context).colorScheme.surfaceContainer,
-                    borderRadius: BorderRadius.circular(4),
+                    borderRadius: BorderRadius.circular(6),
                   ),
                   child: ListView.separated(
                     physics: const NeverScrollableScrollPhysics(),
@@ -90,14 +103,11 @@ class EditContent extends StatelessWidget {
                     itemBuilder: (context, index) {
                       final lesson = lessons[index];
                       return EditCard(
-                        name: lesson.name,
-                        classRoom: lesson.classRoom,
-                        lessonType: lesson.lessonType,
-                        time: lesson.time,
-                        weekParity: lesson.weekParity,
-                        lessonDate: lesson.lessonDate,
-                        teacher: lesson.teacher,
-                        notes: lesson.notes,
+                        lesson: lesson,
+                        onDelete: () async {
+                          await DatabaseService().deleteLesson(lesson.id!);
+                          _loadLessons();
+                        },
                       );
                     },
                     separatorBuilder: (context, index) => Column(
