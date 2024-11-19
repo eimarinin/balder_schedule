@@ -1,112 +1,33 @@
 import 'package:balder_schedule_app/generated/l10n.dart';
 import 'package:balder_schedule_app/models/lesson_model.dart';
 import 'package:balder_schedule_app/services/database/database_service.dart';
-import 'package:balder_schedule_app/widgets/edit/lesson/lesson_segments.dart';
 import 'package:balder_schedule_app/utils/margin_screen.dart';
 import 'package:balder_schedule_app/widgets/edit/lesson/lesson_field.dart';
 import 'package:balder_schedule_app/widgets/edit/lesson/lesson_segment.dart';
+import 'package:balder_schedule_app/widgets/flash/snackbar_handler.dart';
 import 'package:balder_schedule_app/widgets/page_header_child.dart';
 
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
 
-class LessonCreateScreen extends StatefulWidget {
-  const LessonCreateScreen({super.key});
-
-  @override
-  State<LessonCreateScreen> createState() => _LessonCreateScreenState();
+enum ControllerKey {
+  name,
+  classRoom,
+  lessonType,
+  time,
+  weekParity,
+  date,
+  teacher,
+  notes,
 }
 
-class _LessonCreateScreenState extends State<LessonCreateScreen> {
-  final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _classController = TextEditingController();
-  final TextEditingController _lessonTypeController = TextEditingController();
-  final TextEditingController _timeController = TextEditingController();
-  final TextEditingController _weekParityController = TextEditingController();
-  final TextEditingController _dateController = TextEditingController();
-  final TextEditingController _teacherController = TextEditingController();
-  final TextEditingController _notesController = TextEditingController();
-
-  bool _isSpecificDate = false;
-
-  void _toggleSpecificDate(bool value) {
-    setState(() {
-      _isSpecificDate = value;
-    });
-  }
-
-  final _formKey = GlobalKey<FormState>();
-
-  @override
-  void dispose() {
-    _nameController.dispose();
-    _classController.dispose();
-    _lessonTypeController.dispose();
-    _timeController.dispose();
-    _weekParityController.dispose();
-    _dateController.dispose();
-    _teacherController.dispose();
-
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: PageHeaderChild(title: S.of(context).lessonCreateScreenTitle),
-      body: MarginScreen(
-        child: Form(
-          key: _formKey,
-          child: LessonCreateContent(
-            nameController: _nameController,
-            classController: _classController,
-            lessonTypeController: _lessonTypeController,
-            timeController: _timeController,
-            weekParityController: _weekParityController,
-            dateController: _dateController,
-            isSpecificDate: _isSpecificDate,
-            onSpecificDateChanged: _toggleSpecificDate,
-            teacherController: _teacherController,
-            notesController: _notesController,
-            formKey: _formKey,
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class LessonCreateContent extends StatefulWidget {
-  final TextEditingController nameController;
-  final TextEditingController classController;
-  final TextEditingController lessonTypeController;
-  final TextEditingController timeController;
-  final TextEditingController weekParityController;
-  final TextEditingController dateController;
-  final bool isSpecificDate;
-  final ValueChanged<bool> onSpecificDateChanged;
-  final TextEditingController teacherController;
-  final TextEditingController notesController;
-  final GlobalKey<FormState> formKey;
-
-  const LessonCreateContent({
-    super.key,
-    required this.nameController,
-    required this.classController,
-    required this.lessonTypeController,
-    required this.timeController,
-    required this.weekParityController,
-    required this.dateController,
-    required this.isSpecificDate,
-    required this.onSpecificDateChanged,
-    required this.teacherController,
-    required this.notesController,
-    required this.formKey,
-  });
-
-  @override
-  State<LessonCreateContent> createState() => _LessonCreateContentState();
+enum CustomControllerKey {
+  lessonType,
+  online,
+  weekParity,
+  startTime,
+  endTime,
 }
 
 enum ListTime {
@@ -124,59 +45,123 @@ enum ListTime {
   final String end;
 }
 
-class _LessonCreateContentState extends State<LessonCreateContent> {
-  final TextEditingController _customLessonTypeController =
-      TextEditingController();
-  final TextEditingController _customWeekParityController =
-      TextEditingController();
+class LessonCreateScreen extends StatefulWidget {
+  const LessonCreateScreen({super.key});
 
-  final TextEditingController _startTimeController = TextEditingController();
-  final TextEditingController _endTimeController = TextEditingController();
+  @override
+  State<LessonCreateScreen> createState() => _LessonCreateScreenState();
+}
+
+class _LessonCreateScreenState extends State<LessonCreateScreen> {
+  final Map<ControllerKey, TextEditingController> _controllers = {
+    for (var key in ControllerKey.values) key: TextEditingController(),
+  };
+
+  bool _isSpecificDate = false;
+
+  void _toggleSpecificDate(bool value) {
+    setState(() {
+      _isSpecificDate = value;
+    });
+  }
+
+  final _formKey = GlobalKey<FormState>();
+
+  @override
+  void dispose() {
+    for (var controller in _controllers.values) {
+      controller.dispose();
+    }
+
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: PageHeaderChild(title: S.of(context).lessonCreateScreenTitle),
+      body: MarginScreen(
+        child: Form(
+          key: _formKey,
+          child: LessonCreateContent(
+            controllers: _controllers,
+            isSpecificDate: _isSpecificDate,
+            onSpecificDateChanged: _toggleSpecificDate,
+            formKey: _formKey,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class LessonCreateContent extends StatefulWidget {
+  final Map<ControllerKey, TextEditingController> controllers;
+  final bool isSpecificDate;
+  final ValueChanged<bool> onSpecificDateChanged;
+  final GlobalKey<FormState> formKey;
+
+  const LessonCreateContent({
+    super.key,
+    required this.controllers,
+    required this.isSpecificDate,
+    required this.onSpecificDateChanged,
+    required this.formKey,
+  });
+
+  @override
+  State<LessonCreateContent> createState() => _LessonCreateContentState();
+}
+
+class _LessonCreateContentState extends State<LessonCreateContent> {
+  final Map<CustomControllerKey, TextEditingController> _customControllers = {
+    for (var key in CustomControllerKey.values) key: TextEditingController(),
+  };
 
   ListTime? _selectedTime = ListTime.first;
 
   void _saveToDatabase() async {
     if (widget.formKey.currentState?.validate() ?? false) {
       final lesson = LessonModel(
-        name: widget.nameController.text,
-        classRoom: widget.classController.text,
-        lessonType: widget.lessonTypeController.text,
-        time: widget.timeController.text,
-        weekParity:
-            widget.isSpecificDate ? null : widget.weekParityController.text,
-        lessonDate: widget.isSpecificDate ? widget.dateController.text : null,
-        teacher: widget.teacherController.text,
-        notes: widget.notesController.text.isNotEmpty
-            ? widget.notesController.text
+        name: widget.controllers[ControllerKey.name]!.text,
+        classRoom: widget.controllers[ControllerKey.classRoom]!.text,
+        lessonType:
+            _customControllers[CustomControllerKey.lessonType]!.text.isNotEmpty
+                ? _customControllers[CustomControllerKey.lessonType]!.text
+                : widget.controllers[ControllerKey.lessonType]!.text,
+        time: widget.controllers[ControllerKey.time]!.text,
+        weekParity: widget.isSpecificDate
+            ? null
+            : _customControllers[CustomControllerKey.weekParity]!
+                    .text
+                    .isNotEmpty
+                ? _customControllers[CustomControllerKey.weekParity]!.text
+                : widget.controllers[ControllerKey.weekParity]!.text,
+        lessonDate: widget.isSpecificDate
+            ? widget.controllers[ControllerKey.date]!.text
+            : null,
+        teacher: widget.controllers[ControllerKey.teacher]!.text,
+        notes: widget.controllers[ControllerKey.notes]!.text.isNotEmpty
+            ? widget.controllers[ControllerKey.notes]!.text
             : null,
       );
 
-      try {
-        await DatabaseService().insertLesson(lesson);
-
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('Занятие успешно сохранено!'),
-              backgroundColor: Colors.green,
-            ),
-          );
-        }
-      } catch (e) {
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('Ошибка при сохранении занятия: $e'),
-              backgroundColor: Colors.red,
-            ),
-          );
-        }
-      }
+      SnackbarHandler.handleSaveAction(
+        context,
+        () async {
+          await DatabaseService().insertLesson(lesson);
+        },
+        'Занятие успешно сохранено!',
+        'Ошибка при сохранении занятия',
+      );
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Пожалуйста, проверьте поля.'),
-          backgroundColor: Colors.red,
+          content: Text(
+            'Пожалуйста, проверьте поля.',
+            style: TextStyle(color: Theme.of(context).colorScheme.onError),
+          ),
+          backgroundColor: Theme.of(context).colorScheme.error,
         ),
       );
     }
@@ -185,8 +170,10 @@ class _LessonCreateContentState extends State<LessonCreateContent> {
   @override
   void initState() {
     super.initState();
-    _startTimeController.text = _selectedTime?.start ?? '';
-    _endTimeController.text = _selectedTime?.end ?? '';
+    _customControllers[CustomControllerKey.startTime]!.text =
+        _selectedTime?.start ?? '';
+    _customControllers[CustomControllerKey.endTime]!.text =
+        _selectedTime?.end ?? '';
   }
 
   @override
@@ -200,7 +187,7 @@ class _LessonCreateContentState extends State<LessonCreateContent> {
             children: [
               LessonField(
                 labelText: 'Название предмета',
-                controller: widget.nameController,
+                controller: widget.controllers[ControllerKey.name]!,
               ),
               Container(
                 padding: const EdgeInsets.all(12),
@@ -216,42 +203,82 @@ class _LessonCreateContentState extends State<LessonCreateContent> {
                       style: Theme.of(context).textTheme.titleMedium,
                     ),
                     const Gap(12),
-                    LessonSegments(
-                      selected: {widget.lessonTypeController.text},
-                      onSelectionChanged: (newSelection) {
-                        setState(() {
-                          if (_customLessonTypeController.text.isEmpty) {
-                            widget.lessonTypeController.text =
-                                newSelection.isNotEmpty
-                                    ? newSelection.first
-                                    : '';
-                          } else {
-                            widget.lessonTypeController.text =
-                                _customLessonTypeController.text;
-                          }
-                        });
-                      },
-                      segments: [
-                        LessonSegment(value: 'Лекция', text: 'Лекция'),
-                        LessonSegment(value: 'Практика', text: 'Практика'),
-                        LessonSegment(
-                            value: 'Лаб. работа', text: 'Лаб. работа'),
+                    Column(
+                      children: [
+                        SizedBox(
+                          width: double.infinity,
+                          child: SegmentedButton<String>(
+                            showSelectedIcon: false,
+                            emptySelectionAllowed: true,
+                            style: SegmentedButton.styleFrom(
+                              shape: const RoundedRectangleBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(4)),
+                              ),
+                            ),
+                            segments: [
+                              LessonSegment(value: 'Лекция', text: 'Лекция'),
+                              LessonSegment(
+                                  value: 'Практика', text: 'Практика'),
+                              LessonSegment(
+                                  value: 'Лаб. работа', text: 'Лаб. работа'),
+                            ],
+                            selected: {
+                              widget.controllers[ControllerKey.lessonType]!.text
+                            },
+                            onSelectionChanged: (Set<String> value) {
+                              setState(() {
+                                if (value.isNotEmpty) {
+                                  final selectedValue = value.first;
+                                  widget.controllers[ControllerKey.lessonType]!
+                                      .text = selectedValue;
+
+                                  _customControllers[
+                                          CustomControllerKey.lessonType]!
+                                      .clear();
+                                }
+                              });
+                            },
+                          ),
+                        ),
+                        const Gap(8),
+                        TextFormField(
+                            textAlign: TextAlign.center,
+                            controller: _customControllers[
+                                CustomControllerKey.lessonType]!,
+                            decoration: InputDecoration(
+                              border: OutlineInputBorder(),
+                              hintText: 'Свой вариант',
+                              hintStyle: Theme.of(context).textTheme.labelLarge,
+                            ),
+                            onChanged: (value) {
+                              setState(() {
+                                widget.controllers[ControllerKey.lessonType]!
+                                    .clear();
+                                _customControllers[
+                                        CustomControllerKey.lessonType]!
+                                    .text = value;
+                              });
+                            },
+                            validator: (value) {
+                              if ((widget.controllers[ControllerKey.lessonType]!
+                                          .text.isEmpty &&
+                                      (value == null || value.isEmpty)) ||
+                                  (widget.controllers[ControllerKey.lessonType]!
+                                          .text.isNotEmpty &&
+                                      value!.isNotEmpty)) {
+                                return 'Введите тип занятия или выберите из списка';
+                              }
+                              return null;
+                            }),
                       ],
-                      customController: _customLessonTypeController,
-                      validator: (value) {
-                        if (widget.lessonTypeController.text.isNotEmpty ||
-                            _customLessonTypeController.text.isNotEmpty) {
-                          return null;
-                        }
-                        return 'Пожалуйста, выберите тип занятия';
-                      },
                     ),
                   ],
                 ),
               ),
               LessonField(
                 labelText: 'Аудитория',
-                controller: widget.classController,
+                controller: widget.controllers[ControllerKey.classRoom]!,
                 isNumeric: true,
               ),
               Container(
@@ -276,15 +303,18 @@ class _LessonCreateContentState extends State<LessonCreateContent> {
                         size: 20,
                       ),
                       initialSelection: _selectedTime,
-                      controller: widget.timeController,
+                      controller: widget.controllers[ControllerKey.time]!,
                       requestFocusOnTap: false,
                       onSelected: (ListTime? time) {
                         setState(() {
                           if (time != null) {
                             _selectedTime = time;
-                            _startTimeController.text = time.start;
-                            _endTimeController.text = time.end;
-                            widget.timeController.text = time.label;
+                            _customControllers[CustomControllerKey.startTime]!
+                                .text = time.start;
+                            _customControllers[CustomControllerKey.endTime]!
+                                .text = time.end;
+                            widget.controllers[ControllerKey.time]!.text =
+                                time.label;
                           }
                         });
                       },
@@ -329,7 +359,8 @@ class _LessonCreateContentState extends State<LessonCreateContent> {
                             children: [
                               TextFormField(
                                 textAlign: TextAlign.center,
-                                controller: _startTimeController,
+                                controller: _customControllers[
+                                    CustomControllerKey.startTime]!,
                                 decoration: InputDecoration(
                                   border: OutlineInputBorder(),
                                   hintText: '8:00',
@@ -337,8 +368,9 @@ class _LessonCreateContentState extends State<LessonCreateContent> {
                                 onChanged: (value) {
                                   setState(() {
                                     _selectedTime = null;
-                                    widget.timeController.text =
-                                        '${_startTimeController.text}-${_endTimeController.text}';
+                                    widget.controllers[ControllerKey.time]!
+                                            .text =
+                                        '${_customControllers[CustomControllerKey.startTime]!.text}-${_customControllers[CustomControllerKey.endTime]!.text}';
                                   });
                                 },
                                 validator: (value) {
@@ -366,7 +398,8 @@ class _LessonCreateContentState extends State<LessonCreateContent> {
                             children: [
                               TextFormField(
                                 textAlign: TextAlign.center,
-                                controller: _endTimeController,
+                                controller: _customControllers[
+                                    CustomControllerKey.endTime]!,
                                 decoration: InputDecoration(
                                   border: OutlineInputBorder(),
                                   hintText: '9:35',
@@ -374,8 +407,9 @@ class _LessonCreateContentState extends State<LessonCreateContent> {
                                 onChanged: (value) {
                                   setState(() {
                                     _selectedTime = null;
-                                    widget.timeController.text =
-                                        '${_startTimeController.text}-${_endTimeController.text}';
+                                    widget.controllers[ControllerKey.time]!
+                                            .text =
+                                        '${_customControllers[CustomControllerKey.startTime]!.text}-${_customControllers[CustomControllerKey.endTime]!.text}';
                                   });
                                 },
                                 validator: (value) {
@@ -415,45 +449,91 @@ class _LessonCreateContentState extends State<LessonCreateContent> {
                       style: Theme.of(context).textTheme.titleMedium,
                     ),
                     const Gap(12),
-                    LessonSegments(
-                      selected: {widget.weekParityController.text},
-                      onSelectionChanged: (newSelection) {
-                        setState(() {
-                          if (_customWeekParityController.text.isEmpty) {
-                            widget.weekParityController.text =
-                                newSelection.isNotEmpty
-                                    ? newSelection.first
-                                    : '';
-                          } else {
-                            widget.weekParityController.text =
-                                _customWeekParityController.text;
-                          }
-                          widget.onSpecificDateChanged(false);
-                          widget.dateController.clear();
-                        });
-                      },
-                      segments: [
-                        LessonSegment(value: '1', text: '1'),
-                        LessonSegment(value: '2', text: '2'),
+                    Column(
+                      children: [
+                        SizedBox(
+                          width: double.infinity,
+                          child: SegmentedButton<String>(
+                            showSelectedIcon: false,
+                            emptySelectionAllowed: true,
+                            multiSelectionEnabled: true,
+                            style: SegmentedButton.styleFrom(
+                              shape: const RoundedRectangleBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(4)),
+                              ),
+                            ),
+                            segments: [
+                              LessonSegment(value: '1', text: '1'),
+                              LessonSegment(value: '2', text: '2'),
+                            ],
+                            selected: widget
+                                    .controllers[ControllerKey.weekParity]!
+                                    .text
+                                    .isEmpty
+                                ? <String>{}
+                                : widget
+                                    .controllers[ControllerKey.weekParity]!.text
+                                    .split(',')
+                                    .toSet(),
+                            onSelectionChanged: (Set<String> value) {
+                              setState(() {
+                                final sortedValues = value.toList()
+                                  ..sort((a, b) => a.compareTo(b));
+                                widget.controllers[ControllerKey.weekParity]!
+                                    .text = sortedValues.join(',');
+
+                                _customControllers[
+                                        CustomControllerKey.weekParity]!
+                                    .clear();
+
+                                widget.onSpecificDateChanged(false);
+                                widget.controllers[ControllerKey.date]!.clear();
+                              });
+                            },
+                          ),
+                        ),
+                        const Gap(8),
+                        TextFormField(
+                          textAlign: TextAlign.center,
+                          controller: _customControllers[
+                              CustomControllerKey.weekParity]!,
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(),
+                            hintText: 'Свой вариант',
+                            hintStyle: Theme.of(context).textTheme.labelLarge,
+                          ),
+                          onChanged: (value) {
+                            setState(() {
+                              widget.controllers[ControllerKey.weekParity]!
+                                  .clear();
+                              _customControllers[
+                                      CustomControllerKey.weekParity]!
+                                  .text = value;
+
+                              widget.onSpecificDateChanged(false);
+                              widget.controllers[ControllerKey.date]!.clear();
+                            });
+                          },
+                          validator: (value) {
+                            if ((value == null || value.isEmpty) &&
+                                widget.controllers[ControllerKey.weekParity]!
+                                    .text.isEmpty &&
+                                widget.controllers[ControllerKey.date]!.text
+                                    .isEmpty) {
+                              return 'Выберите четность недели или дату проведения занятия';
+                            }
+
+                            if (value != null &&
+                                value.isNotEmpty &&
+                                int.tryParse(value) == null) {
+                              return 'Четность недели должна быть числом';
+                            }
+
+                            return null;
+                          },
+                        ),
                       ],
-                      customController: _customWeekParityController,
-                      validator: (value) {
-                        final parityValue =
-                            widget.weekParityController.text.isNotEmpty
-                                ? widget.weekParityController.text
-                                : _customWeekParityController.text;
-
-                        if (!widget.isSpecificDate && parityValue.isEmpty) {
-                          return 'Пожалуйста, выберите четность недели или дату проведения занятия';
-                        }
-
-                        if (!widget.isSpecificDate &&
-                            int.tryParse(parityValue) == null) {
-                          return 'Четность недели должна быть числом';
-                        }
-
-                        return null;
-                      },
                     ),
                     const Gap(12),
                     Row(
@@ -482,7 +562,7 @@ class _LessonCreateContentState extends State<LessonCreateContent> {
                     TextFormField(
                       style: Theme.of(context).textTheme.bodyLarge,
                       readOnly: true,
-                      controller: widget.dateController,
+                      controller: widget.controllers[ControllerKey.date]!,
                       decoration: InputDecoration(
                         border: OutlineInputBorder(),
                         prefixIcon: Icon(Icons.today_outlined),
@@ -502,8 +582,11 @@ class _LessonCreateContentState extends State<LessonCreateContent> {
                         if (selectedDate != null) {
                           setState(() {
                             widget.onSpecificDateChanged(true);
-                            widget.weekParityController.clear();
-                            widget.dateController.text =
+                            widget.controllers[ControllerKey.weekParity]!
+                                .clear();
+                            _customControllers[CustomControllerKey.weekParity]!
+                                .clear();
+                            widget.controllers[ControllerKey.date]!.text =
                                 DateFormat('dd.MM.yyyy').format(selectedDate);
                           });
                         }
@@ -514,10 +597,10 @@ class _LessonCreateContentState extends State<LessonCreateContent> {
               ),
               LessonField(
                 labelText: 'Преподаватель',
-                controller: widget.teacherController,
+                controller: widget.controllers[ControllerKey.teacher]!,
               ),
               TextFormField(
-                controller: widget.notesController,
+                controller: widget.controllers[ControllerKey.notes]!,
                 decoration: InputDecoration(
                   border: OutlineInputBorder(),
                   alignLabelWithHint: true,
@@ -560,10 +643,9 @@ class _LessonCreateContentState extends State<LessonCreateContent> {
 
   @override
   void dispose() {
-    _customLessonTypeController.dispose();
-    _startTimeController.dispose();
-    _endTimeController.dispose();
-    _customWeekParityController.dispose();
+    for (var customController in _customControllers.values) {
+      customController.dispose();
+    }
 
     super.dispose();
   }
