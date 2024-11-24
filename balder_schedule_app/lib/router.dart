@@ -61,7 +61,9 @@ final goRouter = GoRouter(
               routes: [
                 GoRoute(
                   path: 'lesson_create',
-                  builder: (context, state) => LessonCreateScreen(),
+                  builder: (context, state) => LessonCreateScreen(
+                    selectedDay: state.extra as DateTime,
+                  ),
                 ),
               ],
             ),

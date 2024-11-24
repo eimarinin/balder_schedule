@@ -2,18 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class DaySelector extends StatefulWidget {
-  const DaySelector({super.key});
+  final Function(DateTime) onDayChanged;
+
+  const DaySelector({super.key, required this.onDayChanged});
 
   @override
   State<DaySelector> createState() => _DaySelectorState();
 }
 
 class _DaySelectorState extends State<DaySelector> {
-  DateTime _selectedDate = DateTime.now();
+  DateTime _selectedDay = DateTime.now();
 
   void _changeDay(int days) {
     setState(() {
-      _selectedDate = _selectedDate.add(Duration(days: days));
+      _selectedDay = _selectedDay.add(Duration(days: days));
+      widget.onDayChanged(_selectedDay);
     });
   }
 
@@ -34,7 +37,7 @@ class _DaySelectorState extends State<DaySelector> {
           ),
         ),
         Text(
-          toBeginningOfSentenceCase(DateFormat('EEEE').format(_selectedDate)) ??
+          toBeginningOfSentenceCase(DateFormat('EEEE').format(_selectedDay)) ??
               '',
           style: TextStyle(fontSize: 20, height: 1.2),
         ),

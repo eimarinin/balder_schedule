@@ -4,6 +4,7 @@ import 'package:balder_schedule_app/widgets/schedule/schedule_tag.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 
 class EditCard extends StatelessWidget {
   final LessonModel lesson;
@@ -29,6 +30,28 @@ class EditCard extends StatelessWidget {
     onDelete();
   }
 
+  bool isValidDateFormat(String date) {
+    try {
+      DateFormat('dd/MM/yyyy').parse(date);
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  String convertDateFormat(String date) {
+    try {
+      final DateTime parsedDate = DateFormat('dd/MM/yyyy').parse(date);
+
+      final String formattedDate =
+          DateFormat('dd MMMM yyyy - EEEE', 'ru_RU').format(parsedDate);
+
+      return formattedDate;
+    } catch (e) {
+      return 'Неверный формат даты';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final times = _parseTime(lesson.time);
@@ -40,8 +63,8 @@ class EditCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          if (lesson.lessonDate != null && lesson.lessonDate!.isNotEmpty) ...[
-            ScheduleTag(text: 'Только ${lesson.lessonDate}'),
+          if (isValidDateFormat(lesson.lessonDate!)) ...[
+            ScheduleTag(text: convertDateFormat('${lesson.lessonDate}')),
             const Gap(8),
           ],
           IntrinsicHeight(
@@ -83,7 +106,26 @@ class EditCard extends StatelessWidget {
                       children: [
                         Row(
                           children: [
-                            ScheduleTag(text: lesson.classRoom),
+                            if (lesson.classRoom == 'online') ...[
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 8.0, vertical: 4.0),
+                                decoration: BoxDecoration(
+                                  color: Colors.green,
+                                  borderRadius: BorderRadius.circular(4),
+                                ),
+                                child: Text(
+                                  'Онлайн',
+                                  style: const TextStyle(
+                                    fontSize: 12,
+                                    height: 1,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ),
+                            ] else ...[
+                              ScheduleTag(text: lesson.classRoom),
+                            ],
                             const Gap(2),
                             ScheduleTag(text: lesson.lessonType),
                             if (lesson.weekParity != null &&
