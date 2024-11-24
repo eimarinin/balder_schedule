@@ -67,88 +67,86 @@ class EditCard extends StatelessWidget {
             ScheduleTag(text: convertDateFormat('${lesson.lessonDate}')),
             const Gap(8),
           ],
-          IntrinsicHeight(
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  width: 72,
-                  height: 72,
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.secondaryContainer,
-                    borderRadius: BorderRadius.circular(6),
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        startTime,
-                        style: const TextStyle(fontSize: 24, height: 1.2),
-                      ),
-                      Text(
-                        endTime,
-                        style: const TextStyle(fontSize: 24, height: 1.2),
-                      ),
-                    ],
-                  ),
+          Text(
+            lesson.name,
+            style: Theme.of(context).textTheme.labelLarge,
+          ),
+          const Gap(6),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                width: 64,
+                height: 64,
+                decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.secondaryContainer,
+                  borderRadius: BorderRadius.circular(6),
                 ),
-                const Gap(12),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      lesson.name,
-                      style: Theme.of(context).textTheme.labelLarge,
+                      startTime,
+                      style: const TextStyle(fontSize: 20, height: 1.2),
                     ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            if (lesson.classRoom == 'online') ...[
-                              Container(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 8.0, vertical: 4.0),
-                                decoration: BoxDecoration(
-                                  color: Colors.green,
-                                  borderRadius: BorderRadius.circular(4),
-                                ),
-                                child: Text(
-                                  'Онлайн',
-                                  style: const TextStyle(
-                                    fontSize: 12,
-                                    height: 1,
-                                    color: Colors.white,
-                                  ),
-                                ),
-                              ),
-                            ] else ...[
-                              ScheduleTag(text: lesson.classRoom),
-                            ],
-                            const Gap(2),
-                            ScheduleTag(text: lesson.lessonType),
-                            if (lesson.weekParity != null &&
-                                lesson.weekParity!.isNotEmpty) ...[
-                              const Gap(2),
-                              ScheduleTag(
-                                text: 'Четность недели: ${lesson.weekParity}',
-                              ),
-                            ],
-                          ],
-                        ),
-                        const Gap(2),
-                        ScheduleTag(text: lesson.teacher),
-                      ],
+                    Text(
+                      endTime,
+                      style: const TextStyle(fontSize: 20, height: 1.2),
                     ),
                   ],
                 ),
-                IconButton.filled(
-                  onPressed: _deleteLesson,
-                  icon: Icon(Icons.delete),
-                )
-              ],
-            ),
+              ),
+              const Gap(12),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      ScheduleTag(text: lesson.lessonType),
+                      const Gap(2),
+                      Row(
+                        children: [
+                          if (lesson.classRoom == 'online') ...[
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 8.0, vertical: 4.0),
+                              decoration: BoxDecoration(
+                                color: Colors.green,
+                                borderRadius: BorderRadius.circular(4),
+                              ),
+                              child: Text(
+                                'Онлайн',
+                                style: const TextStyle(
+                                  fontSize: 12,
+                                  height: 1,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                          ] else ...[
+                            ScheduleTag(text: lesson.classRoom),
+                          ],
+                          if (lesson.weekParity != null &&
+                              lesson.weekParity!.isNotEmpty) ...[
+                            const Gap(2),
+                            ScheduleTag(
+                              text: 'Недели: ${lesson.weekParity}',
+                            ),
+                          ],
+                        ],
+                      ),
+                      const Gap(2),
+                      ScheduleTag(text: lesson.teacher),
+                    ],
+                  ),
+                ],
+              ),
+              IconButton.filled(
+                onPressed: _deleteLesson,
+                icon: Icon(Icons.delete),
+              )
+            ],
           ),
         ],
       ),

@@ -263,6 +263,7 @@ class _LessonCreateContentState extends State<LessonCreateContent> {
                             border: OutlineInputBorder(),
                             hintText: 'Свой вариант',
                             hintStyle: Theme.of(context).textTheme.labelLarge,
+                            errorMaxLines: 2,
                           ),
                           onChanged: (value) {
                             setState(() {
@@ -579,6 +580,7 @@ class _LessonCreateContentState extends State<LessonCreateContent> {
                             border: OutlineInputBorder(),
                             hintText: 'Свой вариант',
                             hintStyle: Theme.of(context).textTheme.labelLarge,
+                            errorMaxLines: 2,
                             helper: Text(
                                 'Например, введите "123", чтобы задать первую, вторую и третью честность недели.'),
                           ),
