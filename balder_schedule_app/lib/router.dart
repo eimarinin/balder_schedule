@@ -1,4 +1,5 @@
 import 'package:balder_schedule_app/screens/edit/lesson/lesson_create_screen.dart';
+import 'package:balder_schedule_app/screens/edit/lesson/lesson_edit_screen.dart';
 import 'package:balder_schedule_app/widgets/navigation.dart';
 import 'package:balder_schedule_app/screens/edit/edit_screen.dart';
 import 'package:balder_schedule_app/screens/schedule/lesson_screen.dart';
@@ -63,6 +64,12 @@ final goRouter = GoRouter(
                   path: 'lesson_create',
                   builder: (context, state) => LessonCreateScreen(
                     selectedDay: state.extra as DateTime,
+                  ),
+                ),
+                GoRoute(
+                  path: 'lesson_edit',
+                  builder: (context, state) => LessonEditScreen(
+                    params: state.extra as LessonEditParams,
                   ),
                 ),
               ],

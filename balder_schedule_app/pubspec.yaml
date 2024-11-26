@@ -54,6 +54,7 @@ dependencies:
   sqflite_common_ffi: ^2.3.4
   qr_flutter: ^4.1.0
   auto_size_text: ^3.0.0
+  l10n_flutter: ^1.0.7
   
 
 

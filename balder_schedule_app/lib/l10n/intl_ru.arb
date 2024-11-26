@@ -14,5 +14,6 @@
     "scanNewScheduleTitle": "Сканировать новое расписание",
     "shareScheduleTitle": "Поделиться расписанием",
     "settingsHonesty": "Четность недели",
-    "lessonCreateScreenTitle": "Добавить предмет"
+    "lessonCreateScreenTitle": "Добавить предмет",
+    "lessonEditScreenTitle": "Редактировать предмет"
 }

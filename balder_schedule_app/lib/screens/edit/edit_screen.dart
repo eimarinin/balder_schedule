@@ -143,6 +143,7 @@ class _EditContentState extends State<EditContent> {
                             final lesson = filteredLessons[index];
                             return EditCard(
                               lesson: lesson,
+                              selectedDay: selectedDay,
                               onDelete: () async {
                                 SnackbarHandler.handleSaveAction(
                                   context,
@@ -202,6 +203,7 @@ class _EditContentState extends State<EditContent> {
                             final lesson = specialDateLessons[index];
                             return EditCard(
                               lesson: lesson,
+                              selectedDay: selectedDay,
                               onDelete: () async {
                                 SnackbarHandler.handleSaveAction(
                                   context,

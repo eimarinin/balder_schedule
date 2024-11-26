@@ -1,4 +1,5 @@
 import 'package:balder_schedule_app/models/lesson_model.dart';
+import 'package:balder_schedule_app/screens/edit/lesson/lesson_edit_screen.dart';
 import 'package:balder_schedule_app/services/database/database_service.dart';
 import 'package:balder_schedule_app/widgets/schedule/schedule_tag.dart';
 import 'package:flutter/material.dart';
@@ -9,11 +10,13 @@ import 'package:intl/intl.dart';
 class EditCard extends StatelessWidget {
   final LessonModel lesson;
   final VoidCallback onDelete;
+  final String selectedDay;
 
   const EditCard({
     super.key,
     required this.lesson,
     required this.onDelete,
+    required this.selectedDay,
   });
 
   List<String> _parseTime(String time) {
@@ -59,7 +62,13 @@ class EditCard extends StatelessWidget {
     final endTime = times[1];
 
     return InkWell(
-      onTap: () => context.go('/'),
+      onTap: () => context.go(
+        '/edit/lesson_edit',
+        extra: LessonEditParams(
+          lesson: lesson,
+          selectedDay: selectedDay,
+        ),
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -103,30 +112,30 @@ class EditCard extends StatelessWidget {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      ScheduleTag(text: lesson.lessonType),
+                      if (lesson.classRoom == 'online') ...[
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 8.0, vertical: 4.0),
+                          decoration: BoxDecoration(
+                            color: Colors.green,
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                          child: Text(
+                            'Онлайн',
+                            style: const TextStyle(
+                              fontSize: 12,
+                              height: 1,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ] else ...[
+                        ScheduleTag(text: lesson.classRoom),
+                      ],
                       const Gap(2),
                       Row(
                         children: [
-                          if (lesson.classRoom == 'online') ...[
-                            Container(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 8.0, vertical: 4.0),
-                              decoration: BoxDecoration(
-                                color: Colors.green,
-                                borderRadius: BorderRadius.circular(4),
-                              ),
-                              child: Text(
-                                'Онлайн',
-                                style: const TextStyle(
-                                  fontSize: 12,
-                                  height: 1,
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ),
-                          ] else ...[
-                            ScheduleTag(text: lesson.classRoom),
-                          ],
+                          ScheduleTag(text: lesson.lessonType),
                           if (lesson.weekParity != null &&
                               lesson.weekParity!.isNotEmpty) ...[
                             const Gap(2),

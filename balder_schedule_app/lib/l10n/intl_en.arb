@@ -14,5 +14,6 @@
     "scanNewScheduleTitle": "Scan new schedule",
     "shareScheduleTitle": "Share schedule",
     "settingsHonesty": "The parity of the week",
-    "lessonCreateScreenTitle": "Add a lesson"
+    "lessonCreateScreenTitle": "Add a lesson",
+    "lessonEditScreenTitle": "Edit a lesson"
 }

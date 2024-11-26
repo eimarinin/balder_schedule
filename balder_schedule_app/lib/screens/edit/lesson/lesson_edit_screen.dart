@@ -46,21 +46,52 @@ enum ListTime {
   final String end;
 }
 
-class LessonCreateScreen extends StatefulWidget {
-  final DateTime selectedDay;
+class LessonEditParams {
+  final LessonModel lesson;
+  final String selectedDay;
 
-  const LessonCreateScreen({super.key, required this.selectedDay});
-
-  @override
-  State<LessonCreateScreen> createState() => _LessonCreateScreenState();
+  LessonEditParams({
+    required this.lesson,
+    required this.selectedDay,
+  });
 }
 
-class _LessonCreateScreenState extends State<LessonCreateScreen> {
+class LessonEditScreen extends StatefulWidget {
+  final LessonEditParams params;
+
+  const LessonEditScreen({
+    super.key,
+    required this.params,
+  });
+
+  @override
+  State<LessonEditScreen> createState() => _LessonEditScreenState();
+}
+
+class _LessonEditScreenState extends State<LessonEditScreen> {
   final Map<ControllerKey, TextEditingController> _controllers = {
     for (var key in ControllerKey.values) key: TextEditingController(),
   };
 
   final _formKey = GlobalKey<FormState>();
+
+  @override
+  void initState() {
+    super.initState();
+
+    _controllers[ControllerKey.name]!.text = widget.params.lesson.name;
+    _controllers[ControllerKey.classRoom]!.text =
+        widget.params.lesson.classRoom;
+    _controllers[ControllerKey.lessonType]!.text =
+        widget.params.lesson.lessonType;
+    _controllers[ControllerKey.time]!.text = widget.params.lesson.time;
+    _controllers[ControllerKey.weekParity]!.text =
+        widget.params.lesson.weekParity ?? '';
+    _controllers[ControllerKey.date]!.text =
+        widget.params.lesson.lessonDate ?? '';
+    _controllers[ControllerKey.teacher]!.text = widget.params.lesson.teacher;
+    _controllers[ControllerKey.notes]!.text = widget.params.lesson.notes ?? '';
+  }
 
   @override
   void dispose() {
@@ -80,8 +111,10 @@ class _LessonCreateScreenState extends State<LessonCreateScreen> {
           key: _formKey,
           child: LessonCreateContent(
             controllers: _controllers,
-            selectedDay: widget.selectedDay,
             formKey: _formKey,
+            lessonDate: widget.params.lesson.lessonDate ?? '',
+            lesson: widget.params.lesson,
+            selectedDay: widget.params.selectedDay,
           ),
         ),
       ),
@@ -91,13 +124,17 @@ class _LessonCreateScreenState extends State<LessonCreateScreen> {
 
 class LessonCreateContent extends StatefulWidget {
   final Map<ControllerKey, TextEditingController> controllers;
-  final DateTime selectedDay;
   final GlobalKey<FormState> formKey;
+  final String lessonDate;
+  final LessonModel lesson;
+  final String selectedDay;
 
   const LessonCreateContent({
     super.key,
     required this.controllers,
     required this.formKey,
+    required this.lessonDate,
+    required this.lesson,
     required this.selectedDay,
   });
 
@@ -148,35 +185,38 @@ class _LessonCreateContentState extends State<LessonCreateContent> {
   void _saveToDatabase() async {
     if (widget.formKey.currentState?.validate() ?? false) {
       final lesson = LessonModel(
+        id: widget.lesson.id,
         name: name.text,
         classRoom: _isOnlineLesson ? 'online' : classRoom.text,
         lessonType: customLessonType.text.isNotEmpty
             ? customLessonType.text
             : lessonType.text,
-        time: time.text,
+        time: _selectedTimeText ?? widget.lesson.time,
         weekParity: _isSpecificDate
             ? null
             : customWeekParity.text.isNotEmpty
                 ? customWeekParity.text
                 : weekParity.text,
-        lessonDate: _isSpecificDate
+        lessonDate: _isSpecificDate && lessonDate.text.isNotEmpty
             ? lessonDate.text
-            : DateFormat('EEEE').format(widget.selectedDay),
+            : widget.selectedDay,
         teacher: teacher.text,
         notes: notes.text.isNotEmpty ? notes.text : null,
       );
 
+      print('${customWeekParity.text}, ${weekParity.text}');
+
       SnackbarHandler.handleSaveAction(
         context,
         () async {
-          await DatabaseService().insertLesson(lesson);
+          await DatabaseService().updateLesson(lesson);
 
           if (mounted && context.canPop()) {
             context.pop();
           }
         },
-        'Занятие успешно сохранено!',
-        'Ошибка при сохранении занятия',
+        'Занятие успешно обновлено!',
+        'Ошибка при обновлении занятия',
       );
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -191,13 +231,51 @@ class _LessonCreateContentState extends State<LessonCreateContent> {
     }
   }
 
+  String? _selectedTimeText;
+
   @override
   void initState() {
     super.initState();
-    _customControllers[CustomControllerKey.startTime]!.text =
-        _selectedTime?.start ?? '';
-    _customControllers[CustomControllerKey.endTime]!.text =
-        _selectedTime?.end ?? '';
+
+    final timeString = widget.lesson.time;
+
+    final timeParts = timeString.split('-');
+    final startTimeValue = timeParts.isNotEmpty ? timeParts[0].trim() : '';
+    final endTimeValue = timeParts.length > 1 ? timeParts[1].trim() : '';
+
+    _customControllers[CustomControllerKey.startTime]!.text = startTimeValue;
+    _customControllers[CustomControllerKey.endTime]!.text = endTimeValue;
+
+    _selectedTimeText = timeString;
+
+    _isOnlineLesson = classRoom.text.toLowerCase() == 'online';
+    if (_isOnlineLesson) {
+      classRoom.text = '';
+    }
+
+    customLessonType.text = widget.lesson.lessonType;
+    if (['Лекция', 'Практика', 'Лаб. Работа']
+        .contains(lessonType.text.trim())) {
+      customLessonType.text = '';
+    }
+
+    if (widget.lessonDate.isNotEmpty) {
+      final dateFormat = DateFormat('dd/MM/yyyy');
+      try {
+        dateFormat.parseStrict(widget.lessonDate);
+        lessonDate.text = widget.lessonDate;
+        _isSpecificDate = true;
+      } catch (e) {
+        lessonDate.text = '';
+        _isSpecificDate = false;
+      }
+    } else {
+      _isSpecificDate = false;
+    }
+
+    if (widget.lesson.weekParity != null) {
+      customWeekParity.text = widget.lesson.weekParity!;
+    }
   }
 
   @override
@@ -278,9 +356,7 @@ class _LessonCreateContentState extends State<LessonCreateContent> {
                           },
                           validator: (value) {
                             if ((lessonType.text.isEmpty &&
-                                    (value == null || value.isEmpty)) ||
-                                (lessonType.text.isNotEmpty &&
-                                    value!.isNotEmpty)) {
+                                (value == null || value.isEmpty))) {
                               return 'Введите тип занятия или выберите из списка';
                             }
                             return null;
@@ -405,6 +481,8 @@ class _LessonCreateContentState extends State<LessonCreateContent> {
                             startTime.text = timeItem.start;
                             endTime.text = timeItem.end;
                             time.text = timeItem.label;
+
+                            _selectedTimeText = time.text;
                           }
                         });
                       },
@@ -459,6 +537,8 @@ class _LessonCreateContentState extends State<LessonCreateContent> {
                                     _selectedTime = null;
                                     time.text =
                                         '${startTime.text}-${endTime.text}';
+
+                                    _selectedTimeText = time.text;
                                   });
                                 },
                                 validator: (value) {
@@ -496,6 +576,8 @@ class _LessonCreateContentState extends State<LessonCreateContent> {
                                     _selectedTime = null;
                                     time.text =
                                         '${startTime.text}-${endTime.text}';
+
+                                    _selectedTimeText = time.text;
                                   });
                                 },
                                 validator: (value) {
