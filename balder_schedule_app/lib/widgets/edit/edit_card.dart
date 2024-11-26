@@ -1,6 +1,5 @@
 import 'package:balder_schedule_app/models/lesson_model.dart';
 import 'package:balder_schedule_app/screens/edit/lesson/lesson_edit_screen.dart';
-import 'package:balder_schedule_app/services/database/database_service.dart';
 import 'package:balder_schedule_app/widgets/schedule/schedule_tag.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
@@ -9,13 +8,12 @@ import 'package:intl/intl.dart';
 
 class EditCard extends StatelessWidget {
   final LessonModel lesson;
-  final VoidCallback onDelete;
+
   final String selectedDay;
 
   const EditCard({
     super.key,
     required this.lesson,
-    required this.onDelete,
     required this.selectedDay,
   });
 
@@ -25,12 +23,6 @@ class EditCard extends StatelessWidget {
       return parts;
     }
     return ['--:--', '--:--'];
-  }
-
-  Future<void> _deleteLesson() async {
-    final databaseService = DatabaseService();
-    await databaseService.deleteLesson(lesson.id!);
-    onDelete();
   }
 
   bool isValidDateFormat(String date) {
@@ -151,10 +143,6 @@ class EditCard extends StatelessWidget {
                   ),
                 ],
               ),
-              IconButton.filled(
-                onPressed: _deleteLesson,
-                icon: Icon(Icons.delete),
-              )
             ],
           ),
         ],

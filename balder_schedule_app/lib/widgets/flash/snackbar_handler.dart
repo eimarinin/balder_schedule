@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class SnackbarHandler {
-  static Future<void> handleSaveAction(
+  static Future<void> handleAction(
     BuildContext context,
     Future<void> Function() asyncAction,
     String successMessage,
@@ -13,7 +13,10 @@ class SnackbarHandler {
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(successMessage),
+            content: Text(
+              successMessage,
+              style: TextStyle(color: Colors.white),
+            ),
             backgroundColor: Colors.green,
           ),
         );

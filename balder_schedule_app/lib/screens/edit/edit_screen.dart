@@ -5,7 +5,6 @@ import 'package:balder_schedule_app/utils/export/export.dart';
 import 'package:balder_schedule_app/utils/margin_screen.dart';
 import 'package:balder_schedule_app/widgets/edit/day_selector.dart';
 import 'package:balder_schedule_app/widgets/edit/edit_card.dart';
-import 'package:balder_schedule_app/widgets/flash/snackbar_handler.dart';
 import 'package:balder_schedule_app/widgets/page_header.dart';
 import 'package:flutter/foundation.dart';
 
@@ -144,20 +143,6 @@ class _EditContentState extends State<EditContent> {
                             return EditCard(
                               lesson: lesson,
                               selectedDay: selectedDay,
-                              onDelete: () async {
-                                SnackbarHandler.handleSaveAction(
-                                  context,
-                                  () async {
-                                    await DatabaseService()
-                                        .deleteLesson(lesson.id!);
-                                  },
-                                  'Занятие успешно удалено!',
-                                  'Ошибка при удалении занятия',
-                                );
-                                await DatabaseService()
-                                    .deleteLesson(lesson.id!);
-                                _loadLessons();
-                              },
                             );
                           },
                           separatorBuilder: (context, index) => Column(
@@ -204,20 +189,6 @@ class _EditContentState extends State<EditContent> {
                             return EditCard(
                               lesson: lesson,
                               selectedDay: selectedDay,
-                              onDelete: () async {
-                                SnackbarHandler.handleSaveAction(
-                                  context,
-                                  () async {
-                                    await DatabaseService()
-                                        .deleteLesson(lesson.id!);
-                                  },
-                                  'Занятие успешно удалено!',
-                                  'Ошибка при удалении занятия',
-                                );
-                                await DatabaseService()
-                                    .deleteLesson(lesson.id!);
-                                _loadLessons();
-                              },
                             );
                           },
                           separatorBuilder: (context, index) => Column(

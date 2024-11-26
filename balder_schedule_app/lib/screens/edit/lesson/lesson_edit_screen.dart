@@ -2,6 +2,7 @@ import 'package:balder_schedule_app/generated/l10n.dart';
 import 'package:balder_schedule_app/models/lesson_model.dart';
 import 'package:balder_schedule_app/services/database/database_service.dart';
 import 'package:balder_schedule_app/utils/margin_screen.dart';
+import 'package:balder_schedule_app/widgets/dialogs/confirm_dialog.dart';
 import 'package:balder_schedule_app/widgets/edit/lesson/lesson_field.dart';
 import 'package:balder_schedule_app/widgets/edit/lesson/lesson_segment.dart';
 import 'package:balder_schedule_app/widgets/flash/snackbar_handler.dart';
@@ -204,9 +205,7 @@ class _LessonCreateContentState extends State<LessonCreateContent> {
         notes: notes.text.isNotEmpty ? notes.text : null,
       );
 
-      print('${customWeekParity.text}, ${weekParity.text}');
-
-      SnackbarHandler.handleSaveAction(
+      SnackbarHandler.handleAction(
         context,
         () async {
           await DatabaseService().updateLesson(lesson);
@@ -216,7 +215,7 @@ class _LessonCreateContentState extends State<LessonCreateContent> {
           }
         },
         'Занятие успешно обновлено!',
-        'Ошибка при обновлении занятия',
+        'Ошибка при обновлении занятия.',
       );
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -230,6 +229,44 @@ class _LessonCreateContentState extends State<LessonCreateContent> {
       );
     }
   }
+
+  void _deleteLesson() async {
+    await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return ConfirmDialog(
+          title: 'Подтверждение',
+          content: 'Вы уверены, что хотите удалить это занятие?',
+          confirmText: 'Удалить',
+          cancelText: 'Отмена',
+          onConfirm: () {
+            SnackbarHandler.handleAction(
+              context,
+              () async {
+                await DatabaseService().deleteLesson(widget.lesson.id!);
+                if (mounted && context.canPop()) {
+                  context.pop();
+                }
+              },
+              'Занятие удалено!',
+              'Не удалось удалить занятиe.',
+            );
+          },
+        );
+      },
+    );
+  }
+
+  // void _deleteLesson() async {
+  //   SnackbarHandler.handleAction(
+  //     context,
+  //     () async {
+  //       await DatabaseService().deleteLesson(widget.lesson.id!);
+  //     },
+  //     'Занятие удалено!',
+  //     'Не удалось удалить занятиe.',
+  //   );
+  // }
 
   String? _selectedTimeText;
 
@@ -805,8 +842,32 @@ class _LessonCreateContentState extends State<LessonCreateContent> {
                         Icons.check_outlined,
                         size: 18,
                       ),
-                      label: Text('Сохранить'),
+                      label: Text('Применить изменения'),
                       onPressed: _saveToDatabase,
+                    ),
+                  ),
+                ],
+              ),
+              Row(
+                children: [
+                  Expanded(
+                    child: FilledButton.icon(
+                      style: FilledButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(vertical: 18.0),
+                        backgroundColor: Theme.of(context).colorScheme.error,
+                      ),
+                      icon: Icon(
+                        Icons.delete_outline,
+                        size: 18,
+                        color: Theme.of(context).colorScheme.onError,
+                      ),
+                      label: Text(
+                        'Удалить занятие',
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.onError,
+                        ),
+                      ),
+                      onPressed: _deleteLesson,
                     ),
                   ),
                 ],

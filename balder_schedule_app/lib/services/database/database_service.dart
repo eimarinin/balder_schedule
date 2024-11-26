@@ -101,6 +101,17 @@ class DatabaseService {
   Future<void> updateLesson(LessonModel lesson) async {
     try {
       final db = await database;
+
+      final count = await db.query(
+        _tableLessons,
+        where: '$_columnId = ?',
+        whereArgs: [lesson.id],
+      );
+
+      if (count.isEmpty) {
+        throw Exception('Запись с ID ${lesson.id} не найдена');
+      }
+
       await db.update(
         _tableLessons,
         lesson.toMap(),
@@ -115,6 +126,17 @@ class DatabaseService {
   Future<void> deleteLesson(int id) async {
     try {
       final db = await database;
+
+      final count = await db.query(
+        _tableLessons,
+        where: '$_columnId = ?',
+        whereArgs: [id],
+      );
+
+      if (count.isEmpty) {
+        throw Exception('Запись с ID $id не найдена');
+      }
+
       await db.delete(
         _tableLessons,
         where: '$_columnId = ?',

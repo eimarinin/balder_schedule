@@ -166,7 +166,7 @@ class _LessonCreateContentState extends State<LessonCreateContent> {
         notes: notes.text.isNotEmpty ? notes.text : null,
       );
 
-      SnackbarHandler.handleSaveAction(
+      SnackbarHandler.handleAction(
         context,
         () async {
           await DatabaseService().insertLesson(lesson);
@@ -175,8 +175,8 @@ class _LessonCreateContentState extends State<LessonCreateContent> {
             context.pop();
           }
         },
-        'Занятие успешно сохранено!',
-        'Ошибка при сохранении занятия',
+        'Занятие успешно добавлено!',
+        'Ошибка при добавлении занятия.',
       );
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
