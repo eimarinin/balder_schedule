@@ -98,6 +98,43 @@ class DatabaseService {
     }
   }
 
+  Future<List<LessonModel>> getLessonsByDay(String weekday) async {
+    try {
+      final db = await database;
+
+      final result = await db.query(
+        _tableLessons,
+        where: 'lessonDate = ?',
+        whereArgs: [weekday.toLowerCase()],
+      );
+
+      return result.map((lesson) => LessonModel.fromMap(lesson)).toList();
+    } catch (e) {
+      throw Exception(
+          'Ошибка при получении уроков для дня недели $weekday: $e');
+    }
+  }
+
+  Future<List<LessonModel>> getLessonsByDayAndWeek(
+      String weekday, int weekParity) async {
+    try {
+      final db = await database;
+
+      String weekParityString = weekParity.toString();
+
+      final result = await db.query(
+        _tableLessons,
+        where: 'lessonDate = ? AND weekParity LIKE ?',
+        whereArgs: [weekday.toLowerCase(), '%$weekParityString%'],
+      );
+
+      return result.map((lesson) => LessonModel.fromMap(lesson)).toList();
+    } catch (e) {
+      throw Exception(
+          'Ошибка при получении уроков для $weekday ($weekParity): $e');
+    }
+  }
+
   Future<void> updateLesson(LessonModel lesson) async {
     try {
       final db = await database;

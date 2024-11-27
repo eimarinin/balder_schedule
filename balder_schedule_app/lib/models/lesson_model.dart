@@ -5,7 +5,7 @@ class LessonModel {
   final String lessonType;
   final String time;
   final String? weekParity;
-  final String? lessonDate;
+  final String lessonDate;
   final String teacher;
   final String? notes;
 
@@ -16,7 +16,7 @@ class LessonModel {
     required this.lessonType,
     required this.time,
     this.weekParity,
-    this.lessonDate,
+    required this.lessonDate,
     required this.teacher,
     this.notes,
   });

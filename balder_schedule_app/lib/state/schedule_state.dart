@@ -1,19 +1,38 @@
 import 'package:flutter/material.dart';
 
+extension DateTimeExtension on DateTime {
+  int weekNumber() {
+    final startOfYear = DateTime(year, 1, 1);
+    final daysDifference = difference(startOfYear).inDays;
+    return (daysDifference / 7).floor() + 1;
+  }
+}
+
 class ScheduleState extends ChangeNotifier {
   DateTime currentWeek = DateTime.now();
+  int currentParity = 2; // Начальная четность недели
+  final int maxParity = 3; // Максимальная четность недели
 
-  void setCurrentWeek(DateTime newDate) {
+  void setCurrentWeek(DateTime newDate, {int? parity}) {
     currentWeek = newDate;
+    if (parity != null) {
+      currentParity = parity;
+    }
     notifyListeners();
   }
 
   void nextWeek() {
+    currentParity = (currentParity % maxParity) + 1;
     currentWeek = currentWeek.add(Duration(days: 7));
     notifyListeners();
   }
 
   void previousWeek() {
+    if (currentParity == 1) {
+      currentParity = maxParity;
+    } else {
+      currentParity--;
+    }
     currentWeek = currentWeek.subtract(Duration(days: 7));
     notifyListeners();
   }
@@ -24,6 +43,22 @@ class ScheduleState extends ChangeNotifier {
     );
     final endOfWeek = startOfWeek.add(Duration(days: 6));
     return "${startOfWeek.day}.${startOfWeek.month} - ${endOfWeek.day}.${endOfWeek.month}";
+  }
+
+  String getWeekParityText() {
+    return 'Четность: $currentParity';
+  }
+
+  int calculateWeekDifference(DateTime newDate) {
+    final int currentWeekNumber = currentWeek.weekNumber();
+    final int newWeekNumber = newDate.weekNumber();
+
+    return newWeekNumber - currentWeekNumber;
+  }
+
+  int calculateNewParity(int weeksDifference) {
+    int newParity = (currentParity + weeksDifference - 1) % maxParity + 1;
+    return newParity;
   }
 
   int getWeekNumber() {

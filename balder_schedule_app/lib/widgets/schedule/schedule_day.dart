@@ -25,12 +25,7 @@ class ScheduleDay extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            date,
-            style: const TextStyle(
-              fontSize: 12,
-            ),
-          ),
+          Text(date, style: const TextStyle(fontSize: 12)),
           const Gap(12),
           Wrap(
             runSpacing: 12,

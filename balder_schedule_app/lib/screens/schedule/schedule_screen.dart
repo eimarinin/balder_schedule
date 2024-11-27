@@ -1,4 +1,6 @@
 import 'package:balder_schedule_app/generated/l10n.dart';
+import 'package:balder_schedule_app/models/lesson_model.dart';
+import 'package:balder_schedule_app/services/database/database_service.dart';
 import 'package:balder_schedule_app/state/schedule_state.dart';
 import 'package:balder_schedule_app/utils/margin_screen.dart';
 import 'package:balder_schedule_app/widgets/page_header.dart';
@@ -30,79 +32,53 @@ class ScheduleContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var scheduleState = context.watch<ScheduleState>();
+    final scheduleState = context.watch<ScheduleState>();
+    final weekDates = getWeekDates(scheduleState.currentWeek);
+
     return SingleChildScrollView(
       child: Column(
         children: [
           const Gap(12),
           ScheduleCalendar(scheduleState: scheduleState),
           const Gap(12),
-          ScheduleDay(
-            date: "Понедельник - 28.10",
-            lessons: [
-              ScheduleItem(
-                startTime: '8:00',
-                endTime: '9:35',
-                subject: 'Алгебра',
-                lectureType: 'Лекция',
-                room: '6512',
-                teacher: 'Багаев Андрей Владимирович',
-              ),
-              ScheduleItem(
-                startTime: '9:45',
-                endTime: '11:20',
-                subject: 'Ведение проектов',
-                lectureType: 'Практика',
-                room: '6210',
-                teacher: 'Захаров',
-              ),
-            ],
+          ...weekDates.entries.map(
+            (entry) {
+              final weekday = entry.key;
+              final formattedDate = entry.value;
+
+              return FutureBuilder<List<LessonModel>>(
+                future: DatabaseService().getLessonsByDayAndWeek(
+                    weekday, scheduleState.currentParity),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(child: CircularProgressIndicator());
+                  } else if (snapshot.hasError) {
+                    return Text('Ошибка загрузки занятий для $weekday');
+                  } else {
+                    final lessons = snapshot.data ?? [];
+
+                    if (lessons.isEmpty) {
+                      return const SizedBox.shrink();
+                    }
+
+                    return ScheduleDay(
+                      date: formattedDate,
+                      lessons: lessons.map((lesson) {
+                        return ScheduleItem(
+                          startTime: lesson.time.split('-')[0],
+                          endTime: lesson.time.split('-')[1],
+                          subject: lesson.name,
+                          lectureType: lesson.lessonType,
+                          room: lesson.classRoom,
+                          teacher: lesson.teacher,
+                        );
+                      }).toList(),
+                    );
+                  }
+                },
+              );
+            },
           ),
-          const Gap(12),
-          ScheduleDay(
-            date: "Вторник - 29.10",
-            lessons: [
-              ScheduleItem(
-                startTime: '11:35',
-                endTime: '13:10',
-                subject: 'Базы данных',
-                lectureType: 'Лекция',
-                room: '1221',
-                teacher: 'Моисеев',
-              ),
-              ScheduleItem(
-                startTime: '13:40',
-                endTime: '15:15',
-                subject: 'Распределенные системы',
-                lectureType: 'Практика',
-                room: '1222',
-                teacher: 'Рыбин',
-              ),
-            ],
-          ),
-          const Gap(12),
-          ScheduleDay(
-            date: "Среда - 30.10",
-            lessons: [
-              ScheduleItem(
-                startTime: '11:35',
-                endTime: '13:10',
-                subject: 'Базы данных',
-                lectureType: 'Лекция',
-                room: '1221',
-                teacher: 'Моисеев',
-              ),
-              ScheduleItem(
-                startTime: '13:40',
-                endTime: '15:15',
-                subject: 'Распределенные системы',
-                lectureType: 'Практика',
-                room: '1222',
-                teacher: 'Рыбин',
-              ),
-            ],
-          ),
-          const Gap(12),
         ],
       ),
     );

@@ -3,6 +3,35 @@ import 'package:balder_schedule_app/state/schedule_state.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
+Map<String, String> getWeekDates(DateTime currentWeek) {
+  final weekStart =
+      currentWeek.subtract(Duration(days: currentWeek.weekday - 1));
+  final Map<String, String> weekDates = {};
+
+  for (int i = 0; i < 7; i++) {
+    final date = weekStart.add(Duration(days: i));
+    final weekday = _weekdayFromNumber(i + 1);
+    final formattedDate =
+        '$weekday - ${date.day.toString().padLeft(2, '0')}.${date.month.toString().padLeft(2, '0')}';
+    weekDates[weekday] = formattedDate;
+  }
+
+  return weekDates;
+}
+
+String _weekdayFromNumber(int weekday) {
+  const weekdays = {
+    1: 'Понедельник',
+    2: 'Вторник',
+    3: 'Среда',
+    4: 'Четверг',
+    5: 'Пятница',
+    6: 'Суббота',
+    7: 'Воскресенье',
+  };
+  return weekdays[weekday] ?? '';
+}
+
 class ScheduleCalendar extends StatelessWidget {
   final ScheduleState scheduleState;
 
@@ -35,7 +64,10 @@ class ScheduleCalendar extends StatelessWidget {
             );
 
             if (pickedDate != null && pickedDate != scheduleState.currentWeek) {
-              scheduleState.setCurrentWeek(pickedDate);
+              final weeksDifference =
+                  scheduleState.calculateWeekDifference(pickedDate);
+              scheduleState.setCurrentWeek(pickedDate,
+                  parity: scheduleState.calculateNewParity(weeksDifference));
             }
           },
           child: Row(
@@ -52,7 +84,7 @@ class ScheduleCalendar extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Text(
-                    'Четность: 2',
+                    scheduleState.getWeekParityText(),
                     style: Theme.of(context).textTheme.labelLarge,
                   ),
                   Text(

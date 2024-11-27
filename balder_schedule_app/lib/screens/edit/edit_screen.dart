@@ -99,26 +99,21 @@ class _EditContentState extends State<EditContent> {
               } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
                 return const Text('Данных нет');
               } else {
-                final lessons = snapshot.data!;
+                final lessons = snapshot.data ?? [];
 
                 String selectedDay = DateFormat('EEEE').format(_selectedDay);
+
                 final filteredLessons = lessons.where((lesson) {
-                  if (lesson.lessonDate != null) {
-                    return lesson.lessonDate! == selectedDay;
-                  }
-                  return false;
+                  return lesson.lessonDate == selectedDay;
                 }).toList();
 
                 final specialDateLessons = lessons.where((lesson) {
-                  if (lesson.lessonDate != null) {
-                    try {
-                      DateFormat('dd/MM/yyyy').parse(lesson.lessonDate!);
-                      return true;
-                    } catch (e) {
-                      return false;
-                    }
+                  try {
+                    DateFormat('dd/MM/yyyy').parse(lesson.lessonDate);
+                    return true;
+                  } catch (e) {
+                    return false;
                   }
-                  return false;
                 }).toList();
 
                 if (filteredLessons.isEmpty && specialDateLessons.isEmpty) {

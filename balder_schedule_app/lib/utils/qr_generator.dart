@@ -25,7 +25,7 @@ class LessonFormatter {
 Тип: ${lesson.lessonType}
 Время: ${lesson.time}
 Неделя: ${lesson.weekParity ?? 'Не указано'}
-Дата урока: ${lesson.lessonDate ?? 'Не указано'}
+Дата урока: ${lesson.lessonDate}
 Преподаватель: ${lesson.teacher}
 Заметки: ${lesson.notes ?? 'Нет заметок'}
         ''';

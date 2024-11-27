@@ -18,14 +18,14 @@ class ScheduleTime extends StatelessWidget {
         Text(
           startTime,
           style: const TextStyle(
-            fontSize: 24,
+            fontSize: 20,
             height: 1.2,
           ),
         ),
         Text(
           endTime,
           style: const TextStyle(
-            fontSize: 24,
+            fontSize: 20,
             height: 1.2,
           ),
         ),

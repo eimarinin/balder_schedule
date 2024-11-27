@@ -88,8 +88,7 @@ class _LessonEditScreenState extends State<LessonEditScreen> {
     _controllers[ControllerKey.time]!.text = widget.params.lesson.time;
     _controllers[ControllerKey.weekParity]!.text =
         widget.params.lesson.weekParity ?? '';
-    _controllers[ControllerKey.date]!.text =
-        widget.params.lesson.lessonDate ?? '';
+    _controllers[ControllerKey.date]!.text = widget.params.lesson.lessonDate;
     _controllers[ControllerKey.teacher]!.text = widget.params.lesson.teacher;
     _controllers[ControllerKey.notes]!.text = widget.params.lesson.notes ?? '';
   }
@@ -113,7 +112,7 @@ class _LessonEditScreenState extends State<LessonEditScreen> {
           child: LessonCreateContent(
             controllers: _controllers,
             formKey: _formKey,
-            lessonDate: widget.params.lesson.lessonDate ?? '',
+            lessonDate: widget.params.lesson.lessonDate,
             lesson: widget.params.lesson,
             selectedDay: widget.params.selectedDay,
           ),

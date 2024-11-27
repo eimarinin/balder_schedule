@@ -64,8 +64,8 @@ class EditCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          if (isValidDateFormat(lesson.lessonDate!)) ...[
-            ScheduleTag(text: convertDateFormat('${lesson.lessonDate}')),
+          if (isValidDateFormat(lesson.lessonDate)) ...[
+            ScheduleTag(text: convertDateFormat(lesson.lessonDate)),
             const Gap(8),
           ],
           Text(

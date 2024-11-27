@@ -2,7 +2,7 @@ import 'package:balder_schedule_app/screens/edit/lesson/lesson_create_screen.dar
 import 'package:balder_schedule_app/screens/edit/lesson/lesson_edit_screen.dart';
 import 'package:balder_schedule_app/widgets/navigation.dart';
 import 'package:balder_schedule_app/screens/edit/edit_screen.dart';
-import 'package:balder_schedule_app/screens/schedule/lesson_screen.dart';
+import 'package:balder_schedule_app/screens/schedule/lesson/lesson_screen.dart';
 import 'package:balder_schedule_app/screens/schedule/schedule_screen.dart';
 import 'package:balder_schedule_app/screens/settings/appearance_screen.dart';
 import 'package:balder_schedule_app/screens/settings/notifications_screen.dart';

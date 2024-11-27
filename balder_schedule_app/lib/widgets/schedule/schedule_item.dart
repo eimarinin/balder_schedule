@@ -27,46 +27,45 @@ class ScheduleItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () => context.go('/schedule/lesson'),
-      child: IntrinsicHeight(
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              width: 72,
-              height: 66,
-              decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.secondaryContainer,
-                borderRadius: BorderRadius.circular(6),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            subject,
+            style: Theme.of(context).textTheme.labelLarge,
+          ),
+          const Gap(6),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                width: 64,
+                height: 64,
+                decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.secondaryContainer,
+                  borderRadius: BorderRadius.circular(6),
+                ),
+                child: ScheduleTime(startTime: startTime, endTime: endTime),
               ),
-              child: ScheduleTime(startTime: startTime, endTime: endTime),
-            ),
-            const Gap(12),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  subject,
-                  style: Theme.of(context).textTheme.labelLarge,
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        ScheduleTag(text: room),
-                        const Gap(2),
-                        ScheduleTag(text: lectureType),
-                      ],
-                    ),
-                    const Gap(2),
-                    ScheduleTag(text: teacher),
-                  ],
-                ),
-              ],
-            ),
-          ],
-        ),
+              const Gap(12),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      ScheduleTag(text: room),
+                      const Gap(2),
+                      ScheduleTag(text: lectureType),
+                      const Gap(2),
+                      ScheduleTag(text: teacher),
+                    ],
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }
