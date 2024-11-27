@@ -44,6 +44,10 @@ class DatabaseService {
       initializeDatabaseFactory();
 
       final dbPath = await getDatabasesPath();
+
+      final dbFilePath = join(dbPath, 'schedule.db');
+      print('Путь к базе данных: $dbFilePath');
+
       return await openDatabase(
         join(dbPath, 'schedule.db'),
         version: 1,
