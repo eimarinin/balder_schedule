@@ -368,7 +368,17 @@ class _LessonCreateContentState extends State<LessonCreateContent> {
                           },
                         ),
                         const Gap(8),
-                        Text('Онлайн занятие'),
+                        GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              _isOnlineLesson = !_isOnlineLesson;
+                              if (_isOnlineLesson) {
+                                classRoom.clear();
+                              }
+                            });
+                          },
+                          child: Text('Онлайн занятие'),
+                        ),
                       ],
                     ),
                   ],

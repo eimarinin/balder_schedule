@@ -2,7 +2,7 @@ import 'package:balder_schedule_app/generated/l10n.dart';
 import 'package:balder_schedule_app/models/lesson_model.dart';
 import 'package:balder_schedule_app/services/database/database_service.dart';
 import 'package:balder_schedule_app/utils/margin_screen.dart';
-import 'package:balder_schedule_app/widgets/dialogs/confirm_dialog.dart';
+import 'package:balder_schedule_app/widgets/dialogs/confirmation_dialog.dart';
 import 'package:balder_schedule_app/widgets/edit/lesson/lesson_field.dart';
 import 'package:balder_schedule_app/widgets/edit/lesson/lesson_segment.dart';
 import 'package:balder_schedule_app/widgets/flash/snackbar_handler.dart';
@@ -230,43 +230,29 @@ class _LessonCreateContentState extends State<LessonCreateContent> {
     }
   }
 
-  void _deleteLesson() async {
-    await showDialog(
+  void _showDeleteConfirmationDialog(BuildContext context) {
+    ConfirmationDialog.show(
       context: context,
-      builder: (BuildContext context) {
-        return ConfirmDialog(
-          title: 'Подтверждение',
-          content: 'Вы уверены, что хотите удалить это занятие?',
-          confirmText: 'Удалить',
-          cancelText: 'Отмена',
-          onConfirm: () {
-            SnackbarHandler.handleAction(
-              context,
-              () async {
-                await DatabaseService().deleteLesson(widget.lesson.id!);
-                if (mounted && context.canPop()) {
-                  context.pop();
-                }
-              },
-              'Занятие удалено!',
-              'Не удалось удалить занятиe.',
-            );
+      title: 'Подтверждение',
+      content: 'Вы уверены, что хотите удалить занятие?',
+      confirmButtonText: 'Удалить',
+      isDanger: true,
+      onConfirm: () {
+        SnackbarHandler.handleAction(
+          context,
+          () async {
+            await DatabaseService().deleteLesson(widget.lesson.id!);
+
+            if (context.mounted && context.canPop()) {
+              context.pop();
+            }
           },
+          'Занятие удалено!',
+          'Не удалось удалить занятие.',
         );
       },
     );
   }
-
-  // void _deleteLesson() async {
-  //   SnackbarHandler.handleAction(
-  //     context,
-  //     () async {
-  //       await DatabaseService().deleteLesson(widget.lesson.id!);
-  //     },
-  //     'Занятие удалено!',
-  //     'Не удалось удалить занятиe.',
-  //   );
-  // }
 
   String? _selectedTimeText;
 
@@ -481,9 +467,19 @@ class _LessonCreateContentState extends State<LessonCreateContent> {
                           },
                         ),
                         const Gap(8),
-                        Text('Онлайн занятие'),
+                        GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              _isOnlineLesson = !_isOnlineLesson;
+                              if (_isOnlineLesson) {
+                                classRoom.clear();
+                              }
+                            });
+                          },
+                          child: Text('Онлайн занятие'),
+                        ),
                       ],
-                    ),
+                    )
                   ],
                 ),
               ),
@@ -867,7 +863,7 @@ class _LessonCreateContentState extends State<LessonCreateContent> {
                           color: Theme.of(context).colorScheme.onError,
                         ),
                       ),
-                      onPressed: _deleteLesson,
+                      onPressed: () => _showDeleteConfirmationDialog(context),
                     ),
                   ),
                 ],
