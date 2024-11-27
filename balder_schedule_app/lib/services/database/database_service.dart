@@ -45,8 +45,9 @@ class DatabaseService {
 
       final dbPath = await getDatabasesPath();
 
-      final dbFilePath = join(dbPath, 'schedule.db');
-      print('Путь к базе данных: $dbFilePath');
+      // final dbFilePath = join(dbPath, 'schedule.db');
+      // print('Путь к базе данных: $dbFilePath');
+      // await deleteDatabase(dbFilePath);
 
       return await openDatabase(
         join(dbPath, 'schedule.db'),
