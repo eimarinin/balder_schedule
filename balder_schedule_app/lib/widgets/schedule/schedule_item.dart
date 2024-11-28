@@ -54,7 +54,26 @@ class ScheduleItem extends StatelessWidget {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      ScheduleTag(text: room),
+                      if (room == 'online') ...[
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 8.0, vertical: 4.0),
+                          decoration: BoxDecoration(
+                            color: Colors.green,
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                          child: Text(
+                            'Онлайн',
+                            style: const TextStyle(
+                              fontSize: 12,
+                              height: 1,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ] else ...[
+                        ScheduleTag(text: room),
+                      ],
                       const Gap(2),
                       ScheduleTag(text: lectureType),
                       const Gap(2),

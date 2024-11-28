@@ -109,7 +109,7 @@ class DatabaseService {
 
       final result = await db.query(
         _tableLessons,
-        where: 'lessonDate = ?',
+        where: '$_columnLessonDate = ?',
         whereArgs: [weekday.toLowerCase()],
       );
 
@@ -129,7 +129,7 @@ class DatabaseService {
 
       final result = await db.query(
         _tableLessons,
-        where: 'lessonDate = ? AND weekParity LIKE ?',
+        where: '$_columnLessonDate = ? AND $_columnWeekParity LIKE ?',
         whereArgs: [weekday.toLowerCase(), '%$weekParityString%'],
       );
 
@@ -137,6 +137,22 @@ class DatabaseService {
     } catch (e) {
       throw Exception(
           'Ошибка при получении уроков для $weekday ($weekParity): $e');
+    }
+  }
+
+  Future<List<LessonModel>> getLessonsBySpecificDate(String date) async {
+    try {
+      final db = await database;
+
+      final result = await db.query(
+        _tableLessons,
+        where: '$_columnLessonDate = ?',
+        whereArgs: [date],
+      );
+
+      return result.map((lesson) => LessonModel.fromMap(lesson)).toList();
+    } catch (e) {
+      throw Exception('Ошибка при получении занятий для даты $date: $e');
     }
   }
 

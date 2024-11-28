@@ -2,18 +2,21 @@ import 'package:balder_schedule_app/state/schedule_state.dart';
 
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:intl/intl.dart';
 
-Map<String, String> getWeekDates(DateTime currentWeek) {
+Map<String, Map<String, String>> getWeekDates(DateTime currentWeek) {
   final weekStart =
       currentWeek.subtract(Duration(days: currentWeek.weekday - 1));
-  final Map<String, String> weekDates = {};
+  final Map<String, Map<String, String>> weekDates = {};
 
   for (int i = 0; i < 7; i++) {
     final date = weekStart.add(Duration(days: i));
     final weekday = _weekdayFromNumber(i + 1);
-    final formattedDate =
-        '$weekday - ${date.day.toString().padLeft(2, '0')}.${date.month.toString().padLeft(2, '0')}';
-    weekDates[weekday] = formattedDate;
+    weekDates[weekday] = {
+      'formatted':
+          '$weekday - ${date.day.toString().padLeft(2, '0')}.${date.month.toString().padLeft(2, '0')}',
+      'date': DateFormat('dd/MM/yyyy').format(date),
+    };
   }
 
   return weekDates;

@@ -46,7 +46,7 @@ class ScheduleState extends ChangeNotifier {
   }
 
   String getWeekParityText() {
-    return 'Четность: $currentParity';
+    return 'Кратность: $currentParity';
   }
 
   int calculateWeekDifference(DateTime newDate) {

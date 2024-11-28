@@ -41,46 +41,78 @@ class ScheduleContent extends StatelessWidget {
           const Gap(12),
           ScheduleCalendar(scheduleState: scheduleState),
           const Gap(12),
-          ...weekDates.entries.map(
-            (entry) {
-              final weekday = entry.key;
-              final formattedDate = entry.value;
+          FutureBuilder<Map<String, List<LessonModel>>>(
+            future: _getFilteredLessons(weekDates, scheduleState),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(child: CircularProgressIndicator());
+              }
 
-              return FutureBuilder<List<LessonModel>>(
-                future: DatabaseService().getLessonsByDayAndWeek(
-                    weekday, scheduleState.currentParity),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(child: CircularProgressIndicator());
-                  } else if (snapshot.hasError) {
-                    return Text('Ошибка загрузки занятий для $weekday');
-                  } else {
-                    final lessons = snapshot.data ?? [];
+              if (snapshot.hasError) {
+                return const Text('Ошибка загрузки данных');
+              }
 
-                    if (lessons.isEmpty) {
-                      return const SizedBox.shrink();
-                    }
+              final filteredWeekDates = snapshot.data ?? {};
 
-                    return ScheduleDay(
-                      date: formattedDate,
-                      lessons: lessons.map((lesson) {
-                        return ScheduleItem(
-                          startTime: lesson.time.split('-')[0],
-                          endTime: lesson.time.split('-')[1],
-                          subject: lesson.name,
-                          lectureType: lesson.lessonType,
-                          room: lesson.classRoom,
-                          teacher: lesson.teacher,
-                        );
-                      }).toList(),
-                    );
-                  }
+              if (filteredWeekDates.isEmpty) {
+                return const Text('Нет расписания на текущую неделю');
+              }
+
+              return ListView.separated(
+                physics: const NeverScrollableScrollPhysics(),
+                shrinkWrap: true,
+                itemCount: filteredWeekDates.length,
+                itemBuilder: (context, index) {
+                  final weekday = filteredWeekDates.keys.elementAt(index);
+                  final lessons = filteredWeekDates[weekday]!;
+
+                  return ScheduleDay(
+                    date: weekDates[weekday]!['formatted']!,
+                    lessons: lessons.map((lesson) {
+                      return ScheduleItem(
+                        startTime: lesson.time.split('-')[0],
+                        endTime: lesson.time.split('-')[1],
+                        subject: lesson.name,
+                        lectureType: lesson.lessonType,
+                        room: lesson.classRoom,
+                        teacher: lesson.teacher,
+                      );
+                    }).toList(),
+                  );
                 },
+                separatorBuilder: (context, index) => const Gap(12),
               );
             },
           ),
+          const Gap(12),
         ],
       ),
     );
+  }
+
+  Future<Map<String, List<LessonModel>>> _getFilteredLessons(
+      Map<String, Map<String, String>> weekDates,
+      ScheduleState scheduleState) async {
+    final filteredWeekDates = <String, List<LessonModel>>{};
+
+    for (final weekday in weekDates.keys) {
+      final specificDate = weekDates[weekday]!['date']!;
+
+      final lessons = await Future.wait([
+        DatabaseService()
+            .getLessonsByDayAndWeek(weekday, scheduleState.currentParity),
+        DatabaseService().getLessonsBySpecificDate(specificDate),
+      ]).then((results) {
+        final lessonsByDayAndWeek = results[0];
+        final lessonsBySpecificDate = results[1];
+        return [...lessonsByDayAndWeek, ...lessonsBySpecificDate];
+      });
+
+      if (lessons.isNotEmpty) {
+        filteredWeekDates[weekday] = lessons;
+      }
+    }
+
+    return filteredWeekDates;
   }
 }
