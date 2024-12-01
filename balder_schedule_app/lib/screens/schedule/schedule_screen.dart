@@ -108,6 +108,7 @@ class _ScheduleContentState extends State<ScheduleContent> {
                       date: weekDates[weekday]!['formatted']!,
                       lessons: lessons.map((lesson) {
                         return ScheduleItem(
+                          id: lesson.id!,
                           startTime: lesson.time.split('-')[0],
                           endTime: lesson.time.split('-')[1],
                           subject: lesson.name,

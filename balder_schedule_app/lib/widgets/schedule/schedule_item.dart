@@ -6,6 +6,7 @@ import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 
 class ScheduleItem extends StatelessWidget {
+  final int id;
   final String startTime;
   final String endTime;
   final String subject;
@@ -16,6 +17,7 @@ class ScheduleItem extends StatelessWidget {
 
   const ScheduleItem({
     super.key,
+    required this.id,
     required this.startTime,
     required this.endTime,
     required this.subject,
@@ -28,7 +30,7 @@ class ScheduleItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () => context.go('/schedule/lesson'),
+      onTap: () => context.go('/schedule/lesson/$id'),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -45,6 +47,11 @@ class ScheduleItem extends StatelessWidget {
                       color: Theme.of(context).colorScheme.onPrimary,
                     ),
               ),
+            ),
+          ] else ...[
+            Text(
+              subject,
+              style: Theme.of(context).textTheme.labelLarge,
             ),
           ],
           const Gap(6),

@@ -44,8 +44,11 @@ final goRouter = GoRouter(
               ),
               routes: [
                 GoRoute(
-                  path: 'lesson',
-                  builder: (context, state) => LessonScreen(),
+                  path: 'lesson/:id',
+                  builder: (context, state) {
+                    final id = int.parse(state.pathParameters['id']!);
+                    return LessonScreen(id: id);
+                  },
                 ),
               ],
             ),

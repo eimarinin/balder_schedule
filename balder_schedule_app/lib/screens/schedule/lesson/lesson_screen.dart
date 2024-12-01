@@ -1,3 +1,5 @@
+import 'package:balder_schedule_app/models/lesson_model.dart';
+import 'package:balder_schedule_app/services/database/database_service.dart';
 import 'package:balder_schedule_app/utils/margin_screen.dart';
 import 'package:balder_schedule_app/widgets/page_header_child.dart';
 import 'package:balder_schedule_app/widgets/schedule/lesson/lesson_tag.dart';
@@ -7,19 +9,54 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
 class LessonScreen extends StatelessWidget {
-  const LessonScreen({super.key});
+  final int id;
+
+  const LessonScreen({super.key, required this.id});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: PageHeaderChild(title: 'Алгебра'),
-      body: MarginScreen(child: LessonContent()),
+    return FutureBuilder<LessonModel?>(
+      future: DatabaseService().getLessonById(id), // Загружаем урок по ID
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Scaffold(
+            appBar: AppBar(title: Text('Загрузка урока')),
+            body: Center(child: CircularProgressIndicator()),
+          );
+        }
+
+        if (snapshot.hasError) {
+          return Scaffold(
+            appBar: AppBar(title: Text('Ошибка')),
+            body: Center(child: Text('Не удалось загрузить урок')),
+          );
+        }
+
+        final lesson = snapshot.data;
+
+        if (lesson == null) {
+          return Scaffold(
+            appBar: AppBar(title: Text('Урок не найден')),
+            body: Center(child: Text('Урок с ID $id не найден')),
+          );
+        }
+
+        return Scaffold(
+          appBar: PageHeaderChild(title: lesson.name),
+          body: MarginScreen(child: LessonContent(lesson: lesson)),
+        );
+      },
     );
   }
 }
 
 class LessonContent extends StatelessWidget {
-  const LessonContent({super.key});
+  final LessonModel lesson;
+
+  const LessonContent({
+    super.key,
+    required this.lesson,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -29,11 +66,11 @@ class LessonContent extends StatelessWidget {
           const Gap(12),
           Row(
             children: [
-              LessonTime(text: '8:00'),
+              LessonTime(text: lesson.time.split('-')[0]),
               const Gap(12),
               Text('-', style: TextStyle(fontSize: 24)),
               const Gap(12),
-              LessonTime(text: '9:35'),
+              LessonTime(text: lesson.time.split('-')[1]),
             ],
           ),
           const Gap(12),
@@ -49,19 +86,25 @@ class LessonContent extends StatelessWidget {
                   child: Wrap(
                     runSpacing: 24.0,
                     children: [
-                      LessonTag(label: 'Лекция'),
+                      LessonTag(label: lesson.lessonType),
                       const Divider(thickness: 2, height: 0),
-                      LessonTag(label: '6512'),
-                      const Divider(thickness: 2, height: 0),
-                      LessonTag(label: 'Багаев Андрей Владимирович'),
-                      const Divider(thickness: 2, height: 0),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          LessonTag(label: 'Четные недели'),
-                          LessonTag(label: 'Нечетные недели'),
-                        ],
+                      LessonTag(
+                        label: lesson.classRoom.toLowerCase() == 'online'
+                            ? 'Онлайн'
+                            : lesson.classRoom,
                       ),
+                      const Divider(thickness: 2, height: 0),
+                      LessonTag(label: lesson.teacher),
+                      const Divider(thickness: 2, height: 0),
+                      if (lesson.weekParity != null)
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            LessonTag(
+                              label: 'Кратность недель: ${lesson.weekParity!}',
+                            ),
+                          ],
+                        ),
                     ],
                   ),
                 ),

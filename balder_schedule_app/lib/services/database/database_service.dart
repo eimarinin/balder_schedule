@@ -204,4 +204,21 @@ class DatabaseService {
       throw Exception('Ошибка при удалении урока: $e');
     }
   }
+
+  Future<LessonModel?> getLessonById(int id) async {
+    try {
+      final db = await database;
+      final List<Map<String, dynamic>> result = await db.query(
+        _tableLessons,
+        where: '$_columnId = ?',
+        whereArgs: [id],
+      );
+
+      if (result.isEmpty) return null;
+
+      return LessonModel.fromMap(result.first);
+    } catch (e) {
+      throw Exception('Ошибка при получении урока с ID $id: $e');
+    }
+  }
 }
