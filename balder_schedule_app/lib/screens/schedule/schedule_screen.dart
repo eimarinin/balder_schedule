@@ -9,6 +9,7 @@ import 'package:balder_schedule_app/widgets/schedule/schedule_day.dart';
 import 'package:balder_schedule_app/widgets/schedule/schedule_item.dart';
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:gap/gap.dart';
 
@@ -27,92 +28,131 @@ class ScheduleScreen extends StatelessWidget {
   }
 }
 
-class ScheduleContent extends StatelessWidget {
+class ScheduleContent extends StatefulWidget {
   const ScheduleContent({super.key});
+
+  @override
+  State<ScheduleContent> createState() => _ScheduleContentState();
+}
+
+class _ScheduleContentState extends State<ScheduleContent> {
+  late Future<Map<String, List<LessonModel>>> _futureLessons;
+
+  @override
+  void initState() {
+    super.initState();
+    _futureLessons = _loadLessons();
+  }
+
+  Future<Map<String, List<LessonModel>>> _loadLessons() async {
+    final scheduleState = context.read<ScheduleState>();
+    final weekDates = getWeekDates(scheduleState.currentWeek);
+
+    return _getFilteredLessons(weekDates, scheduleState);
+  }
+
+  Future<void> _refreshLessons() async {
+    setState(() {
+      _futureLessons = _loadLessons();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     final scheduleState = context.watch<ScheduleState>();
     final weekDates = getWeekDates(scheduleState.currentWeek);
 
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          const Gap(12),
-          ScheduleCalendar(scheduleState: scheduleState),
-          const Gap(12),
-          FutureBuilder<Map<String, List<LessonModel>>>(
-            future: _getFilteredLessons(weekDates, scheduleState),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(child: CircularProgressIndicator());
-              }
+    return RefreshIndicator(
+      onRefresh: _refreshLessons,
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            const Gap(12),
+            ScheduleCalendar(scheduleState: scheduleState),
+            const Gap(12),
+            FutureBuilder<Map<String, List<LessonModel>>>(
+              future: _getFilteredLessons(weekDates, scheduleState),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(child: CircularProgressIndicator());
+                }
 
-              if (snapshot.hasError) {
-                return const Text('Ошибка загрузки данных');
-              }
+                if (snapshot.hasError) {
+                  return const Text('Ошибка загрузки данных');
+                }
 
-              final filteredWeekDates = snapshot.data ?? {};
+                final filteredWeekDates = snapshot.data ?? {};
 
-              if (filteredWeekDates.isEmpty) {
-                return const Text('Нет расписания на текущую неделю');
-              }
+                if (filteredWeekDates.isEmpty) {
+                  return const Text('Нет расписания на текущую неделю');
+                }
 
-              return ListView.separated(
-                physics: const NeverScrollableScrollPhysics(),
-                shrinkWrap: true,
-                itemCount: filteredWeekDates.length,
-                itemBuilder: (context, index) {
-                  final weekday = filteredWeekDates.keys.elementAt(index);
-                  final lessons = filteredWeekDates[weekday]!;
+                return ListView.separated(
+                  physics: const NeverScrollableScrollPhysics(),
+                  shrinkWrap: true,
+                  itemCount: filteredWeekDates.length,
+                  itemBuilder: (context, index) {
+                    final weekday = filteredWeekDates.keys.elementAt(index);
+                    final lessons = filteredWeekDates[weekday]!;
 
-                  return ScheduleDay(
-                    date: weekDates[weekday]!['formatted']!,
-                    lessons: lessons.map((lesson) {
-                      return ScheduleItem(
-                        startTime: lesson.time.split('-')[0],
-                        endTime: lesson.time.split('-')[1],
-                        subject: lesson.name,
-                        lectureType: lesson.lessonType,
-                        room: lesson.classRoom,
-                        teacher: lesson.teacher,
-                      );
-                    }).toList(),
-                  );
-                },
-                separatorBuilder: (context, index) => const Gap(12),
-              );
-            },
-          ),
-          const Gap(12),
-        ],
+                    bool specialDay(String date) {
+                      try {
+                        DateFormat('dd/MM/yyyy').parse(date);
+                        return true;
+                      } catch (e) {
+                        return false;
+                      }
+                    }
+
+                    return ScheduleDay(
+                      date: weekDates[weekday]!['formatted']!,
+                      lessons: lessons.map((lesson) {
+                        return ScheduleItem(
+                          startTime: lesson.time.split('-')[0],
+                          endTime: lesson.time.split('-')[1],
+                          subject: lesson.name,
+                          lectureType: lesson.lessonType,
+                          room: lesson.classRoom,
+                          teacher: lesson.teacher,
+                          specialDay: specialDay(lesson.lessonDate),
+                        );
+                      }).toList(),
+                    );
+                  },
+                  separatorBuilder: (context, index) => const Gap(12),
+                );
+              },
+            ),
+            const Gap(12),
+          ],
+        ),
       ),
     );
   }
+}
 
-  Future<Map<String, List<LessonModel>>> _getFilteredLessons(
-      Map<String, Map<String, String>> weekDates,
-      ScheduleState scheduleState) async {
-    final filteredWeekDates = <String, List<LessonModel>>{};
+Future<Map<String, List<LessonModel>>> _getFilteredLessons(
+    Map<String, Map<String, String>> weekDates,
+    ScheduleState scheduleState) async {
+  final filteredWeekDates = <String, List<LessonModel>>{};
 
-    for (final weekday in weekDates.keys) {
-      final specificDate = weekDates[weekday]!['date']!;
+  for (final weekday in weekDates.keys) {
+    final specificDate = weekDates[weekday]!['date']!;
 
-      final lessons = await Future.wait([
-        DatabaseService()
-            .getLessonsByDayAndWeek(weekday, scheduleState.currentParity),
-        DatabaseService().getLessonsBySpecificDate(specificDate),
-      ]).then((results) {
-        final lessonsByDayAndWeek = results[0];
-        final lessonsBySpecificDate = results[1];
-        return [...lessonsByDayAndWeek, ...lessonsBySpecificDate];
-      });
+    final lessons = await Future.wait([
+      DatabaseService()
+          .getLessonsByDayAndWeek(weekday, scheduleState.currentParity),
+      DatabaseService().getLessonsBySpecificDate(specificDate),
+    ]).then((results) {
+      final lessonsByDayAndWeek = results[0];
+      final lessonsBySpecificDate = results[1];
+      return [...lessonsByDayAndWeek, ...lessonsBySpecificDate];
+    });
 
-      if (lessons.isNotEmpty) {
-        filteredWeekDates[weekday] = lessons;
-      }
+    if (lessons.isNotEmpty) {
+      filteredWeekDates[weekday] = lessons;
     }
-
-    return filteredWeekDates;
   }
+
+  return filteredWeekDates;
 }

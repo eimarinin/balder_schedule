@@ -12,6 +12,7 @@ class ScheduleItem extends StatelessWidget {
   final String lectureType;
   final String room;
   final String teacher;
+  final bool specialDay;
 
   const ScheduleItem({
     super.key,
@@ -21,6 +22,7 @@ class ScheduleItem extends StatelessWidget {
     required this.lectureType,
     required this.room,
     required this.teacher,
+    required this.specialDay,
   });
 
   @override
@@ -30,10 +32,21 @@ class ScheduleItem extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            subject,
-            style: Theme.of(context).textTheme.labelLarge,
-          ),
+          if (specialDay) ...[
+            Container(
+              padding: EdgeInsets.symmetric(vertical: 1, horizontal: 4),
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.primary,
+                borderRadius: BorderRadius.circular(4),
+              ),
+              child: Text(
+                subject,
+                style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                      color: Theme.of(context).colorScheme.onPrimary,
+                    ),
+              ),
+            ),
+          ],
           const Gap(6),
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
