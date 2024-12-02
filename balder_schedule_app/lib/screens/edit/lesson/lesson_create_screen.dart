@@ -1,6 +1,6 @@
 import 'package:balder_schedule_app/generated/l10n.dart';
 import 'package:balder_schedule_app/models/lesson_model.dart';
-import 'package:balder_schedule_app/services/database/database_service.dart';
+import 'package:balder_schedule_app/services/database/lesson_db.dart';
 import 'package:balder_schedule_app/utils/margin_screen.dart';
 import 'package:balder_schedule_app/widgets/edit/lesson/lesson_field.dart';
 import 'package:balder_schedule_app/widgets/edit/lesson/lesson_segment.dart';
@@ -169,7 +169,7 @@ class _LessonCreateContentState extends State<LessonCreateContent> {
       SnackbarHandler.handleAction(
         context,
         () async {
-          await DatabaseService().insertLesson(lesson);
+          await LessonDatabase().insertLesson(lesson);
 
           if (mounted && context.canPop()) {
             context.pop();

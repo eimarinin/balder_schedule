@@ -1,11 +1,11 @@
 import 'package:balder_schedule_app/models/lesson_model.dart';
-import 'package:balder_schedule_app/services/database/database_service.dart';
+import 'package:balder_schedule_app/services/database/lesson_db.dart';
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 /// Класс для форматирования данных из базы
 class LessonFormatter {
-  final DatabaseService _databaseService = DatabaseService();
+  final _databaseService = LessonDatabase();
 
   /// Метод для получения всех данных таблицы в формате строки
   Future<String> getFormattedLessons() async {

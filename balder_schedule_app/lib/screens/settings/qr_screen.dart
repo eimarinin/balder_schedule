@@ -1,5 +1,5 @@
 import 'package:balder_schedule_app/generated/l10n.dart';
-import 'package:balder_schedule_app/services/database/database_service.dart';
+import 'package:balder_schedule_app/services/database/lesson_db.dart';
 import 'package:balder_schedule_app/utils/margin_screen.dart';
 import 'package:balder_schedule_app/widgets/page_header_child.dart';
 import 'package:flutter/material.dart';
@@ -33,12 +33,12 @@ class _QrContentState extends State<QrContent> {
   @override
   void initState() {
     super.initState();
-    _loadFormattedLessons(); // Загружаем данные при инициализации
+    _loadFormattedLessons();
   }
 
   /// Загружаем данные из базы и форматируем их
   Future<void> _loadFormattedLessons() async {
-    final DatabaseService databaseService = DatabaseService();
+    final databaseService = LessonDatabase();
 
     try {
       // Получаем список уроков

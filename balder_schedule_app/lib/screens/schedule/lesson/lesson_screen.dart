@@ -1,5 +1,5 @@
 import 'package:balder_schedule_app/models/lesson_model.dart';
-import 'package:balder_schedule_app/services/database/database_service.dart';
+import 'package:balder_schedule_app/services/database/lesson_db.dart';
 import 'package:balder_schedule_app/utils/margin_screen.dart';
 import 'package:balder_schedule_app/widgets/page_header_child.dart';
 import 'package:balder_schedule_app/widgets/schedule/lesson/lesson_tag.dart';
@@ -16,7 +16,7 @@ class LessonScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<LessonModel?>(
-      future: DatabaseService().getLessonById(id),
+      future: LessonDatabase().getLessonById(id),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Scaffold(

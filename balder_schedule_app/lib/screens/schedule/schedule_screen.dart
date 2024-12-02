@@ -1,6 +1,6 @@
 import 'package:balder_schedule_app/generated/l10n.dart';
 import 'package:balder_schedule_app/models/lesson_model.dart';
-import 'package:balder_schedule_app/services/database/database_service.dart';
+import 'package:balder_schedule_app/services/database/lesson_db.dart';
 import 'package:balder_schedule_app/state/schedule_state.dart';
 import 'package:balder_schedule_app/utils/margin_screen.dart';
 import 'package:balder_schedule_app/widgets/page_header.dart';
@@ -36,12 +36,10 @@ class ScheduleContent extends StatefulWidget {
 }
 
 class _ScheduleContentState extends State<ScheduleContent> {
-  late Future<Map<String, List<LessonModel>>> _futureLessons;
-
   @override
   void initState() {
     super.initState();
-    _futureLessons = _loadLessons();
+    _loadLessons();
   }
 
   Future<Map<String, List<LessonModel>>> _loadLessons() async {
@@ -53,7 +51,7 @@ class _ScheduleContentState extends State<ScheduleContent> {
 
   Future<void> _refreshLessons() async {
     setState(() {
-      _futureLessons = _loadLessons();
+      _loadLessons();
     });
   }
 
@@ -149,9 +147,9 @@ Future<Map<String, List<LessonModel>>> _getFilteredLessons(
     final specificDate = weekDates[weekday]!['date']!;
 
     final lessons = await Future.wait([
-      DatabaseService()
+      LessonDatabase()
           .getLessonsByDayAndWeek(weekday, scheduleState.currentParity),
-      DatabaseService().getLessonsBySpecificDate(specificDate),
+      LessonDatabase().getLessonsBySpecificDate(specificDate),
     ]).then((results) {
       final lessonsByDayAndWeek = results[0];
       final lessonsBySpecificDate = results[1];

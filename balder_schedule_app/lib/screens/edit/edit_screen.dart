@@ -1,6 +1,6 @@
 import 'package:balder_schedule_app/generated/l10n.dart';
 import 'package:balder_schedule_app/models/lesson_model.dart';
-import 'package:balder_schedule_app/services/database/database_service.dart';
+import 'package:balder_schedule_app/services/database/lesson_db.dart';
 import 'package:balder_schedule_app/utils/export/export.dart';
 import 'package:balder_schedule_app/utils/margin_screen.dart';
 import 'package:balder_schedule_app/widgets/edit/day_selector.dart';
@@ -49,7 +49,7 @@ class _EditContentState extends State<EditContent> {
 
   void _loadLessons() {
     setState(() {
-      DatabaseService().getLessons();
+      LessonDatabase().getLessons();
     });
   }
 
@@ -83,14 +83,14 @@ class _EditContentState extends State<EditContent> {
               icon: Icon(Icons.download_outlined),
               tooltip: 'Экспортировать данные',
               onPressed: () async {
-                final lessons = await DatabaseService().getLessons();
+                final lessons = await LessonDatabase().getLessons();
                 exportData(lessons.map((lesson) => lesson.toMap()).toList());
               },
             ),
             const Gap(12),
           ],
           FutureBuilder<List<LessonModel>>(
-            future: DatabaseService().getLessons(),
+            future: LessonDatabase().getLessons(),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const CircularProgressIndicator();
