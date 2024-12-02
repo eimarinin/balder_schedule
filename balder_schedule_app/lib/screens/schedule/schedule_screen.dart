@@ -78,10 +78,6 @@ class _ScheduleContentState extends State<ScheduleContent> {
               FutureBuilder<Map<String, List<LessonModel>>>(
                 future: _getFilteredLessons(weekDates, scheduleState),
                 builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(child: CircularProgressIndicator());
-                  }
-
                   if (snapshot.hasError) {
                     return const Text('Ошибка загрузки данных');
                   }

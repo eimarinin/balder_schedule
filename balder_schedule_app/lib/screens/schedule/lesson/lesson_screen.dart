@@ -23,13 +23,6 @@ class LessonScreen extends StatelessWidget {
     return FutureBuilder<LessonModel?>(
       future: LessonDatabase().getLessonById(id),
       builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return Scaffold(
-            appBar: AppBar(title: Text('Загрузка урока')),
-            body: Center(child: CircularProgressIndicator()),
-          );
-        }
-
         if (snapshot.hasError) {
           return Scaffold(
             appBar: AppBar(title: Text('Ошибка')),

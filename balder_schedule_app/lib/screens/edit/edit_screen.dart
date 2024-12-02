@@ -92,9 +92,7 @@ class _EditContentState extends State<EditContent> {
           FutureBuilder<List<LessonModel>>(
             future: LessonDatabase().getLessons(),
             builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const CircularProgressIndicator();
-              } else if (snapshot.hasError) {
+              if (snapshot.hasError) {
                 return Text('Ошибка загрузки данных: ${snapshot.error}');
               } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
                 return const Text('Данных нет');
