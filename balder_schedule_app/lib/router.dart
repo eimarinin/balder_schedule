@@ -47,7 +47,8 @@ final goRouter = GoRouter(
                   path: 'lesson/:id',
                   builder: (context, state) {
                     final id = int.parse(state.pathParameters['id']!);
-                    return LessonScreen(id: id);
+                    final date = state.uri.queryParameters['date'] ?? '';
+                    return LessonScreen(id: id, date: date);
                   },
                 ),
               ],

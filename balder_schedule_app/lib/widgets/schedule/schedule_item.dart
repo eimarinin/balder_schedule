@@ -14,6 +14,7 @@ class ScheduleItem extends StatelessWidget {
   final String room;
   final String teacher;
   final bool specialDay;
+  final String date;
 
   const ScheduleItem({
     super.key,
@@ -25,12 +26,15 @@ class ScheduleItem extends StatelessWidget {
     required this.room,
     required this.teacher,
     required this.specialDay,
+    required this.date,
   });
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () => context.go('/schedule/lesson/$id'),
+      onTap: () => context.go(
+        '/schedule/lesson/$id?date=${Uri.encodeComponent(date)}',
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

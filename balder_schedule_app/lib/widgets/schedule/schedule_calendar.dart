@@ -16,6 +16,7 @@ Map<String, Map<String, String>> getWeekDates(DateTime currentWeek) {
       'formatted':
           '$weekday - ${date.day.toString().padLeft(2, '0')}.${date.month.toString().padLeft(2, '0')}',
       'date': DateFormat('dd/MM/yyyy').format(date),
+      'short': DateFormat('dd.MM').format(date),
     };
   }
 

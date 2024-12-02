@@ -10,8 +10,13 @@ import 'package:gap/gap.dart';
 
 class LessonScreen extends StatelessWidget {
   final int id;
+  final String date;
 
-  const LessonScreen({super.key, required this.id});
+  const LessonScreen({
+    super.key,
+    required this.id,
+    required this.date,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -43,20 +48,43 @@ class LessonScreen extends StatelessWidget {
 
         return Scaffold(
           appBar: PageHeaderChild(title: lesson.name),
-          body: MarginScreen(child: LessonContent(lesson: lesson)),
+          body: MarginScreen(
+            child: LessonContent(
+              lesson: lesson,
+              date: date,
+            ),
+          ),
         );
       },
     );
   }
 }
 
-class LessonContent extends StatelessWidget {
+class LessonContent extends StatefulWidget {
   final LessonModel lesson;
+  final String date;
 
   const LessonContent({
     super.key,
     required this.lesson,
+    required this.date,
   });
+
+  @override
+  State<LessonContent> createState() => _LessonContentState();
+}
+
+class _LessonContentState extends State<LessonContent> {
+  late LessonModel lesson = widget.lesson;
+  late String date = widget.date;
+
+  bool _isNoteFormVisible = false;
+
+  void _toggleNoteFormVisibility() {
+    setState(() {
+      _isNoteFormVisible = !_isNoteFormVisible;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -111,39 +139,79 @@ class LessonContent extends StatelessWidget {
               ),
             ],
           ),
-          const Gap(12),
-          TextField(
-            decoration: InputDecoration(
-              labelText: 'Заметка на 28.10',
-              border: OutlineInputBorder(),
-              alignLabelWithHint: true,
-              hintText: 'Например, сделать домашку...',
-              hintStyle: TextStyle(
-                fontWeight: FontWeight.w400,
-                color: Theme.of(context).colorScheme.outline,
-              ),
+          if (lesson.notes != null) ...[
+            const Gap(12),
+            Row(
+              children: [
+                Expanded(
+                  child: Container(
+                    padding: const EdgeInsets.all(24.0),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(6.0),
+                      color: Theme.of(context).colorScheme.surfaceContainer,
+                    ),
+                    child: Wrap(
+                      runSpacing: 12.0,
+                      children: [
+                        Text('Основная заметка',
+                            style: Theme.of(context).textTheme.bodyLarge),
+                        const Divider(thickness: 2, height: 0),
+                        Text(lesson.notes ?? ''),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
             ),
-            maxLines: null,
-            minLines: 5,
-          ),
+          ],
           const Gap(12),
           Row(
             children: [
               Expanded(
-                child: FilledButton.icon(
-                  style: FilledButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(vertical: 18.0),
-                  ),
-                  onPressed: () {},
-                  icon: Icon(
-                    Icons.check_outlined,
-                    size: 18,
-                  ),
-                  label: Text('Сохранить'),
+                child: TextButton(
+                  onPressed: _toggleNoteFormVisibility,
+                  child: Text(_isNoteFormVisible
+                      ? 'Скрыть заметку'
+                      : 'Добавить заметку'),
                 ),
               ),
             ],
           ),
+          if (_isNoteFormVisible) ...[
+            const Gap(12),
+            TextField(
+              decoration: InputDecoration(
+                labelText: 'Заметка на $date',
+                border: OutlineInputBorder(),
+                alignLabelWithHint: true,
+                hintText: 'Например, сделать домашку...',
+                hintStyle: TextStyle(
+                  fontWeight: FontWeight.w400,
+                  color: Theme.of(context).colorScheme.outline,
+                ),
+              ),
+              maxLines: null,
+              minLines: 5,
+            ),
+            const Gap(12),
+            Row(
+              children: [
+                Expanded(
+                  child: FilledButton.icon(
+                    style: FilledButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(vertical: 18.0),
+                    ),
+                    onPressed: () {},
+                    icon: Icon(
+                      Icons.check_outlined,
+                      size: 18,
+                    ),
+                    label: Text('Сохранить'),
+                  ),
+                ),
+              ],
+            ),
+          ],
           const Gap(12),
         ],
       ),

@@ -121,6 +121,7 @@ class _ScheduleContentState extends State<ScheduleContent> {
                             room: lesson.classRoom,
                             teacher: lesson.teacher,
                             specialDay: specialDay(lesson.lessonDate),
+                            date: weekDates[weekday]!['short']!,
                           );
                         }).toList(),
                       );
