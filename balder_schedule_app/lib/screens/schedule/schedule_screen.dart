@@ -65,67 +65,75 @@ class _ScheduleContentState extends State<ScheduleContent> {
     return RefreshIndicator(
       onRefresh: _refreshLessons,
       child: SingleChildScrollView(
-        child: Column(
-          children: [
-            const Gap(12),
-            ScheduleCalendar(scheduleState: scheduleState),
-            const Gap(12),
-            FutureBuilder<Map<String, List<LessonModel>>>(
-              future: _getFilteredLessons(weekDates, scheduleState),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(child: CircularProgressIndicator());
-                }
+        physics: const AlwaysScrollableScrollPhysics(),
+        child: ConstrainedBox(
+          constraints: BoxConstraints(
+            minHeight: MediaQuery.of(context).size.height -
+                Scaffold.of(context).appBarMaxHeight! -
+                (Theme.of(context).navigationBarTheme.height ?? 80.0),
+          ),
+          child: Column(
+            children: [
+              const Gap(12),
+              ScheduleCalendar(scheduleState: scheduleState),
+              const Gap(12),
+              FutureBuilder<Map<String, List<LessonModel>>>(
+                future: _getFilteredLessons(weekDates, scheduleState),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
 
-                if (snapshot.hasError) {
-                  return const Text('Ошибка загрузки данных');
-                }
+                  if (snapshot.hasError) {
+                    return const Text('Ошибка загрузки данных');
+                  }
 
-                final filteredWeekDates = snapshot.data ?? {};
+                  final filteredWeekDates = snapshot.data ?? {};
 
-                if (filteredWeekDates.isEmpty) {
-                  return const Text('Нет расписания на текущую неделю');
-                }
+                  if (filteredWeekDates.isEmpty) {
+                    return const Text('Нет расписания на текущую неделю');
+                  }
 
-                return ListView.separated(
-                  physics: const NeverScrollableScrollPhysics(),
-                  shrinkWrap: true,
-                  itemCount: filteredWeekDates.length,
-                  itemBuilder: (context, index) {
-                    final weekday = filteredWeekDates.keys.elementAt(index);
-                    final lessons = filteredWeekDates[weekday]!;
+                  return ListView.separated(
+                    physics: const NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    itemCount: filteredWeekDates.length,
+                    itemBuilder: (context, index) {
+                      final weekday = filteredWeekDates.keys.elementAt(index);
+                      final lessons = filteredWeekDates[weekday]!;
 
-                    bool specialDay(String date) {
-                      try {
-                        DateFormat('dd/MM/yyyy').parse(date);
-                        return true;
-                      } catch (e) {
-                        return false;
+                      bool specialDay(String date) {
+                        try {
+                          DateFormat('dd/MM/yyyy').parse(date);
+                          return true;
+                        } catch (e) {
+                          return false;
+                        }
                       }
-                    }
 
-                    return ScheduleDay(
-                      date: weekDates[weekday]!['formatted']!,
-                      lessons: lessons.map((lesson) {
-                        return ScheduleItem(
-                          id: lesson.id!,
-                          startTime: lesson.time.split('-')[0],
-                          endTime: lesson.time.split('-')[1],
-                          subject: lesson.name,
-                          lectureType: lesson.lessonType,
-                          room: lesson.classRoom,
-                          teacher: lesson.teacher,
-                          specialDay: specialDay(lesson.lessonDate),
-                        );
-                      }).toList(),
-                    );
-                  },
-                  separatorBuilder: (context, index) => const Gap(12),
-                );
-              },
-            ),
-            const Gap(12),
-          ],
+                      return ScheduleDay(
+                        date: weekDates[weekday]!['formatted']!,
+                        lessons: lessons.map((lesson) {
+                          return ScheduleItem(
+                            id: lesson.id!,
+                            startTime: lesson.time.split('-')[0],
+                            endTime: lesson.time.split('-')[1],
+                            subject: lesson.name,
+                            lectureType: lesson.lessonType,
+                            room: lesson.classRoom,
+                            teacher: lesson.teacher,
+                            specialDay: specialDay(lesson.lessonDate),
+                          );
+                        }).toList(),
+                      );
+                    },
+                    separatorBuilder: (context, index) => const Gap(12),
+                  );
+                },
+              ),
+              const Gap(12),
+            ],
+          ),
         ),
       ),
     );

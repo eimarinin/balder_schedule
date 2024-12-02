@@ -16,7 +16,7 @@ class LessonScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<LessonModel?>(
-      future: DatabaseService().getLessonById(id), // Загружаем урок по ID
+      future: DatabaseService().getLessonById(id),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Scaffold(

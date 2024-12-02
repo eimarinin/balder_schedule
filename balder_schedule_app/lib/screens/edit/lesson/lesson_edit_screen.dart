@@ -399,7 +399,6 @@ class _LessonCreateContentState extends State<LessonCreateContent> {
                   children: [
                     TextFormField(
                       controller: classRoom,
-                      keyboardType: TextInputType.number,
                       decoration: InputDecoration(
                         labelText: 'Аудитория или адрес',
                         border: OutlineInputBorder(),
