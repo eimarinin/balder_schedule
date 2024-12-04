@@ -246,7 +246,7 @@ class _LessonCreateContentState extends State<LessonCreateContent> {
               context.pop();
             }
           },
-          'Занятие удалено!',
+          'Занятие успешно удалено!',
           'Не удалось удалить занятие.',
         );
       },

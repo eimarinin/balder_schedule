@@ -1,8 +1,8 @@
 class NotesModel {
   final int? id;
-  final int lessonId; // Связь с уроком
-  final String note; // Содержимое заметки
-  final String date; // Дата применения заметки
+  final int lessonId;
+  final String note;
+  final String date;
 
   NotesModel({
     this.id,
