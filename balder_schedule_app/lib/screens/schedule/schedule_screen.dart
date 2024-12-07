@@ -136,25 +136,30 @@ class _ScheduleContentState extends State<ScheduleContent> {
 }
 
 Future<Map<String, List<LessonModel>>> _getFilteredLessons(
-    Map<String, Map<String, String>> weekDates,
-    ScheduleState scheduleState) async {
+  Map<String, Map<String, String>> weekDates,
+  ScheduleState scheduleState,
+) async {
   final filteredWeekDates = <String, List<LessonModel>>{};
 
   for (final weekday in weekDates.keys) {
     final specificDate = weekDates[weekday]!['date']!;
+    try {
+      final lessons = await Future.wait([
+        LessonDatabase()
+            .getLessonsByDayAndWeek(weekday, scheduleState.currentParity),
+        LessonDatabase().getLessonsBySpecificDate(specificDate),
+      ]).then((results) {
+        final lessonsByDayAndWeek = results[0];
+        final lessonsBySpecificDate = results[1];
+        return [...lessonsByDayAndWeek, ...lessonsBySpecificDate];
+      });
 
-    final lessons = await Future.wait([
-      LessonDatabase()
-          .getLessonsByDayAndWeek(weekday, scheduleState.currentParity),
-      LessonDatabase().getLessonsBySpecificDate(specificDate),
-    ]).then((results) {
-      final lessonsByDayAndWeek = results[0];
-      final lessonsBySpecificDate = results[1];
-      return [...lessonsByDayAndWeek, ...lessonsBySpecificDate];
-    });
-
-    if (lessons.isNotEmpty) {
-      filteredWeekDates[weekday] = lessons;
+      if (lessons.isNotEmpty) {
+        filteredWeekDates[weekday] = lessons;
+      }
+    } catch (e) {
+      debugPrint('Ошибка при получении данных: $e');
+      filteredWeekDates[weekday] = [];
     }
   }
 

@@ -1,5 +1,7 @@
-import 'package:balder_schedule_app/services/database/migrations/create_lessons_table.dart.dart';
-import 'package:balder_schedule_app/services/database/migrations/create_notes_table.dart';
+import 'package:balder_schedule_app/services/database/migrations/down/lessons_table.dart.dart';
+import 'package:balder_schedule_app/services/database/migrations/down/notes_table.dart';
+import 'package:balder_schedule_app/services/database/migrations/up/lessons_table.dart.dart';
+import 'package:balder_schedule_app/services/database/migrations/up/notes_table.dart';
 import 'package:path/path.dart';
 import 'package:flutter/foundation.dart';
 import 'dart:async';
@@ -18,6 +20,11 @@ class DatabaseService {
   final List<Future<void> Function(Database)> _migrations = [
     addLessonsTable,
     addNotesTable,
+  ];
+
+  final List<Future<void> Function(Database)> _migrationsDown = [
+    removeLessonsTable,
+    removeNotesTable,
   ];
 
   void initializeDatabaseFactory() {
@@ -41,12 +48,15 @@ class DatabaseService {
     try {
       initializeDatabaseFactory();
       final dbPath = await getDatabasesPath();
+
+      // await deleteDatabase();
+
       return await openDatabase(
         join(dbPath, 'schedule.db'),
         version: currentDbVersion,
         onCreate: _onCreate,
         onUpgrade: _onUpgrade,
-        onDowngrade: onDatabaseDowngradeDelete,
+        onDowngrade: _onDowngrade,
       );
     } catch (e) {
       throw Exception('Ошибка при инициализации базы данных: $e');
@@ -63,11 +73,24 @@ class DatabaseService {
     }
   }
 
+  Future<void> _onDowngrade(Database db, int oldVersion, int newVersion) async {
+    for (int i = oldVersion; i > newVersion; i--) {
+      await _revertMigration(db, i);
+    }
+  }
+
   Future<void> _applyMigration(Database db, int version) async {
     if (version > _migrations.length || version <= 0) {
       throw Exception('Миграция версии $version отсутствует.');
     }
     await _migrations[version - 1](db);
+  }
+
+  Future<void> _revertMigration(Database db, int version) async {
+    if (version > _migrationsDown.length || version <= 0) {
+      throw Exception('Миграция вниз для версии $version отсутствует.');
+    }
+    await _migrationsDown[version - 1](db);
   }
 
   Future<void> _migrateDatabase(Database db, int version) async {
@@ -80,6 +103,21 @@ class DatabaseService {
     if (_database != null) {
       await _database!.close();
       _database = null;
+    }
+  }
+
+  Future<void> deleteDatabase() async {
+    try {
+      await closeDatabase();
+
+      final dbPath = await getDatabasesPath();
+      final path = join(dbPath, 'schedule.db');
+
+      await databaseFactory.deleteDatabase(path);
+
+      debugPrint('База данных schedule.db успешно удалена.');
+    } catch (e) {
+      throw Exception('Ошибка при удалении базы данных: $e');
     }
   }
 }

@@ -5,9 +5,18 @@ import 'package:balder_schedule_app/models/lesson_model.dart';
 class LessonDatabase {
   static const String _tableLessons = 'lessons';
 
+  Future<Database> _getDatabase() async {
+    try {
+      return await DatabaseService().database;
+    } catch (e) {
+      throw Exception('База данных недоступна: $e');
+    }
+  }
+
   Future<void> insertLesson(LessonModel lesson) async {
     try {
-      final db = await DatabaseService().database;
+      final db = await _getDatabase();
+
       await db.insert(
         _tableLessons,
         lesson.toMap(),
@@ -20,7 +29,8 @@ class LessonDatabase {
 
   Future<List<LessonModel>> getLessons() async {
     try {
-      final db = await DatabaseService().database;
+      final db = await _getDatabase();
+
       final List<Map<String, dynamic>> maps = await db.query(_tableLessons);
       return maps.map((map) => LessonModel.fromMap(map)).toList();
     } catch (e) {
@@ -30,7 +40,7 @@ class LessonDatabase {
 
   Future<List<LessonModel>> getLessonsByDay(String weekday) async {
     try {
-      final db = await DatabaseService().database;
+      final db = await _getDatabase();
 
       final result = await db.query(
         _tableLessons,
@@ -48,7 +58,7 @@ class LessonDatabase {
   Future<List<LessonModel>> getLessonsByDayAndWeek(
       String weekday, int weekParity) async {
     try {
-      final db = await DatabaseService().database;
+      final db = await _getDatabase();
 
       String weekParityString = weekParity.toString();
 
@@ -67,7 +77,7 @@ class LessonDatabase {
 
   Future<List<LessonModel>> getLessonsBySpecificDate(String date) async {
     try {
-      final db = await DatabaseService().database;
+      final db = await _getDatabase();
 
       final result = await db.query(
         _tableLessons,
@@ -83,7 +93,7 @@ class LessonDatabase {
 
   Future<void> updateLesson(LessonModel lesson) async {
     try {
-      final db = await DatabaseService().database;
+      final db = await _getDatabase();
 
       final count = await db.query(
         _tableLessons,
@@ -108,7 +118,7 @@ class LessonDatabase {
 
   Future<void> deleteLesson(int id) async {
     try {
-      final db = await DatabaseService().database;
+      final db = await _getDatabase();
 
       final count = await db.query(
         _tableLessons,
@@ -132,7 +142,8 @@ class LessonDatabase {
 
   Future<LessonModel?> getLessonById(int id) async {
     try {
-      final db = await DatabaseService().database;
+      final db = await _getDatabase();
+
       final List<Map<String, dynamic>> result = await db.query(
         _tableLessons,
         where: 'id = ?',
