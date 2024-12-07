@@ -199,6 +199,16 @@ class S {
       args: [],
     );
   }
+
+  /// `Edit a lesson`
+  String get lessonEditScreenTitle {
+    return Intl.message(
+      'Edit a lesson',
+      name: 'lessonEditScreenTitle',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

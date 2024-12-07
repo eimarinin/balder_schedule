@@ -32,6 +32,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "editTitle": MessageLookupByLibrary.simpleMessage("Schedule editor"),
         "lessonCreateScreenTitle":
             MessageLookupByLibrary.simpleMessage("Add a lesson"),
+        "lessonEditScreenTitle":
+            MessageLookupByLibrary.simpleMessage("Edit a lesson"),
         "notificationsTitle":
             MessageLookupByLibrary.simpleMessage("Notifications"),
         "qrTitle": MessageLookupByLibrary.simpleMessage("QR"),

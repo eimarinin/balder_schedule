@@ -1,5 +1,6 @@
 import 'package:balder_schedule_app/generated/l10n.dart';
 import 'package:balder_schedule_app/services/database/lesson_db.dart';
+import 'package:balder_schedule_app/utils/cloud_functions.dart'; // Импорт сервиса для работы с БД
 import 'package:balder_schedule_app/utils/margin_screen.dart';
 import 'package:balder_schedule_app/widgets/page_header_child.dart';
 import 'package:flutter/material.dart';
@@ -29,6 +30,7 @@ class _QrContentState extends State<QrContent> {
   String? _formattedLessons; // Строка с данными из базы
   bool _isLoading = true; // Статус загрузки
   bool _hasError = false; // Флаг ошибки
+  bool _isUploading = false; // Статус загрузки базы данных
 
   @override
   void initState() {
@@ -102,6 +104,36 @@ class _QrContentState extends State<QrContent> {
     );
   }
 
+  /// Отправка базы данных в хранилище
+  Future<void> _uploadDatabase() async {
+    final dbService = CloudFunctions();
+
+    setState(() {
+      _isUploading = true; // Показываем индикатор загрузки
+    });
+
+    try {
+      await dbService.uploadDatabaseToStorage();
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('База данных успешно отправлена!')),
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Ошибка при отправке базы данных: $e')),
+        );
+      }
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isUploading = false; // Скрываем индикатор загрузки
+        });
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -146,9 +178,11 @@ class _QrContentState extends State<QrContent> {
                 SizedBox(
                   width: double.infinity,
                   child: TextButton.icon(
-                    onPressed: () {
-                      // Дополнительные действия, например, поделиться QR-кодом
-                    },
+                    onPressed: _isUploading
+                        ? null
+                        : () {
+                            _uploadDatabase(); // Вызов метода отправки базы данных
+                          },
                     icon: const Icon(Icons.share_outlined, size: 18),
                     label: Text(S.of(context).shareScheduleTitle),
                   ),
