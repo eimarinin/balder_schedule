@@ -343,7 +343,7 @@ class _LessonContentState extends State<LessonContent> {
                     ],
                   );
                 },
-                separatorBuilder: (context, index) => const Gap(8),
+                separatorBuilder: (context, index) => const Gap(12),
               );
             },
           ),

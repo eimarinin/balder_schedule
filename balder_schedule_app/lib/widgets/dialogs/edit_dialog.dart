@@ -33,7 +33,7 @@ class EditNoteDialog {
                 ),
                 const SizedBox(width: 8),
                 Expanded(
-                  child: FilledButton.tonal(
+                  child: FilledButton(
                     onPressed: () =>
                         Navigator.pop(dialogContext, controller.text),
                     child: Text(confirmButtonText),

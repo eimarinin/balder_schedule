@@ -201,7 +201,7 @@ class _LessonCreateContentState extends State<LessonCreateContent> {
             ? lessonDate.text
             : widget.selectedDay,
         teacher: teacher.text,
-        notes: notes.text.isNotEmpty ? notes.text : null,
+        notes: notes.text.isNotEmpty ? notes.text.trim() : null,
       );
 
       SnackbarHandler.handleAction(

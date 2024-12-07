@@ -21,7 +21,7 @@ final _shellNavigatorSettingsKey =
     GlobalKey<NavigatorState>(debugLabel: 'shellSettings');
 
 final goRouter = GoRouter(
-  initialLocation: '/schedule',
+  initialLocation: '/',
   navigatorKey: _rootNavigatorKey,
   debugLogDiagnostics: true,
   routes: [
@@ -35,10 +35,6 @@ final goRouter = GoRouter(
           routes: [
             GoRoute(
               path: '/',
-              builder: (context, state) => ScheduleScreen(),
-            ),
-            GoRoute(
-              path: '/schedule',
               pageBuilder: (context, state) => NoTransitionPage(
                 child: ScheduleScreen(),
               ),

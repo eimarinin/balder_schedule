@@ -33,7 +33,7 @@ class ScheduleItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () => context.go(
-        '/schedule/lesson/$id?date=${Uri.encodeComponent(date)}',
+        '/lesson/$id?date=${Uri.encodeComponent(date)}',
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

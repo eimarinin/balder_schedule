@@ -163,7 +163,7 @@ class _LessonCreateContentState extends State<LessonCreateContent> {
             ? lessonDate.text
             : DateFormat('EEEE').format(widget.selectedDay),
         teacher: teacher.text,
-        notes: notes.text.isNotEmpty ? notes.text : null,
+        notes: notes.text.isNotEmpty ? notes.text.trim() : null,
       );
 
       SnackbarHandler.handleAction(
