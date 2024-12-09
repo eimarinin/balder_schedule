@@ -49,7 +49,7 @@ class DatabaseService {
       initializeDatabaseFactory();
       final dbPath = await getDatabasesPath();
 
-      await deleteDatabase();
+      // await deleteDatabase();
 
       return await openDatabase(
         join(dbPath, 'schedule.db'),
