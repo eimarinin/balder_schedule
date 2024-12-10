@@ -72,7 +72,8 @@ class LessonContent extends StatefulWidget {
   State<LessonContent> createState() => _LessonContentState();
 }
 
-class _LessonContentState extends State<LessonContent> {
+class _LessonContentState extends State<LessonContent>
+    with TickerProviderStateMixin {
   late LessonModel lesson = widget.lesson;
   late String date = widget.date;
 
@@ -263,84 +264,97 @@ class _LessonContentState extends State<LessonContent> {
                 itemCount: notes.length,
                 itemBuilder: (context, index) {
                   final note = notes[index];
-                  return Row(
-                    children: [
-                      Expanded(
-                        child: Container(
-                          padding: const EdgeInsets.all(24.0),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(6.0),
-                            color: Theme.of(context)
-                                .colorScheme
-                                .surfaceContainerLow,
-                          ),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      'Заметка на ${note.date}',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyMedium,
+                  return FadeTransition(
+                    opacity: Tween(begin: 0.0, end: 1.0).animate(
+                      CurvedAnimation(
+                        parent: AnimationController(
+                          vsync: this,
+                          duration: const Duration(milliseconds: 400),
+                        )..forward(),
+                        curve: Curves.easeIn,
+                      ),
+                    ),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Container(
+                            padding: const EdgeInsets.all(24.0),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(6.0),
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .surfaceContainerLow,
+                            ),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        'Заметка на ${note.date}',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyMedium,
+                                      ),
+                                      const Divider(thickness: 2, height: 16),
+                                      Text(
+                                        note.note,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyLarge,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                const Gap(8),
+                                MenuAnchor(
+                                  menuChildren: <Widget>[
+                                    MenuItemButton(
+                                      style: ButtonStyle(
+                                        padding: WidgetStateProperty.all(
+                                          const EdgeInsets.symmetric(
+                                              horizontal: 16),
+                                        ),
+                                      ),
+                                      onPressed: () => _editNote(
+                                          context, note.id!, note.note),
+                                      child: const Text('Редактировать'),
                                     ),
-                                    const Divider(thickness: 2, height: 16),
-                                    Text(
-                                      note.note,
-                                      style:
-                                          Theme.of(context).textTheme.bodyLarge,
+                                    MenuItemButton(
+                                      style: ButtonStyle(
+                                        padding: WidgetStateProperty.all(
+                                          const EdgeInsets.symmetric(
+                                              horizontal: 16),
+                                        ),
+                                      ),
+                                      onPressed: () =>
+                                          _deleteNote(context, note.id!),
+                                      child: const Text('Удалить'),
                                     ),
                                   ],
+                                  builder: (_, MenuController controller,
+                                      Widget? child) {
+                                    return IconButton(
+                                      onPressed: () {
+                                        if (controller.isOpen) {
+                                          controller.close();
+                                        } else {
+                                          controller.open();
+                                        }
+                                      },
+                                      icon: const Icon(Icons.more_vert),
+                                    );
+                                  },
                                 ),
-                              ),
-                              const Gap(8),
-                              MenuAnchor(
-                                menuChildren: <Widget>[
-                                  MenuItemButton(
-                                    style: ButtonStyle(
-                                      padding: WidgetStateProperty.all(
-                                        const EdgeInsets.symmetric(
-                                            horizontal: 16),
-                                      ),
-                                    ),
-                                    onPressed: () =>
-                                        _editNote(context, note.id!, note.note),
-                                    child: const Text('Редактировать'),
-                                  ),
-                                  MenuItemButton(
-                                    style: ButtonStyle(
-                                      padding: WidgetStateProperty.all(
-                                        const EdgeInsets.symmetric(
-                                            horizontal: 16),
-                                      ),
-                                    ),
-                                    onPressed: () =>
-                                        _deleteNote(context, note.id!),
-                                    child: const Text('Удалить'),
-                                  ),
-                                ],
-                                builder: (_, MenuController controller,
-                                    Widget? child) {
-                                  return IconButton(
-                                    onPressed: () {
-                                      if (controller.isOpen) {
-                                        controller.close();
-                                      } else {
-                                        controller.open();
-                                      }
-                                    },
-                                    icon: const Icon(Icons.more_vert),
-                                  );
-                                },
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   );
                 },
                 separatorBuilder: (context, index) => const Gap(12),
