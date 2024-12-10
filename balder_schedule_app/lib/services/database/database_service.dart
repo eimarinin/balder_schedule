@@ -1,3 +1,4 @@
+import 'package:balder_schedule_app/globals.dart';
 import 'package:balder_schedule_app/services/database/migrations/down/lessons_table.dart.dart';
 import 'package:balder_schedule_app/services/database/migrations/down/notes_table.dart';
 import 'package:balder_schedule_app/services/database/migrations/up/lessons_table.dart.dart';
@@ -47,7 +48,7 @@ class DatabaseService {
   Future<Database> _initDatabase() async {
     try {
       initializeDatabaseFactory();
-      final dbPath = await getDatabasesPath();
+      dbPath = await getDatabasesPath();
 
       // await deleteDatabase();
 
@@ -110,7 +111,6 @@ class DatabaseService {
     try {
       await closeDatabase();
 
-      final dbPath = await getDatabasesPath();
       final path = join(dbPath, 'schedule.db');
 
       await databaseFactory.deleteDatabase(path);

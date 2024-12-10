@@ -1,13 +1,14 @@
 import 'dart:io';
 
 import 'package:balder_schedule_app/generated/l10n.dart';
+import 'package:balder_schedule_app/globals.dart';
 import 'package:balder_schedule_app/services/database/lesson_db.dart';
 import 'package:balder_schedule_app/utils/cloud_functions.dart'; // Импорт сервиса для работы с БД
 import 'package:balder_schedule_app/utils/margin_screen.dart';
 import 'package:balder_schedule_app/widgets/page_header_child.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:path_provider/path_provider.dart';
+import 'package:path/path.dart' as path;
 import 'package:qr_flutter/qr_flutter.dart';
 
 class QrScreen extends StatelessWidget {
@@ -108,18 +109,14 @@ class _QrContentState extends State<QrContent> {
   }
 
   /// проверка пути бд
-  Future<String> getDatabasePath(String dbName) async {
-    final directory = await getApplicationDocumentsDirectory();
-    return '${directory.path}/$dbName';
-  }
 
   /// Отправка базы данных в хранилище
   Future<void> _uploadDatabase() async {
     final cloudFunctions = CloudFunctions(); // Инициализация CloudFunctions
 
     // Получаем путь к файлу базы данных
-    final filePath = await getDatabasePath(
-        'schedule.db'); // Вызываем getDatabasePath для получения пути
+    final filePath = path.join(
+        dbPath, 'schedule.db'); // Вызываем getDatabasePath для получения пути
     final file = File(filePath);
 
     // Выводим путь к файлу в консоль
