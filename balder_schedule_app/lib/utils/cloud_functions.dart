@@ -22,6 +22,21 @@ class CloudFunctions {
     );
   }
 
+  /// Генерация временной публичной ссылки для скачивания файла
+  Future<String> generatePublicLink(String fileName,
+      {int expirySeconds = 3600}) async {
+    try {
+      // Генерация временной ссылки (3600 секунд = 1 час)
+      final url = await _minio.presignedGetObject(bucketName, fileName,
+          expires: expirySeconds);
+      print("Ссылка для скачивания файла '$fileName': $url");
+      return url;
+    } catch (e) {
+      print("Ошибка при генерации ссылки: $e");
+      rethrow; // Пробрасываем ошибку дальше
+    }
+  }
+
   /// Загрузка файла
   Future<void> uploadFile(String filePath, String fileName) async {
     final file = File(filePath);

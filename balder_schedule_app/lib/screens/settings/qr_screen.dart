@@ -36,6 +36,7 @@ class _QrContentState extends State<QrContent> {
   bool _isLoading = true; // Статус загрузки
   bool _hasError = false; // Флаг ошибки
   bool _isUploading = false; // Статус загрузки базы данных
+  String? _downloadLink; // Ссылка для скачивания файла
 
   @override
   void initState() {
@@ -98,19 +99,20 @@ class _QrContentState extends State<QrContent> {
   }
 
   /// Генерация QR-кода
-  Widget _buildQrCode() {
-    if (_hasError || _formattedLessons == null) {
-      return Center(
+  /// Генерация QR-кода из ссылки
+  Widget _buildQrCode(String? link) {
+    if (link == null || link.isEmpty) {
+      return const Center(
         child: Text(
-          _formattedLessons ?? 'Ошибка',
-          style: const TextStyle(color: Colors.red, fontSize: 16),
+          'Ссылка не доступна',
+          style: TextStyle(color: Colors.red, fontSize: 16),
           textAlign: TextAlign.center,
         ),
       );
     }
 
     return QrImageView(
-      data: _formattedLessons!,
+      data: link,
       version: QrVersions.auto,
       size: 364, // Размер QR-кода
       gapless: false,
@@ -129,34 +131,35 @@ class _QrContentState extends State<QrContent> {
   Future<void> _uploadDatabase() async {
     final cloudFunctions = CloudFunctions(); // Инициализация CloudFunctions
 
-    // Получаем путь к файлу базы данных
     final filePath = path.join(dbPath, 'schedule.db'); // Путь к базе данных
     final file = File(filePath);
 
-    // Получаем уникальный ID устройства
     final deviceId = await getDeviceId();
-    final fileName =
-        '$deviceId-schedule.db'; // Имя файла, содержащее ID устройства
+    final fileName = '$deviceId-schedule.db'; // Уникальное имя файла
 
-    // Выводим путь к файлу в консоль
-    print('Путь к файлу базы данных: $filePath');
-
-    // Проверяем, существует ли файл
     if (!file.existsSync()) {
       print('Ошибка: файл не существует по пути $filePath');
       setState(() {
-        _isUploading = false; // Скрываем индикатор загрузки
+        _isUploading = false;
       });
-      return; // Прерываем выполнение, если файл не найден
+      return;
     }
 
     setState(() {
-      _isUploading = true; // Показываем индикатор загрузки
+      _isUploading = true;
     });
 
     try {
-      // Вызов метода загрузки из CloudFunctions
+      // Загрузка файла
       await cloudFunctions.uploadFile(filePath, fileName);
+
+      // Генерация публичной ссылки
+      final downloadLink = await cloudFunctions.generatePublicLink(fileName);
+
+      // Сохранение ссылки в состояние
+      setState(() {
+        _downloadLink = downloadLink;
+      });
 
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -172,7 +175,7 @@ class _QrContentState extends State<QrContent> {
     } finally {
       if (mounted) {
         setState(() {
-          _isUploading = false; // Скрываем индикатор загрузки
+          _isUploading = false;
         });
       }
     }
@@ -215,7 +218,8 @@ class _QrContentState extends State<QrContent> {
                             child:
                                 CircularProgressIndicator(), // Индикатор загрузки
                           )
-                        : _buildQrCode(), // Генерация QR-кода или ошибка
+                        : _buildQrCode(
+                            _downloadLink), // Генерация QR-кода из ссылки
                   ),
                 ),
                 const Gap(12),
