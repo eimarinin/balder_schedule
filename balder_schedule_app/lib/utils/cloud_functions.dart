@@ -8,7 +8,6 @@ import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:dio/dio.dart'; // Для HTTP-запросов
 
 class CloudFunctions {
-  /// Метод для загрузки базы данных в хранилище
   Future<void> uploadDatabaseToStorage() async {
     try {
       // Путь к базе данных
@@ -20,38 +19,42 @@ class CloudFunctions {
         throw Exception('Файл базы данных не найден.');
       }
 
-      // Конфигурация клиента Dio
+      // Конфигурация клиента Dio с правильными заголовками для VK Cloud
       final dio = Dio(
         BaseOptions(
-          baseUrl: 'https://hb.bizmrg.com',
+          baseUrl: 'https://balderstorage.hb.bizmrg.com/',
           headers: {
-            'Access-Key': 'fhS3aDD9EyeLEW6YdgcVp2', // Ваш Access Key
-            'Secret-Key':
-                '9R2KBwN2rWivrp7LY6KSQUcDzPjpWeqd3YMgjXdEJqMq', // Ваш Secret Key
+            'X-Auth-Access-Key': 'fhS3aDD9EyeLEW6YdgcVp2',
+            'X-Auth-Secret-Key': '9R2KBwN2rWivrp7LY6KSQUcDzPjpWeqd3YMgjXdEJqMq',
           },
         ),
       );
 
       // Имя файла в хранилище
       final fileName = 'schedule_${DateTime.now().toIso8601String()}.db';
+      final fileLength = await dbFile.length();
 
-      // Выполняем загрузку файла
+      // Выполняем загрузку файла с правильными заголовками
       final response = await dio.put(
-        '/balderstorage/$fileName', // Бакет и имя файла
+        '/balderstorage/$fileName',
         data: dbFile.openRead(),
         options: Options(
           headers: {
             'Content-Type': 'application/octet-stream',
+            'Content-Length': fileLength.toString(),
+            'X-Content-Type': 'application/octet-stream',
+          },
+          validateStatus: (status) {
+            return status! < 500;
           },
         ),
       );
 
-      // Проверяем успешность запроса
       if (response.statusCode == 200 || response.statusCode == 201) {
         print('Файл успешно загружен в хранилище.');
       } else {
         throw Exception(
-          'Ошибка при загрузке файла: ${response.statusCode} ${response.statusMessage}',
+          'Ошибка при загрузке файла: ${response.statusCode} ${response.statusMessage}\nТело ответа: ${response.data}',
         );
       }
     } catch (e) {
