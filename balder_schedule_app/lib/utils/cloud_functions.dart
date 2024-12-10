@@ -1,8 +1,8 @@
 import 'dart:async';
-
 import 'package:minio/minio.dart';
 import 'dart:io';
 import 'dart:typed_data';
+import 'package:device_info_plus/device_info_plus.dart';
 
 class CloudFunctions {
   final String endpoint =
@@ -94,4 +94,19 @@ class CloudFunctions {
       print("Ошибка удаления файла: $e");
     }
   }
+}
+
+Future<String> getDeviceId() async {
+  final DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+  String deviceId = '';
+
+  if (Platform.isAndroid) {
+    final AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
+    deviceId = androidInfo.id ?? ''; // Используем id вместо androidId
+  } else if (Platform.isIOS) {
+    final IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
+    deviceId = iosInfo.identifierForVendor ?? ''; // Уникальный ID для iOS
+  }
+
+  return deviceId;
 }

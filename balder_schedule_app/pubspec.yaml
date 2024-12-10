@@ -58,6 +58,7 @@ dependencies:
   http: ^1.1.0
   dio: ^5.7.0
   minio: ^3.5.7
+  device_info_plus: ^11.1.1
   
   
 
