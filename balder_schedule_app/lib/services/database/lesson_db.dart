@@ -157,4 +157,27 @@ class LessonDatabase {
       throw Exception('Ошибка при получении урока с ID $id: $e');
     }
   }
+
+  Future<int> getTotalNotesCountForLesson(int lessonId) async {
+    try {
+      final db = await _getDatabase();
+
+      final result = await db.rawQuery('''
+      SELECT 
+          (CASE WHEN lessons.notes IS NOT NULL THEN 1 ELSE 0 END) +
+          (SELECT COUNT(*) FROM notes WHERE notes.lessonId = lessons.id) AS totalNotes
+      FROM lessons
+      WHERE lessons.id = ?
+    ''', [lessonId]);
+
+      if (result.isNotEmpty) {
+        return result.first['totalNotes'] as int;
+      } else {
+        return 0;
+      }
+    } catch (e) {
+      throw Exception(
+          'Ошибка при подсчете заметок для урока с ID $lessonId: $e');
+    }
+  }
 }

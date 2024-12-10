@@ -96,30 +96,20 @@ class _ScheduleContentState extends State<ScheduleContent> {
                       final weekday = filteredWeekDates.keys.elementAt(index);
                       final lessons = filteredWeekDates[weekday]!;
 
-                      bool specialDay(String date) {
-                        try {
-                          DateFormat('dd/MM/yyyy').parse(date);
-                          return true;
-                        } catch (e) {
-                          return false;
-                        }
-                      }
+                      return FutureBuilder<List<ScheduleItem>>(
+                        future: _buildScheduleItems(
+                            lessons, weekDates[weekday]!['short']!),
+                        builder: (context, snapshot) {
+                          if (snapshot.hasError) {
+                            return const Text('Ошибка загрузки расписания');
+                          }
 
-                      return ScheduleDay(
-                        date: weekDates[weekday]!['formatted']!,
-                        lessons: lessons.map((lesson) {
-                          return ScheduleItem(
-                            id: lesson.id!,
-                            startTime: lesson.time.split('-')[0],
-                            endTime: lesson.time.split('-')[1],
-                            subject: lesson.name,
-                            lectureType: lesson.lessonType,
-                            room: lesson.classRoom,
-                            teacher: lesson.teacher,
-                            specialDay: specialDay(lesson.lessonDate),
-                            date: weekDates[weekday]!['short']!,
+                          final scheduleItems = snapshot.data ?? [];
+                          return ScheduleDay(
+                            date: weekDates[weekday]!['formatted']!,
+                            lessons: scheduleItems,
                           );
-                        }).toList(),
+                        },
                       );
                     },
                     separatorBuilder: (context, index) => const Gap(12),
@@ -164,4 +154,55 @@ Future<Map<String, List<LessonModel>>> _getFilteredLessons(
   }
 
   return filteredWeekDates;
+}
+
+Future<List<ScheduleItem>> _buildScheduleItems(
+    List<LessonModel> lessons, String shortDate) async {
+  final scheduleItems = <ScheduleItem>[];
+
+  for (final lesson in lessons) {
+    try {
+      final countNotes =
+          await LessonDatabase().getTotalNotesCountForLesson(lesson.id!);
+      scheduleItems.add(ScheduleItem(
+        id: lesson.id!,
+        startTime: lesson.time.split('-')[0],
+        endTime: lesson.time.split('-')[1],
+        subject: lesson.name,
+        lectureType: lesson.lessonType,
+        room: lesson.classRoom,
+        teacher: lesson.teacher,
+        specialDay: _isSpecialDay(lesson.lessonDate),
+        date: shortDate,
+        lessonNote: lesson.notes ?? '',
+        countNotes: countNotes,
+      ));
+    } catch (e) {
+      debugPrint('Ошибка загрузки заметок для урока ${lesson.id}: $e');
+      scheduleItems.add(ScheduleItem(
+        id: lesson.id!,
+        startTime: lesson.time.split('-')[0],
+        endTime: lesson.time.split('-')[1],
+        subject: lesson.name,
+        lectureType: lesson.lessonType,
+        room: lesson.classRoom,
+        teacher: lesson.teacher,
+        specialDay: _isSpecialDay(lesson.lessonDate),
+        date: shortDate,
+        lessonNote: lesson.notes ?? '',
+        countNotes: 0, // Если произошла ошибка, устанавливаем 0
+      ));
+    }
+  }
+
+  return scheduleItems;
+}
+
+bool _isSpecialDay(String date) {
+  try {
+    DateFormat('dd/MM/yyyy').parse(date);
+    return true;
+  } catch (e) {
+    return false;
+  }
 }
