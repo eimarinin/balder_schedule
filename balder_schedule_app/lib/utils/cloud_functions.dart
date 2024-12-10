@@ -1,55 +1,97 @@
-import 'package:path/path.dart';
-import 'dart:io';
 import 'dart:async';
-import 'package:sqflite_common_ffi/sqflite_ffi.dart';
-import 'package:dio/dio.dart';
+
+import 'package:minio/minio.dart';
+import 'dart:io';
+import 'dart:typed_data';
 
 class CloudFunctions {
-  Future<void> uploadDatabaseToStorage() async {
+  final String endpoint =
+      'https://hb.bizmrg.com'; // S3-совместимый API VK Cloud
+  final String accessKey = 'w1RsvMGPTqWEwmncjnRzDB'; // Ваш Access Key
+  final String secretKey =
+      '4q1im5jUTPywfnMfhgad5KbyVeREzQKZvzeTRn2xvoeR'; // Ваш Secret Key
+  final String bucketName = 'balderstorage1.0.1'; // Имя бакета
+
+  late Minio _minio;
+
+  CloudFunctions() {
+    _minio = Minio(
+      endPoint: endpoint.replaceFirst('https://', ''), // Убираем протокол
+      accessKey: accessKey,
+      secretKey: secretKey,
+    );
+  }
+
+  /// Загрузка файла
+  Future<void> uploadFile(String filePath, String fileName) async {
+    final file = File(filePath);
+
     try {
-      final dbPath = await getDatabasesPath();
-      final dbFile = File(join(dbPath, 'schedule.db'));
-
-      if (!dbFile.existsSync()) {
-        throw Exception('Файл базы данных не найден.');
-      }
-
-      // Конфигурация клиента Dio
-      final dio = Dio(
-        BaseOptions(
-          baseUrl: 'https://hb.bizmrg.com',
-          headers: {
-            'Access-Key': 'fhS3aDD9EyeLEW6YdgcVp2', // Ваш Access Key
-            'Secret-Key':
-                '9R2KBwN2rWivrp7LY6KSQUcDzPjpWeqd3YMgjXdEJqMq', // Ваш Secret Key
+      // Преобразуем поток в Stream<Uint8List>
+      final fileStream = file.openRead().transform<List<int>>(
+        StreamTransformer.fromHandlers(
+          handleData: (data, sink) {
+            sink.add(Uint8List.fromList(data));
           },
         ),
+      ).cast<Uint8List>();
+
+      final fileLength = await file.length(); // Получаем размер файла
+
+      await _minio.putObject(
+        bucketName,
+        fileName,
+        fileStream, // Передаем преобразованный поток
+        size: fileLength, // Размер файла
+        metadata: {'Content-Type': 'application/octet-stream'},
       );
 
-      final fileName = 'schedule_${DateTime.now().toIso8601String()}.db';
-      final fileLength = await dbFile.length();
+      print("Файл '$fileName' успешно загружен!");
+    } catch (e) {
+      print("Ошибка при загрузке файла: $e");
+    }
+  }
 
-      // Выполняем загрузку файла
-      final response = await dio.put(
-        '/balderstorage/$fileName', // Бакет и имя файла
-        data: dbFile.openRead(),
-        options: Options(
-          headers: {
-            'Content-Type': 'application/octet-stream',
-          },
-        ),
-      );
+  /// Список файлов в бакете
+  Future<void> listFiles() async {
+    try {
+      // Получаем список объектов из бакета
+      final objects = await _minio.listObjects(bucketName).toList();
 
-      // Проверяем успешность запроса
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        print('Файл успешно загружен в хранилище.');
+      if (objects.isNotEmpty) {
+        print("Список файлов в бакете:");
+
+        // Выводим структуру каждого объекта
+        for (var obj in objects) {
+          print("Объект целиком: $obj"); // Выводим объект целиком
+        }
       } else {
-        throw Exception(
-          'Ошибка при загрузке файла: ${response.statusCode} ${response.statusMessage}',
-        );
+        print("Бакет пуст.");
       }
     } catch (e) {
-      throw Exception('Ошибка при загрузке базы данных: $e');
+      print("Ошибка получения списка файлов: $e");
+    }
+  }
+
+  /// Скачивание файла
+  Future<void> downloadFile(String fileName, String savePath) async {
+    try {
+      final stream = await _minio.getObject(bucketName, fileName);
+      final file = File(savePath);
+      await file.openWrite().addStream(stream);
+      print("Файл '$fileName' успешно загружен в $savePath!");
+    } catch (e) {
+      print("Ошибка при скачивании файла: $e");
+    }
+  }
+
+  /// Удаление файла
+  Future<void> deleteFile(String fileName) async {
+    try {
+      await _minio.removeObject(bucketName, fileName);
+      print("Файл '$fileName' успешно удален!");
+    } catch (e) {
+      print("Ошибка удаления файла: $e");
     }
   }
 }

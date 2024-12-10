@@ -57,6 +57,7 @@ dependencies:
   l10n_flutter: ^1.0.7
   http: ^1.1.0
   dio: ^5.7.0
+  minio: ^3.5.7
   
   
 
