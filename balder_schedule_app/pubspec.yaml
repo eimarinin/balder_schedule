@@ -60,6 +60,8 @@ dependencies:
   minio: ^3.5.7
   device_info_plus: ^11.1.1
   crypto: ^3.0.6
+  share_plus: ^10.1.2
+
   
   
 

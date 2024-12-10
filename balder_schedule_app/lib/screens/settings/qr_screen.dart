@@ -2,7 +2,7 @@ import 'dart:io';
 import 'package:balder_schedule_app/generated/l10n.dart';
 import 'package:balder_schedule_app/globals.dart';
 import 'package:balder_schedule_app/services/database/lesson_db.dart';
-import 'package:balder_schedule_app/utils/cloud_functions.dart'; // Импорт сервиса для работы с БД
+import 'package:balder_schedule_app/utils/cloud_functions.dart';
 import 'package:balder_schedule_app/utils/margin_screen.dart';
 import 'package:balder_schedule_app/widgets/page_header_child.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +10,7 @@ import 'package:gap/gap.dart';
 import 'package:path/path.dart' as path;
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:device_info_plus/device_info_plus.dart';
-import 'dart:io';
+import 'package:share_plus/share_plus.dart';
 
 class QrScreen extends StatelessWidget {
   const QrScreen({super.key});
@@ -32,11 +32,11 @@ class QrContent extends StatefulWidget {
 }
 
 class _QrContentState extends State<QrContent> {
-  String? _formattedLessons; // Строка с данными из базы
-  bool _isLoading = true; // Статус загрузки
-  bool _hasError = false; // Флаг ошибки
-  bool _isUploading = false; // Статус загрузки базы данных
-  String? _downloadLink; // Ссылка для скачивания файла
+  String? _formattedLessons;
+  bool _isLoading = true;
+  bool _hasError = false;
+  bool _isUploading = false;
+  String? _downloadLink;
 
   @override
   void initState() {
@@ -44,34 +44,30 @@ class _QrContentState extends State<QrContent> {
     _loadFormattedLessons();
   }
 
-  /// Получение уникального ID устройства
   Future<String> getDeviceId() async {
     final DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
     String deviceId = '';
 
     if (Platform.isAndroid) {
       final AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
-      deviceId = androidInfo.id ?? ''; // Используем id вместо androidId
+      deviceId = androidInfo.id ?? '';
     } else if (Platform.isIOS) {
       final IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
-      deviceId = iosInfo.identifierForVendor ?? ''; // Уникальный ID для iOS
+      deviceId = iosInfo.identifierForVendor ?? '';
     }
 
     return deviceId;
   }
 
-  /// Загружаем данные из базы и форматируем их
   Future<void> _loadFormattedLessons() async {
     final databaseService = LessonDatabase();
 
     try {
-      // Получаем список уроков
       final lessons = await databaseService.getLessons();
       if (lessons.isEmpty) {
         throw Exception('Данные отсутствуют');
       }
 
-      // Форматируем строку
       final result = lessons.map((lesson) {
         return '''
 Урок: ${lesson.name}
@@ -98,8 +94,6 @@ class _QrContentState extends State<QrContent> {
     }
   }
 
-  /// Генерация QR-кода
-  /// Генерация QR-кода из ссылки
   Widget _buildQrCode(String? link) {
     if (link == null || link.isEmpty) {
       return const Center(
@@ -114,7 +108,7 @@ class _QrContentState extends State<QrContent> {
     return QrImageView(
       data: link,
       version: QrVersions.auto,
-      size: 364, // Размер QR-кода
+      size: 364,
       gapless: false,
       errorStateBuilder: (context, error) {
         return const Center(
@@ -127,15 +121,12 @@ class _QrContentState extends State<QrContent> {
     );
   }
 
-  /// Отправка базы данных в хранилище с уникальным именем, основанным на ID устройства
   Future<void> _uploadDatabase() async {
-    final cloudFunctions = CloudFunctions(); // Инициализация CloudFunctions
-
-    final filePath = path.join(dbPath, 'schedule.db'); // Путь к базе данных
+    final cloudFunctions = CloudFunctions();
+    final filePath = path.join(dbPath, 'schedule.db');
     final file = File(filePath);
-
     final deviceId = await getDeviceId();
-    final fileName = '$deviceId-schedule.db'; // Уникальное имя файла
+    final fileName = '$deviceId-schedule.db';
 
     if (!file.existsSync()) {
       print('Ошибка: файл не существует по пути $filePath');
@@ -150,13 +141,9 @@ class _QrContentState extends State<QrContent> {
     });
 
     try {
-      // Загрузка файла
       await cloudFunctions.uploadFile(filePath, fileName);
-
-      // Генерация публичной ссылки
       final downloadLink = await cloudFunctions.generatePublicLink(fileName);
 
-      // Сохранение ссылки в состояние
       setState(() {
         _downloadLink = downloadLink;
       });
@@ -181,6 +168,27 @@ class _QrContentState extends State<QrContent> {
     }
   }
 
+  void _shareLink() async {
+    if (_downloadLink != null) {
+      try {
+        await Share.share(_downloadLink!);
+      } catch (e) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Ошибка при попытке поделиться: $e')),
+          );
+        }
+      }
+    }
+  }
+
+  Future<void> _handleShareButtonPress() async {
+    await _uploadDatabase();
+    if (_downloadLink != null) {
+      _shareLink();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -198,7 +206,7 @@ class _QrContentState extends State<QrContent> {
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton.icon(
-                    onPressed: () {}, // Можно добавить функцию сканирования
+                    onPressed: () {}, // Действие для сканирования расписания
                     icon:
                         const Icon(Icons.video_camera_front_outlined, size: 18),
                     label: Text(S.of(context).scanNewScheduleTitle),
@@ -223,14 +231,11 @@ class _QrContentState extends State<QrContent> {
                   ),
                 ),
                 const Gap(12),
+                // Единственная кнопка внизу
                 SizedBox(
                   width: double.infinity,
-                  child: TextButton.icon(
-                    onPressed: _isUploading
-                        ? null
-                        : () {
-                            _uploadDatabase(); // Вызов метода отправки базы данных
-                          },
+                  child: ElevatedButton.icon(
+                    onPressed: _isUploading ? null : _handleShareButtonPress,
                     icon: const Icon(Icons.share_outlined, size: 18),
                     label: Text(S.of(context).shareScheduleTitle),
                   ),
