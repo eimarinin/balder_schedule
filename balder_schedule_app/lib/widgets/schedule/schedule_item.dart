@@ -144,14 +144,14 @@ class ScheduleItem extends StatelessWidget {
 
                             final notes = snapshot.data ?? [];
 
-                            if (notes.isEmpty) {
+                            final itemCount =
+                                notes.length + (lessonNote.isNotEmpty ? 1 : 0);
+
+                            if (itemCount == 0) {
                               return const Center(
                                 child: Text('Заметок нет'),
                               );
                             }
-
-                            final itemCount =
-                                notes.length + (lessonNote.isNotEmpty ? 1 : 0);
 
                             return SizedBox(
                               height: 350,

@@ -74,7 +74,7 @@ class LessonContent extends StatefulWidget {
 
 class _LessonContentState extends State<LessonContent> {
   late LessonModel lesson = widget.lesson;
-  late String date = widget.date;
+  late String date = widget.date.isEmpty ? 'все даты' : widget.date;
 
   String _noteText = '';
 
@@ -259,7 +259,7 @@ class _LessonContentState extends State<LessonContent> {
 
               return ListView.separated(
                 shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
+                physics: const NeverScrollableScrollPhysics(),
                 itemCount: notes.length,
                 itemBuilder: (context, index) {
                   final note = notes[index];
@@ -364,7 +364,7 @@ class _LessonContentState extends State<LessonContent> {
             const Gap(12),
             TextField(
               decoration: InputDecoration(
-                labelText: 'Заметка на $date',
+                labelText: date.isEmpty ? 'Без даты' : 'Заметка на $date',
                 border: OutlineInputBorder(),
                 alignLabelWithHint: true,
                 hintText: 'Например, сделать домашку...',

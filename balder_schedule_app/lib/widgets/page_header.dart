@@ -5,7 +5,7 @@ import 'package:go_router/go_router.dart';
 
 Future<List<LessonModel>> loadLessonData() async {
   final lessons = await LessonDatabase().getLessons();
-  return lessons; // Возвращаем полный список объектов LessonModel
+  return lessons;
 }
 
 class PageHeader extends StatelessWidget implements PreferredSizeWidget {
@@ -116,9 +116,9 @@ class CustomSearchDelegate extends SearchDelegate {
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    // if (query.isEmpty) {
-    //   return const SizedBox.shrink();
-    // }
+    if (query.isEmpty) {
+      return const SizedBox.shrink();
+    }
 
     final suggestions = data.where((lesson) {
       final searchableString = '''
