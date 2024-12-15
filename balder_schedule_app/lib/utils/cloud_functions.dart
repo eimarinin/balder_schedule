@@ -4,6 +4,7 @@ import 'package:minio/minio.dart';
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:device_info_plus/device_info_plus.dart';
+import 'package:http/http.dart' as http;
 
 class CloudFunctions {
   final String endpoint =
@@ -23,18 +24,34 @@ class CloudFunctions {
     );
   }
 
-  /// Генерация временной публичной ссылки для скачивания файла
   Future<String> generatePublicLink(String fileName,
       {int expirySeconds = 3600}) async {
     try {
-      // Генерация временной ссылки (3600 секунд = 1 час)
+      // Генерация временной ссылки
       final url = await _minio.presignedGetObject(bucketName, fileName,
           expires: expirySeconds);
       print("Ссылка для скачивания файла '$fileName': $url");
-      return url;
+
+      // Сокращение ссылки с помощью TinyURL
+      final shortUrl = await _shortenWithTinyURL(url);
+      print("Сокращённая ссылка через TinyURL: $shortUrl");
+
+      return shortUrl;
     } catch (e) {
       print("Ошибка при генерации ссылки: $e");
-      rethrow; // Пробрасываем ошибку дальше
+      rethrow;
+    }
+  }
+
+  /// Метод для сокращения ссылки через TinyURL
+  Future<String> _shortenWithTinyURL(String url) async {
+    final response = await http
+        .get(Uri.parse('https://tinyurl.com/api-create.php?url=$url'));
+
+    if (response.statusCode == 200) {
+      return response.body; // Возвращает короткую ссылку
+    } else {
+      throw Exception('Ошибка при сокращении ссылки через TinyURL');
     }
   }
 
