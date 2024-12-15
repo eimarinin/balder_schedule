@@ -46,6 +46,14 @@ class _QrContentState extends State<QrContent> {
     }
 
     return QrImageView(
+      eyeStyle: QrEyeStyle(
+        eyeShape: QrEyeShape.square,
+        color: Theme.of(context).colorScheme.primary,
+      ),
+      dataModuleStyle: QrDataModuleStyle(
+        dataModuleShape: QrDataModuleShape.square,
+        color: Theme.of(context).colorScheme.secondary,
+      ),
       data: link,
       version: QrVersions.auto,
       size: 364,
