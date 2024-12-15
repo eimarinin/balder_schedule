@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:balder_schedule_app/generated/l10n.dart';
 import 'package:balder_schedule_app/globals.dart';
-import 'package:balder_schedule_app/services/database/lesson_db.dart';
+import 'package:balder_schedule_app/screens/settings/qr_scanner_screen.dart';
 import 'package:balder_schedule_app/utils/cloud_functions.dart';
 import 'package:balder_schedule_app/utils/margin_screen.dart';
 import 'package:balder_schedule_app/widgets/page_header_child.dart';
@@ -9,7 +9,6 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:path/path.dart' as path;
 import 'package:qr_flutter/qr_flutter.dart';
-import 'package:device_info_plus/device_info_plus.dart';
 import 'package:share_plus/share_plus.dart';
 
 class QrScreen extends StatelessWidget {
@@ -32,67 +31,8 @@ class QrContent extends StatefulWidget {
 }
 
 class _QrContentState extends State<QrContent> {
-  String? _formattedLessons;
-  bool _isLoading = true;
-  bool _hasError = false;
   bool _isUploading = false;
   String? _downloadLink;
-
-  @override
-  void initState() {
-    super.initState();
-    _loadFormattedLessons();
-  }
-
-  Future<String> getDeviceId() async {
-    final DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
-    String deviceId = '';
-
-    if (Platform.isAndroid) {
-      final AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
-      deviceId = androidInfo.id ?? '';
-    } else if (Platform.isIOS) {
-      final IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
-      deviceId = iosInfo.identifierForVendor ?? '';
-    }
-
-    return deviceId;
-  }
-
-  Future<void> _loadFormattedLessons() async {
-    final databaseService = LessonDatabase();
-
-    try {
-      final lessons = await databaseService.getLessons();
-      if (lessons.isEmpty) {
-        throw Exception('Данные отсутствуют');
-      }
-
-      final result = lessons.map((lesson) {
-        return '''
-Урок: ${lesson.name}
-Аудитория: ${lesson.classRoom}
-Тип: ${lesson.lessonType}
-Время: ${lesson.time}
-Неделя: ${lesson.weekParity ?? 'Не указано'}
-Дата урока: ${lesson.lessonDate}
-Преподаватель: ${lesson.teacher}
-Заметки: ${lesson.notes ?? 'Нет заметок'}
-        ''';
-      }).join('\n---\n');
-
-      setState(() {
-        _formattedLessons = result;
-        _isLoading = false;
-      });
-    } catch (e) {
-      setState(() {
-        _hasError = true;
-        _formattedLessons = 'Ошибка при загрузке данных: $e';
-        _isLoading = false;
-      });
-    }
-  }
 
   Widget _buildQrCode(String? link) {
     if (link == null || link.isEmpty) {
@@ -123,13 +63,10 @@ class _QrContentState extends State<QrContent> {
 
   Future<void> _uploadDatabase() async {
     final cloudFunctions = CloudFunctions();
-    final filePath = path.join(dbPath, 'schedule.db');
+    final filePath = path.join(dbPath, dbName);
     final file = File(filePath);
-    final deviceId = await getDeviceId();
-    final fileName = '$deviceId-schedule.db';
 
     if (!file.existsSync()) {
-      print('Ошибка: файл не существует по пути $filePath');
       setState(() {
         _isUploading = false;
       });
@@ -141,8 +78,8 @@ class _QrContentState extends State<QrContent> {
     });
 
     try {
-      await cloudFunctions.uploadFile(filePath, fileName);
-      final downloadLink = await cloudFunctions.generatePublicLink(fileName);
+      await cloudFunctions.uploadFile(filePath, dbName);
+      final downloadLink = await cloudFunctions.generatePublicLink(dbName);
 
       setState(() {
         _downloadLink = downloadLink;
@@ -206,7 +143,34 @@ class _QrContentState extends State<QrContent> {
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton.icon(
-                    onPressed: () {}, // Действие для сканирования расписания
+                    onPressed: () async {
+                      // Открытие экрана QR сканера
+                      final scannedData = await Navigator.push<String>(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const QRScannerScreen()),
+                      );
+
+                      debugPrint("Сканированная ссылка: $scannedData");
+
+                      if (scannedData != null) {
+                        final cloudFunctions = CloudFunctions();
+                        try {
+                          await cloudFunctions.downloadFile(
+                              scannedData, path.join(dbPath, dbName));
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                                content: Text('Расписание обновлено')),
+                          );
+                        } catch (e) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                                content:
+                                    Text('Ошибка при обновлении расписания')),
+                          );
+                        }
+                      }
+                    },
                     icon:
                         const Icon(Icons.video_camera_front_outlined, size: 18),
                     label: Text(S.of(context).scanNewScheduleTitle),
@@ -221,13 +185,7 @@ class _QrContentState extends State<QrContent> {
                   ),
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(8),
-                    child: _isLoading
-                        ? const Center(
-                            child:
-                                CircularProgressIndicator(), // Индикатор загрузки
-                          )
-                        : _buildQrCode(
-                            _downloadLink), // Генерация QR-кода из ссылки
+                    child: _buildQrCode(_downloadLink),
                   ),
                 ),
                 const Gap(12),

@@ -3,6 +3,7 @@ import 'package:balder_schedule_app/services/database/migrations/down/lessons_ta
 import 'package:balder_schedule_app/services/database/migrations/down/notes_table.dart';
 import 'package:balder_schedule_app/services/database/migrations/up/lessons_table.dart.dart';
 import 'package:balder_schedule_app/services/database/migrations/up/notes_table.dart';
+import 'package:balder_schedule_app/utils/cloud_functions.dart';
 import 'package:path/path.dart';
 import 'package:flutter/foundation.dart';
 import 'dart:async';
@@ -51,9 +52,10 @@ class DatabaseService {
       dbPath = await getDatabasesPath();
 
       // await deleteDatabase();
+      dbName = '${await getDeviceId()}_schedule.db';
 
       return await openDatabase(
-        join(dbPath, 'schedule.db'),
+        join(dbPath, dbName),
         version: currentDbVersion,
         onCreate: _onCreate,
         onUpgrade: _onUpgrade,
@@ -111,11 +113,11 @@ class DatabaseService {
     try {
       await closeDatabase();
 
-      final path = join(dbPath, 'schedule.db');
+      final path = join(dbPath, dbName);
 
       await databaseFactory.deleteDatabase(path);
 
-      debugPrint('База данных schedule.db успешно удалена.');
+      debugPrint('База данных $dbName успешно удалена.');
     } catch (e) {
       throw Exception('Ошибка при удалении базы данных: $e');
     }

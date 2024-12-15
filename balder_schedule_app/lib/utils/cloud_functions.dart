@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:flutter/material.dart';
 import 'package:minio/minio.dart';
 import 'dart:io';
 import 'dart:typed_data';
@@ -89,14 +90,37 @@ class CloudFunctions {
   }
 
   /// Скачивание файла
-  Future<void> downloadFile(String fileName, String savePath) async {
+
+  Future<void> downloadFile(String fileUrl, String savePath) async {
     try {
-      final stream = await _minio.getObject(bucketName, fileName);
-      final file = File(savePath);
-      await file.openWrite().addStream(stream);
-      print("Файл '$fileName' успешно загружен в $savePath!");
+      debugPrint('Запуск скачивания файла с URL: $fileUrl');
+
+      final uri = Uri.parse(fileUrl);
+      debugPrint('Преобразование URL в URI: $uri');
+
+      final httpClient = HttpClient();
+      debugPrint('Создание httpClient');
+
+      final request = await httpClient.getUrl(uri);
+      debugPrint('Отправка запроса на сервер: $fileUrl');
+
+      final response = await request.close();
+      debugPrint('Ответ от сервера получен с кодом: ${response.statusCode}');
+
+      if (response.statusCode == 200) {
+        final file = File(savePath);
+        debugPrint('Открытие файла для записи по пути: $savePath');
+
+        await file.openWrite().addStream(response);
+        debugPrint('Файл успешно скачан и сохранен в $savePath');
+      } else {
+        debugPrint(
+            'Ошибка при скачивании файла, код статуса: ${response.statusCode}');
+        throw Exception('Ошибка загрузки: ${response.statusCode}');
+      }
     } catch (e) {
-      print("Ошибка при скачивании файла: $e");
+      debugPrint("Ошибка при скачивании файла: $e");
+      rethrow; // Пробрасываем ошибку дальше
     }
   }
 
@@ -117,10 +141,19 @@ Future<String> getDeviceId() async {
 
   if (Platform.isAndroid) {
     final AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
-    deviceId = androidInfo.id ?? ''; // Используем id вместо androidId
+    deviceId = androidInfo.id;
   } else if (Platform.isIOS) {
     final IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
-    deviceId = iosInfo.identifierForVendor ?? ''; // Уникальный ID для iOS
+    deviceId = iosInfo.identifierForVendor ?? '';
+  } else if (Platform.isMacOS) {
+    final MacOsDeviceInfo macosInfo = await deviceInfo.macOsInfo;
+    deviceId = macosInfo.systemGUID ?? '';
+  } else if (Platform.isWindows) {
+    final WindowsDeviceInfo windowsInfo = await deviceInfo.windowsInfo;
+    deviceId = windowsInfo.computerName;
+  } else if (Platform.isLinux) {
+    final LinuxDeviceInfo linuxInfo = await deviceInfo.linuxInfo;
+    deviceId = linuxInfo.name;
   }
 
   return deviceId;
