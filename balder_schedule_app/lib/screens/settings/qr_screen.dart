@@ -2,8 +2,10 @@ import 'dart:io';
 import 'package:balder_schedule_app/generated/l10n.dart';
 import 'package:balder_schedule_app/globals.dart';
 import 'package:balder_schedule_app/screens/settings/qr_scanner_screen.dart';
+import 'package:balder_schedule_app/services/permission_camera.dart';
 import 'package:balder_schedule_app/utils/cloud_functions.dart';
 import 'package:balder_schedule_app/utils/margin_screen.dart';
+import 'package:balder_schedule_app/widgets/flash/snackbar_handler.dart';
 import 'package:balder_schedule_app/widgets/page_header_child.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
@@ -36,13 +38,7 @@ class _QrContentState extends State<QrContent> {
 
   Widget _buildQrCode(String? link) {
     if (link == null || link.isEmpty) {
-      return const Center(
-        child: Text(
-          'Ссылка не доступна',
-          style: TextStyle(color: Colors.red, fontSize: 16),
-          textAlign: TextAlign.center,
-        ),
-      );
+      return const SizedBox();
     }
 
     return QrImageView(
@@ -92,16 +88,10 @@ class _QrContentState extends State<QrContent> {
       setState(() {
         _downloadLink = downloadLink;
       });
-
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('База данных успешно отправлена!')),
-        );
-      }
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Ошибка при отправке базы данных: $e')),
+          SnackBar(content: Text('Ошибка при генерации кода: $e')),
         );
       }
     } finally {
@@ -130,8 +120,42 @@ class _QrContentState extends State<QrContent> {
   Future<void> _handleShareButtonPress() async {
     await _uploadDatabase();
     if (_downloadLink != null) {
-      _shareLink();
+      _showShareDialog();
     }
+  }
+
+  // Открытие модального окна с QR-кодом и кнопкой "Поделиться ссылкой"
+  void _showShareDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12.0),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(S.of(context).shareScheduleTitle),
+                const Gap(12),
+                _buildQrCode(_downloadLink),
+                const Gap(12),
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton.icon(
+                    onPressed: _shareLink,
+                    icon: const Icon(Icons.share_outlined),
+                    label: Text('Поделиться ссылкой'),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
   }
 
   @override
@@ -148,60 +172,53 @@ class _QrContentState extends State<QrContent> {
             ),
             child: Column(
               children: [
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton.icon(
-                    onPressed: () async {
-                      // Открытие экрана QR сканера
-                      final scannedData = await Navigator.push<String>(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const QRScannerScreen()),
-                      );
+                // Проверяем, что устройство не является телефоном
+                if (Platform.isAndroid || Platform.isIOS) ...[
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton.icon(
+                      onPressed: () async {
+                        final cameraAvailable =
+                            await PermissionCamera.checkCameraPermission(
+                                context);
 
-                      if (scannedData != null) {
-                        final cloudFunctions = CloudFunctions();
-                        try {
-                          await cloudFunctions.downloadFile(
-                              scannedData, path.join(dbPath, dbName));
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                                content: Text('Расписание обновлено')),
+                        if (cameraAvailable && context.mounted) {
+                          // Открытие экрана QR сканера
+                          final scannedData = await Navigator.push<String>(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const QRScannerScreen()),
                           );
-                        } catch (e) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                                content:
-                                    Text('Ошибка при обновлении расписания')),
-                          );
+
+                          if (scannedData != null) {
+                            final cloudFunctions = CloudFunctions();
+
+                            if (context.mounted) {
+                              SnackbarHandler.handleAction(
+                                context,
+                                () async {
+                                  await cloudFunctions.downloadFile(
+                                      scannedData, path.join(dbPath, dbName));
+                                },
+                                'Расписание обновлено',
+                                'Ошибка при обновлении расписания',
+                              );
+                            }
+                          }
                         }
-                      }
-                    },
-                    icon:
-                        const Icon(Icons.video_camera_front_outlined, size: 18),
-                    label: Text(S.of(context).scanNewScheduleTitle),
+                      },
+                      icon: const Icon(Icons.video_camera_front_outlined,
+                          size: 18),
+                      label: Text(S.of(context).scanNewScheduleTitle),
+                    ),
                   ),
-                ),
-                const Gap(12),
-                Container(
-                  width: 364,
-                  height: 364,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(8),
-                    child: _buildQrCode(_downloadLink),
-                  ),
-                ),
-                const Gap(12),
-                // Единственная кнопка внизу
+                  const Gap(12),
+                ],
                 SizedBox(
                   width: double.infinity,
-                  child: ElevatedButton.icon(
+                  child: TextButton(
                     onPressed: _isUploading ? null : _handleShareButtonPress,
-                    icon: const Icon(Icons.share_outlined, size: 18),
-                    label: Text(S.of(context).shareScheduleTitle),
+                    child: Text(S.of(context).shareScheduleTitle),
                   ),
                 ),
               ],
