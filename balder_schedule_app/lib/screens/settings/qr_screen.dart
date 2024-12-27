@@ -159,8 +159,6 @@ class _QrContentState extends State<QrContent> {
                             builder: (context) => const QRScannerScreen()),
                       );
 
-                      debugPrint("Сканированная ссылка: $scannedData");
-
                       if (scannedData != null) {
                         final cloudFunctions = CloudFunctions();
                         try {

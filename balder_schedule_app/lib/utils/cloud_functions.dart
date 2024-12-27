@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:flutter/material.dart';
 import 'package:minio/minio.dart';
 import 'dart:io';
 import 'dart:typed_data';
@@ -30,15 +29,12 @@ class CloudFunctions {
       // Генерация временной ссылки
       final url = await _minio.presignedGetObject(bucketName, fileName,
           expires: expirySeconds);
-      print("Ссылка для скачивания файла '$fileName': $url");
 
       // Сокращение ссылки с помощью TinyURL
       final shortUrl = await _shortenWithTinyURL(url);
-      print("Сокращённая ссылка через TinyURL: $shortUrl");
 
       return shortUrl;
     } catch (e) {
-      print("Ошибка при генерации ссылки: $e");
       rethrow;
     }
   }
@@ -69,75 +65,37 @@ class CloudFunctions {
         ),
       ).cast<Uint8List>();
 
-      final fileLength = await file.length(); // Получаем размер файла
+      final fileLength = await file.length();
 
       await _minio.putObject(
         bucketName,
         fileName,
-        fileStream, // Передаем преобразованный поток
-        size: fileLength, // Размер файла
+        fileStream,
+        size: fileLength,
         metadata: {'Content-Type': 'application/octet-stream'},
       );
-
-      print("Файл '$fileName' успешно загружен!");
     } catch (e) {
-      print("Ошибка при загрузке файла: $e");
-    }
-  }
-
-  /// Список файлов в бакете
-  Future<void> listFiles() async {
-    try {
-      // Получаем список объектов из бакета
-      final objects = await _minio.listObjects(bucketName).toList();
-
-      if (objects.isNotEmpty) {
-        print("Список файлов в бакете:");
-
-        // Выводим структуру каждого объекта
-        for (var obj in objects) {
-          print("Объект целиком: $obj"); // Выводим объект целиком
-        }
-      } else {
-        print("Бакет пуст.");
-      }
-    } catch (e) {
-      print("Ошибка получения списка файлов: $e");
+      throw Exception("Ошибка при загрузке файла: $e");
     }
   }
 
   /// Скачивание файла
-
   Future<void> downloadFile(String fileUrl, String savePath) async {
     try {
-      debugPrint('Запуск скачивания файла с URL: $fileUrl');
-
       final uri = Uri.parse(fileUrl);
-      debugPrint('Преобразование URL в URI: $uri');
-
       final httpClient = HttpClient();
-      debugPrint('Создание httpClient');
 
       final request = await httpClient.getUrl(uri);
-      debugPrint('Отправка запроса на сервер: $fileUrl');
-
       final response = await request.close();
-      debugPrint('Ответ от сервера получен с кодом: ${response.statusCode}');
 
       if (response.statusCode == 200) {
         final file = File(savePath);
-        debugPrint('Открытие файла для записи по пути: $savePath');
-
         await file.openWrite().addStream(response);
-        debugPrint('Файл успешно скачан и сохранен в $savePath');
       } else {
-        debugPrint(
-            'Ошибка при скачивании файла, код статуса: ${response.statusCode}');
         throw Exception('Ошибка загрузки: ${response.statusCode}');
       }
     } catch (e) {
-      debugPrint("Ошибка при скачивании файла: $e");
-      rethrow; // Пробрасываем ошибку дальше
+      rethrow;
     }
   }
 
@@ -145,9 +103,8 @@ class CloudFunctions {
   Future<void> deleteFile(String fileName) async {
     try {
       await _minio.removeObject(bucketName, fileName);
-      print("Файл '$fileName' успешно удален!");
     } catch (e) {
-      print("Ошибка удаления файла: $e");
+      throw Exception("Ошибка удаления файла: $e");
     }
   }
 }

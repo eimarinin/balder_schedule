@@ -148,7 +148,6 @@ Future<Map<String, List<LessonModel>>> _getFilteredLessons(
         filteredWeekDates[weekday] = lessons;
       }
     } catch (e) {
-      debugPrint('Ошибка при получении данных: $e');
       filteredWeekDates[weekday] = [];
     }
   }
@@ -178,7 +177,6 @@ Future<List<ScheduleItem>> _buildScheduleItems(
         countNotes: countNotes,
       ));
     } catch (e) {
-      debugPrint('Ошибка загрузки заметок для урока ${lesson.id}: $e');
       scheduleItems.add(ScheduleItem(
         id: lesson.id!,
         startTime: lesson.time.split('-')[0],

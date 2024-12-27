@@ -116,8 +116,6 @@ class DatabaseService {
       final path = join(dbPath, dbName);
 
       await databaseFactory.deleteDatabase(path);
-
-      debugPrint('База данных $dbName успешно удалена.');
     } catch (e) {
       throw Exception('Ошибка при удалении базы данных: $e');
     }
